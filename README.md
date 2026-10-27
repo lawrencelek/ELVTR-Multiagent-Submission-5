@@ -1,6 +1,6 @@
-# DUMMIES — Prototype 6.6
+# DUMMIES — Prototype 6.7
 
-**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 76.
+**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 77.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
@@ -19,19 +19,27 @@
 | | Keys | Gamepad | Touch (phones and tablets, landscape) | Unlocked by |
 |---|---|---|---|---|
 | Move | WASD / arrows | stick or d-pad | analog stick, left | — |
-| Dash | SPACE or K | A (or RT) | A | start |
-| Jump | L or SHIFT | B | B | Jump (Legs) |
-| Grab / place | J or E | X | X | Carry (Arms) |
-| Throw | I or Q | Y | Y | Throw (Arms) |
+| Dash | SPACE or K | A (or RT) | A | start; Battery recharges it faster |
+| Jump | L or SHIFT | B | B | Legs 1 |
+| Grab / place | J or E | X | X | Arms 1 |
+| Throw | I or Q | Y | Y | Throw 1 (needs Arms 1) |
 | Pause | ESC or P | START | ❚❚ PAUSE | — |
 | Pad setup | G | hold START | — | — |
 
 - Touch controls show only on touch screens. Add `#touch` to the address to force them.
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, THROW in turn.
-- Upgrades come from the shop after each write-off. Tuning (T, desktop) installs them for a test run.
+- The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
 
-## What 6.6 adds
+## What 6.7 adds
+
+- The shop sells four abilities, one per button, three levels each: Battery (A), Legs (B), Arms (X), Throw (Y).
+- Level 1 gives the ability. Every level cuts how much damage wears it, 25% a level.
+- Battery levels speed the dash recharge: 0.8 s a charge, down to 0.41 s. Torso damage slows it.
+- Walk and jump: a hop, it clears nothing. Run and jump to clear.
+- Jump test: diagonal jumps. A running jump clears a handrail to 55° off square, a sedan to 32°.
+
+## 6.6
 
 - The screen fills the window at any scale, not only ×2 or ×3.
 - Touch controls only on phones and tablets, drawn in the HUD's glass style.
