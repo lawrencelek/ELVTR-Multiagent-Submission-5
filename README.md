@@ -1,6 +1,6 @@
-# DUMMIES — Prototype 6.8
+# DUMMIES — Prototype 6.9
 
-**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 78.
+**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 79.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
@@ -21,8 +21,10 @@
 | Move | WASD / arrows | stick or d-pad | analog stick, left | — |
 | Dash | SPACE or K | A (or RT) | A | start; Battery recharges it faster |
 | Jump | L or SHIFT | B | B | Legs 1 |
-| Grab / place | J or E | X | X | Arms 1 |
-| Throw | I or Q | Y | Y | Throw 1 (needs Arms 1) |
+| Grab / put down | J or E, tap | X, tap | X, tap | Arms 1 |
+| Throw | J or E, hold | X, hold | X, hold | Arms 2 |
+| Hitch a car / let go | J or E beside a moving car | X | X | Arms 3 |
+| Sling (hitched) | SPACE or K | A | A | Arms 3 |
 | Pause | ESC or P | START | ❚❚ PAUSE | — |
 | Pad setup | G | hold START | — | — |
 
@@ -31,7 +33,14 @@
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, THROW in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
 
-## What 6.8 adds
+## What 6.9 adds
+
+- Three abilities, three levels: Battery (dash charge 1 s, then 0.8, 0.7, 0.6), Legs (0.3, 0.4, 0.5 s in the air), Arms (carry, hold X to throw, hitch).
+- Hitch: grab a passing car, ride it, let go at its speed, or sling off with A into the next car.
+- Combos: mixing moves climbs faster (to ×5); jumps, bounces, slings and hitches hold the combo clock; a thrown cone into a car links; a meter shows the chain.
+- Every value is in Tuning (T).
+
+## 6.8
 
 - Four levels per ability. Legs: 0.3 to 0.6 s in the air. Arms: carry 1 to 4 cones. Throw: +40 range a level. Battery: −0.1 s a charge a level.
 - The shop shows one card per ability; A buys its next level.
