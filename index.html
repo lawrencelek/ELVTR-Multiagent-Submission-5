@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="screen-orientation" content="landscape"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>DUMMIES P6.9</title>
+<title>DUMMIES P6.10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&family=Nunito:wght@700;800;900&display=swap">
@@ -65,11 +65,11 @@ body.touch #game { touch-action: none; }
 </head>
 <body>
 <div class="stage" id="stage">
-  <canvas id="game" tabindex="0" aria-label="DUMMIES P6.9 game. Keyboard, gamepad or touch (landscape)."></canvas>
+  <canvas id="game" tabindex="0" aria-label="DUMMIES P6.10 game. Keyboard, gamepad or touch (landscape)."></canvas>
 </div>
 <div class="wrap">
   <div class="bar">
-    <p class="keys"><kbd>WASD</kbd> move · <kbd>Space</kbd>/<kbd>K</kbd> dash (A) · <kbd>L</kbd>/<kbd>Shift</kbd> jump (B) · <kbd>J</kbd>/<kbd>E</kbd> grab, hold to throw, hitch (X) · <kbd>Esc</kbd> pause · <kbd>T</kbd> tuning · <kbd>G</kbd> pad setup · <span id="status"></span></p>
+    <p class="keys"><kbd>WASD</kbd> move · <kbd>Space</kbd>/<kbd>K</kbd> dash (A) · <kbd>L</kbd>/<kbd>Shift</kbd> jump (B) · <kbd>J</kbd>/<kbd>E</kbd> grab, hold to put down (X) · <kbd>I</kbd>/<kbd>Q</kbd> push off a car (Y) · <kbd>Esc</kbd> pause · <kbd>T</kbd> tuning · <kbd>G</kbd> pad setup · <span id="status"></span></p>
     <button id="btn-pal" type="button">Night palette</button>
     <button id="btn-full" type="button">Full screen</button>
     <button id="btn-tune" type="button">Tuning</button>
@@ -282,6 +282,10 @@ document.getElementById('btn-full').addEventListener('click', () => {
     'abilities.battery.level1Seconds': 0.8, 'abilities.battery.level2Seconds': 0.7, 'abilities.battery.level3Seconds': 0.6, 'input.throwHoldSeconds': 0.3,
     'abilities.arms.hitchReach': 12, 'abilities.arms.hitchSeconds': 1.5, 'abilities.arms.hitchMinSpeed': 30, 'abilities.arms.hitchEdge': 40,
     'abilities.arms.slingScale': 1, 'abilities.arms.slingDash': 120,
+    // Edit 80 (P6.10): Hands carry cones (two levels: two hands); Arms push off cars, a ricochet: stronger, and once more, a level
+    'abilities.hands.maxLevel': 2, 'abilities.hands.conesPerLevel': 1,
+    'abilities.arms.pushSpeed': 160, 'abilities.arms.pushStep': 40, 'abilities.arms.pushesPerLevel': 1, 'abilities.arms.pushReach': 10, 'abilities.arms.pushWindow': 0.3,
+    'proto.parts.armPushLoss': 1, 'proto.parts.armPushFloor': 0.5,
     // Edit 79: combos. Variety pays; the clock stops in the air; a thrown cone that hits a car links the chain
     'scoring.comboVariety': 0, 'scoring.comboAirPause': 0, 'scoring.coneLink': 0, 'scoring.coneHitPoints': 20,
     'physics.slideFriction': 1, 'physics.gravity': 9.81, // Edit 78: a knocked dummy slides to a stop at slideFriction × gravity (m/s², × proto.scale.unitsPerMetre)
@@ -385,6 +389,17 @@ document.getElementById('btn-full').addEventListener('click', () => {
   };
   const NODES9 = {};
   for (const [t, tr] of Object.entries(TRACKS9)) for (let L = 1; L <= 3; L++) NODES9[t + L] = { name: tr.name + ' ' + L, branch: tr.name, track: t, level: L, price: 'economy.price.ability.level' + L, pre: L > 1 ? t + (L - 1) : null, desc: tr.desc[L - 1] };
+  // Edit 80 (P6.10, proto.abilities 3): Battery (A), Legs (B), Hands (X), Arms (Y). Hands: cones, two levels. Arms: the push off a car
+  const TRACKS10 = {
+    battery: TRACKS9.battery, legs: TRACKS9.legs,
+    hands: { name: 'Hands', button: 'X', verb: 'GRAB', part: 'arms', max: 2,
+      desc: ['X picks up a cone. Hold X to put it down.', 'Two hands: carry two cones.'] },
+    arms: { name: 'Arms', button: 'Y', verb: 'PUSH', part: 'arms',
+      desc: ['Y pushes off a car you hit or touch: a ricochet. One push before you land.', 'A stronger push; two before you land.', 'The strongest push; three before you land.'] },
+  };
+  const NODES10 = {};
+  for (const [t, tr] of Object.entries(TRACKS10)) for (let L = 1; L <= (tr.max || 3); L++) NODES10[t + L] = { name: tr.name + ' ' + L, branch: tr.name, track: t, level: L, price: 'economy.price.ability.level' + L, pre: L > 1 ? t + (L - 1) : null, desc: tr.desc[L - 1] };
+  const ABIL10_HAS = { jump: ['legs', 1], carry: ['hands', 1], push: ['arms', 1], throw: null, hitch: null, bigBattery: null, ricochet: null, spine: null, hips: null, grip: null };
   const ABIL9_HAS = { jump: ['legs', 1], carry: ['arms', 1], throw: ['arms', 2], hitch: ['arms', 3], bigBattery: null, ricochet: null, spine: null, hips: null, grip: null };
   const ABIL_HAS = { jump: 'legs', carry: 'arms', throw: 'throw', bigBattery: null, ricochet: null, spine: null, hips: null, grip: null }; // the old names, read from the tracks
 
@@ -1729,20 +1744,21 @@ document.getElementById('btn-full').addEventListener('click', () => {
       if (!this.net) this.fillDeckCars();
     }
 
-    tracks() { return this.P['proto.abilities'] === 2 ? TRACKS9 : TRACKS; } // Edit 79
-    nodes() { return this.P['proto.abilities'] === 2 ? NODES9 : NODES7; }
-    has(n) { if (this.P['proto.abilities'] === 2 && n in ABIL9_HAS) { const q = ABIL9_HAS[n]; return q ? this.tier(q[0]) >= q[1] : false; } if (this.P['proto.abilities'] && n in ABIL_HAS) { const t = ABIL_HAS[n]; return t ? this.tier(t) >= 1 : false; } return !!this.run.owned[n]; }
-    tier(t) { let n = 0; while (n < 4 && n < this.P['abilities.maxLevel'] && this.run.owned[t + (n + 1)]) n++; return n; } // Edit 77: an ability track's level, 0–4 (this.level is the screen)
+    tracks() { const m = this.P['proto.abilities']; return m === 3 ? TRACKS10 : m === 2 ? TRACKS9 : TRACKS; } // Edit 79–80
+    nodes() { const m = this.P['proto.abilities']; return m === 3 ? NODES10 : m === 2 ? NODES9 : NODES7; }
+    trackMax(t) { const tr = this.tracks()[t]; return Math.min(tr && tr.max ? this.P['abilities.' + t + '.maxLevel'] || tr.max : 4, this.P['abilities.maxLevel']); } // Edit 80: Hands stop at two
+    has(n) { if (this.P['proto.abilities'] === 3 && n in ABIL10_HAS) { const q = ABIL10_HAS[n]; return q ? this.tier(q[0]) >= q[1] : false; } if (this.P['proto.abilities'] === 2 && n in ABIL9_HAS) { const q = ABIL9_HAS[n]; return q ? this.tier(q[0]) >= q[1] : false; } if (this.P['proto.abilities'] && n in ABIL_HAS) { const t = ABIL_HAS[n]; return t ? this.tier(t) >= 1 : false; } return !!this.run.owned[n]; }
+    tier(t) { const mx = this.P['proto.abilities'] === 3 ? this.trackMax(t) : this.P['abilities.maxLevel']; let n = 0; while (n < 4 && n < mx && this.run.owned[t + (n + 1)]) n++; return n; } // Edit 77: an ability track's level, 0–4 (this.level is the screen)
     shield(t) { return this.P['proto.abilities'] ? Math.max(0, 1 - this.P['abilities.wearCut'] * this.tier(t)) : 1; } // the share of wear that gets through
     secondsPerCharge() { // Edit 77: Battery levels speed the recharge; torso damage slows it
       const P = this.P; if (!P['proto.abilities']) return P['battery.secondsPerCharge'];
       const L = this.tier('battery');
-      if (P['proto.abilities'] === 2) return (L ? P['abilities.battery.level' + L + 'Seconds'] : P['battery.secondsPerCharge']) / this.partEffect('recharge'); // Edit 79: a value per level
+      if (P['proto.abilities'] >= 2) return (L ? P['abilities.battery.level' + L + 'Seconds'] : P['battery.secondsPerCharge']) / this.partEffect('recharge'); // Edit 79: a value per level
       return Math.max(0.05, P['battery.secondsPerCharge'] - P['abilities.battery.rechargeCut'] * L) / this.partEffect('recharge'); // Edit 78: linear
     }
     // Edit 78 (P6.8): the level steps. Without ability tracks, the P6.5–6.6 values.
     jumpAirtime() { const P = this.P; return P['proto.abilities'] ? P['abilities.legs.airtimeBase'] + P['abilities.legs.airtimeStep'] * Math.max(0, this.tier('legs') - 1) : P['upgrades.jumpAirtime']; }
-    coneCapacity() { return this.P['proto.abilities'] === 1 ? Math.max(1, this.P['abilities.arms.conesPerLevel'] * this.tier('arms')) : 1; }
+    coneCapacity() { const P = this.P; return P['proto.abilities'] === 3 ? Math.max(1, P['abilities.hands.conesPerLevel'] * this.tier('hands')) : P['proto.abilities'] === 1 ? Math.max(1, P['abilities.arms.conesPerLevel'] * this.tier('arms')) : 1; } // Edit 80: two hands, two cones
     throwReach() { const P = this.P; return P['upgrades.throwDistance'] + (P['proto.abilities'] === 1 ? P['abilities.throw.distanceStep'] * Math.max(0, this.tier('throw') - 1) : 0); }
     carriedCones() { const b = this.body; return b.carried && b.carried.length ? b.carried : b.held ? [b.held] : []; }
     takeCone(cn) { const b = this.body; cn.state = 'held'; if (!b.carried) b.carried = []; b.carried.push(cn); b.held = cn; this.emit('pickup', { cone: cn.id, n: b.carried.length }); this.mile('use:carry'); }
@@ -1827,7 +1843,8 @@ document.getElementById('btn-full').addEventListener('click', () => {
       b.denied = Math.max(0, b.denied - dt);
       this.comboClock(dt); // Edit 79
       if (b.mode === 'hitch') return this.stepHitch(cmd, dt); // Edit 79: riding a car
-      if (b.mode !== 'knock') b.sling = false; // a sling ends with its flight
+      if (b.mode !== 'knock') { b.sling = false; b.pushed = false; } // a sling or a push ends with its flight
+      if (P['proto.abilities'] === 3 && (b.mode === 'idle' || b.mode === 'move' || b.mode === 'coast' || b.mode === 'recover') && !b.stair) { b.pushes = P['abilities.arms.pushesPerLevel'] * this.tier('arms'); b.pushFrom = null; } // Edit 80: pushes refill on the ground
       if (b.mode === 'drop') return; // in the air: no control until the landing
       if (b.landT > 0) { b.landT -= dt; if (b.landT < 1e-9) b.landT = 0; }
       const facing0 = b.facing, direct = P['proto.turnModel'] === 2; // Edit 75: DIRECT (P6.5)
@@ -1940,6 +1957,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     }
     // Edit 75 (P6.5): X picks up or places a cone (Carry); Y throws the held cone (Throw).
     handleXY(cmd) {
+      if (this.P['proto.abilities'] === 3) { this.handleHands(cmd); return this.handlePush(cmd); } // Edit 80
       if (this.P['proto.abilities'] === 2) return this.handleArms(cmd);
       const b = this.body, busy = b.mode === 'lunge' || b.mode === 'recover';
       if (cmd.xPress) { // Edit 78: X grabs while there is room (Arms level) and a cone in reach; else it places the top cone
@@ -1973,6 +1991,48 @@ document.getElementById('btn-full').addEventListener('click', () => {
           if (!b.xHold.done && b.held && this.has('throw') && b.xHold.t >= P['input.throwHoldSeconds'] - 1e-9) { b.xHold.done = true; if (!this.armsBroken()) this.throwHeld(); else this.deny('throw'); }
         } else { if (!b.xHold.done && b.held) this.dropHeld(); b.xHold = null; }
       }
+    }
+    // Edit 80 (P6.10): Hands. A tap of X picks up a cone (room for abilities.hands.conesPerLevel × level); holding X
+    // input.dropHoldSeconds puts the top one down. A tap with nothing to pick up does nothing: hold to put down.
+    handleHands(cmd) {
+      const P = this.P, b = this.body, busy = b.mode === 'lunge' || b.mode === 'recover', dt = this.dtLast || 1 / 60;
+      if (cmd.xPress) {
+        if (!this.has('carry')) { this.deny('pickup', 'locked'); return; }
+        b.xHold = { t: 0, done: false };
+        const room = this.carriedCones().length < this.coneCapacity();
+        const cn = room && !busy && !this.armsBroken() && this.onGround() ? this.nearestCone() : null;
+        if (cn) { this.takeCone(cn); b.xHold.done = true; } // a tap that picks up never also puts down
+        else if (!b.held) { this.deny('pickup'); b.xHold = null; }
+      }
+      if (!b.xHold) return;
+      if (cmd.xHeld) { b.xHold.t += dt; if (!b.xHold.done && b.held && b.xHold.t >= P['input.dropHoldSeconds'] - 1e-9) { b.xHold.done = true; this.dropHeld(); } }
+      else { if (!b.xHold.done && b.held) this.deny('drop', 'hold'); b.xHold = null; }
+    }
+    // Edit 80: Arms. Y pushes off a car: the one just hit or touched (within abilities.arms.pushWindow), else one within
+    // abilities.arms.pushReach. The push adds pushSpeed + pushStep × (level − 1), × arm wear, away from the car (or along the stick,
+    // if it points away); motion into the car is dropped. The flight is a knock: it slides and strikes as a dash (combo kind PUSH).
+    // abilities.arms.pushesPerLevel × level pushes, refilled on the ground in control.
+    handlePush(cmd) {
+      const P = this.P, b = this.body;
+      if (!cmd.yPress) return;
+      if (!this.has('push')) return this.deny('push', 'locked');
+      if (!(b.pushes > 0)) return this.deny('push', 'spent');
+      const tg = this.pushTarget(); if (!tg) return this.deny('push', 'nothing');
+      const L = this.tier('arms'), sp = (P['abilities.arms.pushSpeed'] + P['abilities.arms.pushStep'] * (L - 1)) * this.partEffect('push');
+      let dx = tg.nx, dy = tg.ny; const m = hyp(cmd.mx || 0, cmd.my || 0);
+      if (m > 0.3) { const ux = cmd.mx / m, uy = cmd.my / m; if (ux * tg.nx + uy * tg.ny > 0.2) { dx = ux; dy = uy; } }
+      let vx = b.vx, vy = b.vy; const vn = vx * tg.nx + vy * tg.ny; if (vn < 0) { vx -= vn * tg.nx; vy -= vn * tg.ny; }
+      vx += dx * sp; vy += dy * sp; b.pushes--; b.lastHit = null; b.pushFrom = { id: tg.id, t: this.t }; // one push a contact
+      Object.assign(b, { mode: 'knock', knockT: 0, knockVx: vx, knockVy: vy, vx, vy, lunge: null, jump: null, z: 0, pushed: true, sling: false });
+      if (hyp(vx, vy) > 1) b.facing = Math.atan2(vy, vx);
+      this.emit('push', { car: tg.id, speed: +hyp(vx, vy).toFixed(1), add: +sp.toFixed(1), left: b.pushes, level: L, recent: !!tg.recent }); this.mile('use:push');
+    }
+    pushTarget() {
+      const P = this.P, b = this.body, lh = b.lastHit, pf = b.pushFrom; // the car last pushed off needs a fresh contact
+      if (lh && this.t - lh.t <= P['abilities.arms.pushWindow'] + 1e-9 && (!pf || lh.id !== pf.id || lh.t > pf.t) && this.carById(lh.id)) return { id: lh.id, nx: lh.nx, ny: lh.ny, recent: true };
+      const r = P['body.radius'] + P['abilities.arms.pushReach']; let best = null;
+      for (const c of this.cars) { if (!this.meets(c) || (pf && (c.id === pf.id || (c.real && c.real.id === pf.id)))) continue; const res = circleCar(b.x, b.y, r, c); if (res && (!best || res.pen > best.pen)) best = { id: c.id, nx: res.nx, ny: res.ny, pen: res.pen }; }
+      return best;
     }
     carById(id) { return this.cars.find((q) => q.id === id || (q.real && q.real.id === id)) || null; }
     hitchTarget() { // a moving car on the dummy's level, its side within abilities.arms.hitchReach of the body
@@ -2601,12 +2661,13 @@ document.getElementById('btn-full').addEventListener('click', () => {
       if (!P['proto.parts.effects']) return 1;
       const legs = this.partShare('legL') + this.partShare('legR'), arms = this.partShare('armL') + this.partShare('armR'); // Edit 77: × the track's shield
       if (kind === 'dash') return Math.max(P['movement.wearFloor'], 1 - P['proto.parts.legDashLoss'] * legs * this.shield('legs'));
+      if (kind === 'push') return Math.max(P['proto.parts.armPushFloor'], 1 - P['proto.parts.armPushLoss'] * arms * this.shield('arms')); // Edit 80: arm damage weakens the push; Arms shields it
       if (kind === 'recharge') return P['proto.abilities'] ? Math.max(P['proto.parts.torsoRechargeFloor'], 1 - P['proto.parts.torsoRechargeLoss'] * this.partShare('torso') * this.shield('battery')) : 1;
       const t = { speed: ['legSpeed', legs * this.shield('legs')], turn: ['torsoTurn', this.partShare('torso') * this.shield('battery')],
         view: ['headCone', this.partShare('head')], throw: ['armThrow', arms * this.shield(P['proto.abilities'] === 2 ? 'arms' : 'throw')] }[kind];
       return Math.max(P['proto.parts.' + t[0] + 'Floor'], 1 - P['proto.parts.' + t[0] + 'Loss'] * t[1]);
     }
-    armsBroken() { const P = this.P, k = this.shield('arms'); return !!P['proto.parts.effects'] && this.partShare('armL') * k >= P['proto.parts.brokenShare'] && this.partShare('armR') * k >= P['proto.parts.brokenShare']; } // Edit 77: Arms levels hold the grip
+    armsBroken() { const P = this.P, k = this.shield(P['proto.abilities'] === 3 ? 'hands' : 'arms'); return !!P['proto.parts.effects'] && this.partShare('armL') * k >= P['proto.parts.brokenShare'] && this.partShare('armR') * k >= P['proto.parts.brokenShare']; } // Edit 77: Arms levels hold the grip
     coneWidth() { return this.P['sensing.coneWidth'] * this.partEffect('view'); }
     partOf(px, py, assessed, legs) {
       const P = this.P, b = this.body, a = Math.atan2(py - b.y, px - b.x) - b.facing, side = Math.sin(a) >= 0 ? 'R' : 'L';
@@ -3699,7 +3760,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     canBuy(n) {
       if (this.P['proto.abilities']) { // Edit 77: ability tracks by level (Edit 79: three tracks)
         const N = this.nodes(), nd = N[n], r = this.run;
-        if (!nd || nd.level > this.P['abilities.maxLevel']) return { ok: false, why: 'not sold' };
+        if (!nd || nd.level > (this.P['proto.abilities'] === 3 ? this.trackMax(nd.track) : this.P['abilities.maxLevel'])) return { ok: false, why: 'not sold' };
         if (r.owned[n]) return { ok: false, why: 'owned' };
         if (nd.pre && !r.owned[nd.pre]) return { ok: false, why: 'needs ' + N[nd.pre].name };
         const price = this.P[nd.price];
@@ -3739,7 +3800,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     }
   }
 
-  const api = { Sim, JUMP, REG, PROTO, OVERRIDES, NODES, NODES4, NODES7, TRACKS, NODES9, TRACKS9, LEVELS, LEVEL_LIST: DISTRICT_LIST, ROADS, DISTRICT_LIST, DISTRICTS, INFO, planCity, cityDistrict, bakeCity, DIFFICULTIES, assess, impulseImpact, zoneOf, circleCar, pathAt, pathProject, DEG,
+  const api = { Sim, JUMP, REG, PROTO, OVERRIDES, NODES, NODES4, NODES7, TRACKS, NODES9, TRACKS9, NODES10, TRACKS10, LEVELS, LEVEL_LIST: DISTRICT_LIST, ROADS, DISTRICT_LIST, DISTRICTS, INFO, planCity, cityDistrict, bakeCity, DIFFICULTIES, assess, impulseImpact, zoneOf, circleCar, pathAt, pathProject, DEG,
     planDistrict, cellLevel, cellName, edgeSpans, edgeCrossings, laneEnds, seamSight, deckCrossOK, roadCenter, makePatches, roadDist, SIDE, dropImpact, checkZone, buildableArea, zHeight, stairRun, LEVELS3,
     lanesOf, makePath, offsetPts, fillet, filletAny, arcPts, roundaboutCenter, skeletons, routeCenter, edgePoint, deckLanesOf, fleetClass, minBend }; // P4: the Turn Lab builds its tracks with these
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -5650,7 +5711,8 @@ document.getElementById('btn-full').addEventListener('click', () => {
     'proto.abilities': 1, 'proto.jump.runToClear': 1, // Edit 77 (Prototype 6.7): ability tracks by level; run to clear
     'proto.bounce.newton': 1, 'proto.recoilScale': 1, // Edit 78 (Prototype 6.8): the bounce off a car is Newtonian: full post-impact velocity, then a slide
     'proto.abilities': 2, 'abilities.maxLevel': 3, 'abilities.wearCut': 0.25, 'battery.secondsPerCharge': 1, // Edit 79 (Prototype 6.9): Battery, Legs, Arms; three levels
-    'scoring.comboVariety': 0.5, 'scoring.comboAirPause': 1, 'scoring.coneLink': 1, 'scoring.comboMax': 5 }; // Edit 79: combos
+    'scoring.comboVariety': 0.5, 'scoring.comboAirPause': 1, 'scoring.coneLink': 1, 'scoring.comboMax': 5, // Edit 79: combos
+    'proto.abilities': 3, 'input.dropHoldSeconds': 0.3 }; // Edit 80 (Prototype 6.10): Battery, Legs, Hands (two levels), Arms (the push); hold X to put a cone down
   for (const k of Object.keys(P)) if (/^vehicles\.[a-z]+\.(length|width|height)$/.test(k)) P6SIM[k] = Math.round(P[k] * P6SIM['vehicles.scale'] * 10) / 10;
   Object.assign(P, P6SIM);
   const W = P['world.width'], H = P['world.height'], LW = P['world.laneWidth'], OUTER = LW + P['proto.shoulderWidth'], HALF = P['world.deckWidth'] / 2, PW = P['world.parapetWidth'];
@@ -7761,11 +7823,12 @@ document.getElementById('btn-full').addEventListener('click', () => {
           const ph = X.impulseImpact(P, b.vx, b.vy, c.vx, c.vy, nx, ny, c.cls, b.mode === 'lunge' || b.mode === 'knock' || b.mode === 'jump'); // Edit 75: a jump strikes as a dash does
           contacts.push({ k, car: c, closing: Math.max(0, rel), ph, px: res.cx, py: res.cy, zone: X.zoneOf(res.qx, res.qy, c),
             carState: this.carCue(c), cause: c.cause, lunging: b.mode === 'lunge', bodySpeed: hyp(b.vx, b.vy), carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff), jump: b.mode === 'jump', ricochet: rico,
-            kind: b.mode === 'knock' ? (b.sling ? 'sling' : 'bounce') : b.mode === 'jump' ? 'jump' : b.mode === 'lunge' ? 'dash' : 'struck' }); // Edit 79: the move, for combo variety
+            kind: b.mode === 'knock' ? (b.pushed ? 'push' : b.sling ? 'sling' : 'bounce') : b.mode === 'jump' ? 'jump' : b.mode === 'lunge' ? 'dash' : 'struck' }); // Edit 79: the move, for combo variety (Edit 80: PUSH)
           if (P['proto.damageModel'] && ph.un > 1e-6) knock = this.bounce(ph.knock); // Ricochet: twice the bounce
         }
         b.x += res.nx * res.pen; b.y += res.ny * res.pen;
-        if (knock) { b.mode = 'knock'; b.sling = false; b.lunge = null; b.jump = null; b.z = 0; b.knockT = 0; b.knockVx = knock.x; b.knockVy = knock.y; b.vx = knock.x; b.vy = knock.y; this.emit('knock', { car: c.id, speed: +hyp(knock.x, knock.y).toFixed(2), ricochet: this.has('ricochet') }); }
+        b.lastHit = { id: c.id, t: this.t, nx: res.nx, ny: res.ny }; // Edit 80: the car to push off, and which way is away
+        if (knock) { b.mode = 'knock'; b.sling = false; b.pushed = false; b.lunge = null; b.jump = null; b.z = 0; b.knockT = 0; b.knockVx = knock.x; b.knockVy = knock.y; b.vx = knock.x; b.vy = knock.y; this.emit('knock', { car: c.id, speed: +hyp(knock.x, knock.y).toFixed(2), ricochet: this.has('ricochet') }); }
         else if (rel > 0) { b.vx -= rel * nx; b.vy -= rel * ny; }
         block();
       }
@@ -10712,7 +10775,7 @@ window.FLEET_DB = {
    Screen: 640 × 360 art pixels, integer-scaled. Field: 400 × 300 art pixels at (120, 30). HUD and screens: 1280 × 720 reference units. */
 (function () {
   'use strict';
-  const { Sim, NODES, NODES4, NODES7: NODES7_4, TRACKS: TRACKS_4, NODES9, TRACKS9, LEVELS, DIFFICULTIES, REG, PROTO, OVERRIDES, DEG, pathAt, DISTRICTS, zHeight } = window.DUMMIES;
+  const { Sim, NODES, NODES4, NODES7: NODES7_4, TRACKS: TRACKS_4, NODES9, TRACKS9, NODES10, TRACKS10, LEVELS, DIFFICULTIES, REG, PROTO, OVERRIDES, DEG, pathAt, DISTRICTS, zHeight } = window.DUMMIES;
   const W6 = window.WORLD6 || null; // P6 (Edit 62): Parkland, Waterfront, Monument, built by world6.js
   const LEVEL_LIST = W6 ? W6.LEVEL_LIST : window.DUMMIES.LEVEL_LIST;
   const INFO = (id) => (W6 && W6.INFO(id)) || window.DUMMIES.INFO(id);
@@ -10778,7 +10841,7 @@ window.FLEET_DB = {
   if (FLEET) for (const m of FLEET.models) for (const sid of m.simIds) FMODEL.set(sid, m);
   const CPARAM = {};
   for (const part of [CJ, CI, CG, CB, CH, CTM, CP, CD]) if (part && part.params) for (const p of part.params) CPARAM[p.id] = p.value;
-  const BUILD = W6 ? 'P6.9' : 'P5.3'; // Prototype 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
+  const BUILD = W6 ? 'P6.10' : 'P5.3'; // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
   function pv(id) {
     if (id == null) return null;
     if (app.tune[id] != null) return app.tune[id];
@@ -10861,7 +10924,8 @@ window.FLEET_DB = {
   const FOUR = !!(W6 && W6.P6SIM && W6.P6SIM['proto.input.fourButtons']);
   const ABIL = !!(W6 && W6.P6SIM && W6.P6SIM['proto.abilities']);
   const ABIL3 = !!(W6 && W6.P6SIM && W6.P6SIM['proto.abilities'] === 2); // Edit 79 (P6.9): Battery, Legs, Arms; three levels; Y has no job
-  const TRACKS = ABIL3 ? TRACKS9 : TRACKS_4, NODES7 = ABIL3 ? NODES9 : NODES7_4; // Edit 77 (P6.7): the shop sells four ability tracks by level. Edit 78 (P6.8): four levels
+  const ABIL4 = !!(W6 && W6.P6SIM && W6.P6SIM['proto.abilities'] === 3); // Edit 80 (P6.10): Battery, Legs, Hands (two levels), Arms (the push, Y)
+  const TRACKS = ABIL4 ? TRACKS10 : ABIL3 ? TRACKS9 : TRACKS_4, NODES7 = ABIL4 ? NODES10 : ABIL3 ? NODES9 : NODES7_4; // Edit 77 (P6.7): the shop sells four ability tracks by level. Edit 78 (P6.8): four levels
   const held = new Set();
   const q = { a: 0, b: 0, bUp: 0, x: 0, y: 0 };
   const menuQ = [];
@@ -10904,12 +10968,12 @@ window.FLEET_DB = {
   // Gamepads (Edit 75: pads.js, shared with the controls prototype). Every connected pad is read; the last one used drives.
   // Standard mapping: stick or d-pad moves; A (or RT) dash, B jump, X grab, Y throw; START pauses; hold START (or G) to set up.
   const radial = (x, y, dz, outer) => { const m = Math.hypot(x, y); if (m < dz) return { x: 0, y: 0, m: 0 }; const k = clamp((m - dz) / Math.max(1e-6, outer - dz), 0, 1); return { x: x / m * k, y: y / m * k, m: k }; };
-  const PADCFG = ABIL3 ? { actions: ['a', 'b', 'x'], std: { a: [0, 7], b: [1], x: [2] }, other: { a: [0], b: [1], x: [2] }, store: 'p69' } : FOUR
+  const PADCFG = ABIL4 ? { actions: ['a', 'b', 'x', 'y'], std: { a: [0, 7], b: [1], x: [2], y: [3] }, other: { a: [0], b: [1], x: [2], y: [3] }, store: 'p610' } : ABIL3 ? { actions: ['a', 'b', 'x'], std: { a: [0, 7], b: [1], x: [2] }, other: { a: [0], b: [1], x: [2] }, store: 'p69' } : FOUR
     ? { actions: ['a', 'b', 'x', 'y'], std: { a: [0, 7], b: [1], x: [2], y: [3] }, other: { a: [0], b: [1], x: [2], y: [3] }, store: 'p6' }
     : { actions: ['a', 'b'], std: { a: [0], b: [1] }, other: { a: [0], b: [1] }, store: 'p6' };
   Object.assign(PADCFG, { dead: pv('proto.input.deadzone'), outer: pv('proto.input.stickOuter'), aimDead: 2, holdSetup: pv('proto.input.padSetupHoldSeconds'), stick: radial });
   const pad = { st: window.PADS ? window.PADS.create() : null, mx: 0, my: 0, bHeld: false, xHeld: false, prevB: false, info: null, dirs: {}, blocked: false };
-  const PAD_NAME = { a: 'DASH (A)', b: 'JUMP (B)', x: ABIL3 ? 'GRAB / THROW (X)' : 'GRAB (X)', y: 'THROW (Y)' };
+  const PAD_NAME = { a: 'DASH (A)', b: 'JUMP (B)', x: ABIL3 ? 'GRAB / THROW (X)' : 'GRAB (X)', y: ABIL4 ? 'PUSH (Y)' : 'THROW (Y)' };
   function pollPad(dt) {
     pad.mx = pad.my = 0; pad.bHeld = false; pad.xHeld = false;
     if (!pad.st) return;
@@ -10954,8 +11018,8 @@ window.FLEET_DB = {
   // On where the main pointer is a finger and nothing hovers: (hover: none) and (pointer: coarse); #touch in the address forces it.
   // Landscape only. The analog stick under the district map; Y, X, B, A under the chassis, as on a gamepad. Both may reach into the
   // screen's side margins. Layout in reference units from the canvas corner (the game's units), so the margins count.
-  const FACE = [['y', 0, -1, 'Y', 'THROW'], ['x', -1, 0, 'X', ABIL3 ? 'GRAB' : 'GRAB'], ['b', 1, 0, 'B', 'JUMP'], ['a', 0, 1, 'A', 'DASH']].filter((f) => !(ABIL3 && f[0] === 'y')); // Edit 79: no Y in 6.9
-  const FACE_NODE = { a: null, b: 'jump', x: 'carry', y: 'throw' };
+  const FACE = [['y', 0, -1, 'Y', ABIL4 ? 'PUSH' : 'THROW'], ['x', -1, 0, 'X', ABIL3 ? 'GRAB' : 'GRAB'], ['b', 1, 0, 'B', 'JUMP'], ['a', 0, 1, 'A', 'DASH']].filter((f) => !(ABIL3 && f[0] === 'y')); // Edit 79: no Y in 6.9
+  const FACE_NODE = { a: null, b: 'jump', x: 'carry', y: ABIL4 ? 'push' : 'throw' };
   function touchDevice() {
     try { return /(^#|[#&])touch\b/.test(location.hash) || /[?&]touch\b/.test(location.search) || window.matchMedia('(hover: none) and (pointer: coarse)').matches; }
     catch (e) { return false; }
@@ -11095,6 +11159,7 @@ window.FLEET_DB = {
   const LEVEL6 = { walk: 'Walkway: no traffic up here. Step off the side to drop onto cars below.', hill: 'Hilltop (Z1): streets with traffic. Step off the cliff edge to drop to the valley.',
     terrace: 'Terrace: step off the edge to drop to the beach.', ring: 'Ring deck: highway traffic gives way at the entries. Escalators lead down.' }; // P6 (Edit 62)
   const DENY_TEXT = { lunge: 'No lunge — charge empty or recovering', pickup: 'No cone within reach', drop: 'No room to place the cone', throw: 'No room to release the cone',
+    'push.locked': 'Push needs Arms', 'push.spent': 'No pushes left: land to get them back', 'push.nothing': 'Nothing to push off: hit or touch a car', 'drop.hold': 'Hold X to put the cone down', // Edit 80
     jump: 'No jump — charge empty, or mid-action', 'jump.locked': 'Jump needs the Jump module (Legs)', 'pickup.locked': 'Grab needs the Carry module (Arms)', 'throw.locked': 'Throw needs the Throw module (Arms)', 'throw.empty': 'Grab a cone first (X), then throw (Y)' }; // Edit 75
   // Generated juice (content/juice.json): one entry per sim event, every value a parameter ID. Returns false if absent.
   function juice(e, s) {
@@ -11418,6 +11483,7 @@ window.FLEET_DB = {
         case 'combo-end': Snd.tone(523, 784, 0.12, 'triangle', 0.06); toast('COMBO BANKED · ' + e.n + ' hits · ×' + e.mult + ' · ' + num(e.points)); break; // Edit 79
         case 'hitch': Snd.tone(300, 420, 0.08, 'square', 0.05); if (!fx.hitchTold) { fx.hitchTold = true; toast('Hitched. X lets go; A slings you off with a dash.'); } break;
         case 'sling': Snd.tone(420, 900, 0.14, 'triangle', 0.08); kick(3, 0.15); break;
+        case 'push': { Snd.tone(360, 820, 0.12, 'triangle', 0.08); kick(3, 0.15); const b = s.body; puff(b.x, b.y, 6, { type: 'spark', speed: 80, life: 0.25, size: 2 }); break; } // Edit 80
         case 'cone-hit': Snd.tone(900, 600, 0.08, 'square', 0.06); toast('CONE HIT' + (e.n > 1 ? ' · COMBO ' + e.n + ' · ×' + e.mult : '') + ' · +' + num(e.points)); break;
         case 'slip': { fx.slipT = e.t; const b = s.body; puff(b.x, b.y + 8, 8, { type: 'spark', role: 'puddleHi', speed: 90, life: 0.3, size: 2 }); toast(copy('toast.slip', 'No dash on water. Step off the puddle.')); break; } // D18
         case 'skid': { const c = carsOf(s).find((q) => q.id === e.car); if (c) puff(c.x, c.y, 10, { type: 'spark', role: 'puddleHi', dir: c.h + Math.PI, spread: 2.2, speed: 120, life: 0.35, size: 2 }); Snd.tone(1800, 900, 0.18, 'sawtooth', 0.02); break; }
@@ -11464,7 +11530,7 @@ window.FLEET_DB = {
   const SHOP_GRID = ABIL ? Object.keys(TRACKS).map((t) => [t]) // Edit 78: one card per track (Battery A, Legs B, Arms X, Throw Y); A buys its next level
     : FOUR ? [['spine'], ['jump', 'ricochet'], ['carry', 'throw'], ['bigBattery']] : [['hips', 'spine'], ['carry', 'throw'], ['bigBattery']]; // Edit 75: Legs (Jump, Ricochet); Hips leaves (DIRECT, D48)
   const SHOP_ROWS = ABIL ? 1 : 2; // the deploy row sits below the last card row
-  const nextLevel = (s, t) => { const L = s.tier(t) + 1; return L <= s.P['abilities.maxLevel'] ? t + L : null; }; // Edit 78: the node a track's card sells
+  const nextLevel = (s, t) => { const L = s.tier(t) + 1; return L <= (ABIL4 ? s.trackMax(t) : s.P['abilities.maxLevel']) ? t + L : null; }; // Edit 78: the node a track's card sells
   const NODE = (n) => (ABIL && NODES7[n]) || NODES[n];
   const nodeDesc = (n) => (ABIL && NODES7[n] && NODES7[n].desc) || (FOUR && NODES4 && NODES4[n] && NODES4[n].desc) || NODES[n].desc;
   function handleMenus() {
@@ -12429,6 +12495,12 @@ window.FLEET_DB = {
     if (!FOUR) { const keys = [['WASD', 'MOVE'], ['SPACE', 'DASH']]; if (s.has('carry') || s.has('throw')) keys.push(['K', 'CONE']); return keys; }
     const pd = app.device === 'pad', keys = [[pd ? 'STICK' : 'WASD', 'MOVE'], [pd ? 'A' : 'SPACE', 'DASH']]; // Edit 75: A, B, X, Y as installed
     if (s.has('jump')) keys.push([pd ? 'B' : 'L', 'JUMP']);
+    if (ABIL4) { // Edit 80: X grabs, a hold puts down; Y pushes off a car
+      const b = s.body, n = s.carriedCones().length, room = n < s.coneCapacity();
+      if (s.has('carry')) keys.push([pd ? 'X' : 'J', b.held ? (room ? 'GRAB · HOLD: DOWN' : 'HOLD: PUT DOWN') : 'GRAB']);
+      if (s.has('push')) keys.push([pd ? 'Y' : 'I', 'PUSH ×' + (b.pushes || 0)]);
+      return keys;
+    }
     if (ABIL3) { // Edit 79: X does it all; a hitched body lets go with X, slings with A
       const b = s.body;
       if (b.mode === 'hitch') { keys[1] = [pd ? 'A' : 'SPACE', 'SLING']; keys.push([pd ? 'X' : 'J', 'LET GO']); }
@@ -12582,7 +12654,8 @@ window.FLEET_DB = {
     return out;
   }
   // Owned nodes; in the shop the selected node is tried on (blinking); the tuning preview shows all 15.
-  const DOLL_MODS = ABIL3 ? { battery: ['fastCharge', 'kineticCharge', 'bigBattery'], legs: ['jump', 'springStart', 'grip'], arms: ['carry', 'throw', 'holdOn'] } // Edit 79
+  const DOLL_MODS = ABIL4 ? { battery: ['fastCharge', 'kineticCharge', 'bigBattery'], legs: ['jump', 'springStart', 'grip'], hands: ['carry', 'holdOn'], arms: ['throw', 'spine', 'hips'] } // Edit 80
+    : ABIL3 ? { battery: ['fastCharge', 'kineticCharge', 'bigBattery'], legs: ['jump', 'springStart', 'grip'], arms: ['carry', 'throw', 'holdOn'] } // Edit 79
     : { battery: ['fastCharge', 'kineticCharge', 'bigBattery', 'spine'], legs: ['jump', 'springStart', 'grip', 'hips'], arms: ['carry', 'holdOn', 'neck', 'ears'], throw: ['throw', 'widerView', 'memory'] }; // Edit 77–78: a piece per level
   function dollMods(s) {
     if (app.previewMods) return PIX.MODULES;
@@ -12737,6 +12810,11 @@ window.FLEET_DB = {
   // Edit 78: what a track does at level L (0–4): its step, and the share of wear its level stops
   function abilityStats(s, t, L) {
     const P = s.P, cut = Math.round(P['abilities.wearCut'] * L * 100), wear = L ? 'WEAR −' + cut + '%' : 'FULL WEAR';
+    if (ABIL4) { // Edit 80
+      if (t === 'battery') return ['CHARGE ' + (L ? P['abilities.battery.level' + L + 'Seconds'] : P['battery.secondsPerCharge']).toFixed(1) + ' s', wear];
+      if (t === 'hands') return [L ? P['abilities.hands.conesPerLevel'] * L + ' CONE' + (P['abilities.hands.conesPerLevel'] * L === 1 ? '' : 'S') : 'NO GRAB', L ? wear : ''];
+      if (t === 'arms') return [L ? 'PUSH +' + (P['abilities.arms.pushSpeed'] + P['abilities.arms.pushStep'] * (L - 1)) + ' ×' + P['abilities.arms.pushesPerLevel'] * L : 'BOUNCE ONLY', L ? wear : ''];
+    }
     if (ABIL3) { // Edit 79
       if (t === 'battery') return ['CHARGE ' + (L ? P['abilities.battery.level' + L + 'Seconds'] : P['battery.secondsPerCharge']).toFixed(1) + ' s', wear];
       if (t === 'arms') return [['NO GRAB', 'CARRY A CONE', 'HOLD X: THROW', 'HITCH A CAR'][L], L ? wear : ''];
@@ -12749,7 +12827,7 @@ window.FLEET_DB = {
   }
   function drawAbilityShop(s) {
     veil();
-    const x = FX + 22, y = FY + 18, w = FW - 44, h = FH - 36, P = s.P, max = P['abilities.maxLevel'];
+    const x = FX + 22, y = FY + 18, w = FW - 44, h = FH - 36, P = s.P; let max = P['abilities.maxLevel'];
     panel(x, y, w, h);
     txt(copy('shop.eyebrow', 'MODIFICATION SERVICES').toUpperCase(), x + 28, y + 46, fLab, FT.accent);
     const ct = s.run.credits + ' CREDIT' + (s.run.credits === 1 ? '' : 'S');
@@ -12758,7 +12836,7 @@ window.FLEET_DB = {
     txt(ct, x + w - 28 - cw / 2, y + 46, fLab, C.primary, 'center');
     const nc = SHOP_GRID.length, gap = 16, colW = (w - 56 - gap * (nc - 1)) / nc, top = y + 76, cardH = 262;
     SHOP_GRID.forEach((col, ci) => {
-      const t = col[0], tr = TRACKS[t], lv = s.tier(t), n = nextLevel(s, t), chk = n ? s.canBuy(n) : { ok: false, why: 'max' }, on = app.shopCol === ci && app.shopRow === 0, cx = x + 28 + ci * (colW + gap);
+      const t = col[0], tr = TRACKS[t], lv = s.tier(t), _m = (max = ABIL4 ? s.trackMax(t) : P['abilities.maxLevel']), n = nextLevel(s, t), chk = n ? s.canBuy(n) : { ok: false, why: 'max' }, on = app.shopCol === ci && app.shopRow === 0, cx = x + 28 + ci * (colW + gap);
       rr(cx, top, colW, cardH, 12);
       ctx.fillStyle = on ? FT.keyTop : lv ? 'rgba(79,195,232,0.16)' : FT.item; ctx.fill();
       ctx.strokeStyle = on ? FT.accent : FT.itemEdge; ctx.lineWidth = on ? 3 : 1.5; ctx.stroke();
@@ -12888,7 +12966,7 @@ window.FLEET_DB = {
   }
   // Edit 79: the combo meter, top of the field while a chain is live: hits, multiplier, the moves so far; the bar is the clock
   // (scoring.comboWindow), held while the dummy is in the air, flying or hitched
-  const MOVE_NAME = { dash: 'DASH', jump: 'JUMP', bounce: 'BOUNCE', sling: 'SLING', drop: 'DROP', cone: 'CONE', struck: 'STRUCK' };
+  const MOVE_NAME = { dash: 'DASH', jump: 'JUMP', bounce: 'BOUNCE', push: 'PUSH', sling: 'SLING', drop: 'DROP', cone: 'CONE', struck: 'STRUCK' };
   function drawComboMeter(s) {
     const b = s.body, cb = b && b.combo, P = s.P;
     if (!cb || cb.ended || !P['proto.combo'] || s.phase !== 'play') return;
@@ -12897,6 +12975,7 @@ window.FLEET_DB = {
     rr(x, y, w, h, 12); ctx.fillStyle = 'rgba(11,16,22,0.78)'; ctx.fill(); ctx.strokeStyle = cb.n > 1 ? C.dummy : FT.accent; ctx.lineWidth = 2; ctx.stroke();
     txt((cb.n > 1 ? 'COMBO ' + cb.n : 'HIT') + '  ×' + (+cb.mult.toFixed(2)), x + 14, y + 26, fLab, cb.n > 1 ? C.dummy : FT.text);
     txt(cb.kinds.map((k) => MOVE_NAME[k] || k).join(' › '), x + w - 14, y + 26, '700 15px ' + F_UI, FT.dim, 'right');
+    if (ABIL4 && s.has('push')) { const n = P['abilities.arms.pushesPerLevel'] * s.tier('arms'); for (let i = 0; i < n; i++) { ctx.beginPath(); ctx.arc(x + w / 2 - (n - 1) * 9 + i * 18, y + 20, 5.5, 0, TAU); ctx.fillStyle = i < (b.pushes || 0) ? FT.accent : 'rgba(159,176,186,0.25)'; ctx.fill(); } } // Edit 80: pushes left
     rr(x + 14, y + 38, w - 28, 10, 5); ctx.fillStyle = 'rgba(159,176,186,0.22)'; ctx.fill();
     if (left > 0) { rr(x + 14, y + 38, Math.max(10, (w - 28) * left), 10, 5); ctx.fillStyle = air && P['scoring.comboAirPause'] ? FT.accent : C.dummy; ctx.fill(); }
   }
@@ -12906,7 +12985,7 @@ window.FLEET_DB = {
     panel(x, y, w, h);
     txt('GAMEPAD SETUP', x + w / 2, y + 44, fLab, FT.accent, 'center');
     txt('Press the button for ' + PAD_NAME[st], x + w / 2, y + 92, '700 30px ' + F_UI, FT.text, 'center');
-    txt((ABIL3 ? 'DASH, JUMP, GRAB in turn' : 'DASH, JUMP, GRAB, THROW in turn') + ' · ESC or G cancels', x + w / 2, y + 128, fTxt, FT.dim, 'center');
+    txt((ABIL3 ? 'DASH, JUMP, GRAB in turn' : ABIL4 ? 'DASH, JUMP, GRAB, PUSH in turn' : 'DASH, JUMP, GRAB, THROW in turn') + ' · ESC or G cancels', x + w / 2, y + 128, fTxt, FT.dim, 'center');
   }
 
   // ---------- tuning panel
@@ -12939,13 +13018,20 @@ window.FLEET_DB = {
     ['abilities.arms.conesPerLevel', 1, 3, 1], ['abilities.throw.distanceStep', 0, 120, 5], ['economy.price.ability.level4', 0, 8, 1],
     // Edit 79 (P6.9): Battery's seconds a charge per level; the throw hold; the hitch and sling; combos
     ['abilities.battery.level1Seconds', 0.2, 2, 0.05], ['abilities.battery.level2Seconds', 0.2, 2, 0.05], ['abilities.battery.level3Seconds', 0.2, 2, 0.05],
-    ['input.throwHoldSeconds', 0.1, 1, 0.05], ['abilities.arms.hitchReach', 0, 40, 1], ['abilities.arms.hitchSeconds', 0.3, 4, 0.1], ['abilities.arms.hitchMinSpeed', 0, 120, 5],
+    ['input.throwHoldSeconds', 0.1, 1, 0.05], ['input.dropHoldSeconds', 0.1, 1, 0.05], ['abilities.hands.conesPerLevel', 1, 3, 1],
+    ['abilities.arms.pushSpeed', 0, 400, 10], ['abilities.arms.pushStep', 0, 200, 5], ['abilities.arms.pushesPerLevel', 1, 3, 1], ['abilities.arms.pushReach', 0, 40, 1], ['abilities.arms.pushWindow', 0, 1, 0.05],
+    ['proto.parts.armPushLoss', 0, 3, 0.1], ['abilities.arms.hitchReach', 0, 40, 1], ['abilities.arms.hitchSeconds', 0.3, 4, 0.1], ['abilities.arms.hitchMinSpeed', 0, 120, 5],
     ['abilities.arms.slingScale', 0.5, 2, 0.05], ['abilities.arms.slingDash', 0, 300, 10], ['abilities.arms.hitchEdge', 0, 120, 5],
     ['scoring.comboVariety', 0, 2, 0.1], ['scoring.comboAirPause', 0, 1, 1], ['scoring.coneLink', 0, 1, 1], ['scoring.coneHitPoints', 0, 100, 5],
     // Edit 78 (P6.8): the bounce off a car, Newtonian. Restitution, the dummy's mass, contact friction, the slide
     ['proto.bounce.newton', 0, 1, 1], ['physics.slideFriction', 0.1, 3, 0.05], ['proto.parts.torsoRechargeLoss', 0, 3, 0.1], ['proto.jump.runToClear', 0, 1, 1],
     ['economy.price.ability.level1', 0, 5, 1], ['economy.price.ability.level2', 0, 5, 1], ['economy.price.ability.level3', 0, 6, 1], ['scoring.comboWindow', 0.2, 4, 0.1], ['scoring.comboStep', 0, 2, 0.1], ['scoring.comboMax', 1, 6, 0.5],
   ];
+  if (ABIL4) { // Edit 80: P6.10 drops the sliders it does not use (the throw, the hitch and sling, the cone link, the old tree, level 4)
+    const gone = new Set(['input.throwHoldSeconds', 'abilities.arms.hitchReach', 'abilities.arms.hitchSeconds', 'abilities.arms.hitchMinSpeed', 'abilities.arms.slingScale', 'abilities.arms.slingDash', 'abilities.arms.hitchEdge',
+      'scoring.coneLink', 'scoring.coneHitPoints', 'upgrades.ricochetScale', 'upgrades.throwDistance', 'upgrades.spineLimit', 'upgrades.hipsTurnRate', 'upgrades.bigCapacity', 'abilities.battery.rechargeCut', 'abilities.arms.conesPerLevel', 'abilities.throw.distanceStep', 'economy.price.ability.level4']);
+    for (let i = TUNE.length - 1; i >= 0; i--) if (gone.has(TUNE[i][0])) TUNE.splice(i, 1);
+  }
   for (const id of Object.keys(CPARAM)) { const v = CPARAM[id]; TUNE.push([id, 0, Math.max(1, Math.ceil(v * 3)), v >= 10 ? 1 : 0.01]); } // generated presentation IDs
   const tuneEl = document.getElementById('tune'), grid = document.getElementById('tune-grid');
   function current(id) {
@@ -12982,7 +13068,7 @@ window.FLEET_DB = {
         inp.addEventListener('change', () => {
           const sm = app.sim; if (!sm) { inp.checked = false; toast('Start a district first'); return; }
           const nd = ABIL && NODES7[n];
-          if (nd) { for (let L = 1; L <= 4; L++) { const k = nd.track + L; if (inp.checked ? L <= nd.level : L >= nd.level) { if (inp.checked) sm.run.owned[k] = true; else delete sm.run.owned[k]; } const el = document.getElementById('t-own-' + k); if (el) el.checked = !!sm.run.owned[k]; } } // Edit 77: a level brings the levels below it
+          if (nd) { for (let L = 1; L <= 4; L++) { if (!NODES7[nd.track + L]) continue; const k = nd.track + L; if (inp.checked ? L <= nd.level : L >= nd.level) { if (inp.checked) sm.run.owned[k] = true; else delete sm.run.owned[k]; } const el = document.getElementById('t-own-' + k); if (el) el.checked = !!sm.run.owned[k]; } } // Edit 77: a level brings the levels below it
           else if (inp.checked) sm.run.owned[n] = true; else delete sm.run.owned[n];
           app.tuned = true; sm.emit('debug-module', { node: n, on: inp.checked });
         });
