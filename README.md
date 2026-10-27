@@ -1,6 +1,6 @@
-# DUMMIES — Prototype 6.7
+# DUMMIES — Prototype 6.8
 
-**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 77.
+**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 78.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
@@ -31,7 +31,14 @@
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, THROW in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
 
-## What 6.7 adds
+## What 6.8 adds
+
+- Four levels per ability. Legs: 0.3 to 0.6 s in the air. Arms: carry 1 to 4 cones. Throw: +40 range a level. Battery: −0.1 s a charge a level.
+- The shop shows one card per ability; A buys its next level.
+- Hits bounce the dummy with Newtonian momentum: a head-on hit throws it far, into the next car for a combo. Tune it in Tuning (T).
+- Jump test: [ and ] change the Legs level.
+
+## 6.7
 
 - The shop sells four abilities, one per button, three levels each: Battery (A), Legs (B), Arms (X), Throw (Y).
 - Level 1 gives the ability. Every level cuts how much damage wears it, 25% a level.
