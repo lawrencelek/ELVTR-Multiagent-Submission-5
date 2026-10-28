@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.5
+# DUMMIES — Prototype 7.6
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 86.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 87.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.5:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-5/
 - **Prototype 7.4:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-4/
 - **Prototype 7.3:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-3/
 - **Prototype 7.2:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-2/
@@ -16,7 +17,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.5. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.6. Arcade and Story. One file; no server.
+- `p7-5/index.html`: Prototype 7.5, frozen.
 - `p7-4/index.html`: Prototype 7.4, frozen.
 - `p7-3/index.html`: Prototype 7.3, frozen.
 - `p7-2/index.html`: Prototype 7.2, frozen.
@@ -41,9 +43,17 @@
 
 - ESC, START or ❚❚ pauses. **Options** (sound, palette, full screen, tuning, pad setup) and **Controls** (for the keyboard, pad or touch you are using) are in the pause menu.
 - Touch controls show only on touch screens. Add `#touch` to the address to force them.
+- Touch: Pause › Controls › Adjust layout. Drag the stick or the buttons anywhere, size them (60–160%), Reset. Saved in your browser.
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.6 changes
+
+- One top edge: BODY, the game screen and a new POINTS · CREDITS box line up. The chassis sits under the box. Arcade's box: POINTS · CARS LEFT.
+- The objective moves to the top strip. The map panel reads the map and tile, e.g. MONUMENT · A1.
+- Touch: small PAUSE and FULL chips, top left. Everything fits the 16:9 centre.
+- Touch: move and size the stick and the buttons yourself (Pause › Controls › Adjust layout). On a wide phone such as the S25 Ultra, put them in the side margins.
 
 ## What 7.5 changes
 
