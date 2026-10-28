@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.2
+# DUMMIES — Prototype 7.3
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 83.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 84.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.2:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-2/
 - **Prototype 7.1:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-1/
 - **Prototype 7 (before 7.1's economy):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7/
 - **Prototype 6.10 (before the modes):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p6-10/
@@ -13,7 +14,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.2. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.3. Arcade and Story. One file; no server.
+- `p7-2/index.html`: Prototype 7.2, frozen.
 - `p7-1/index.html`: Prototype 7.1, frozen.
 - `p7/index.html`: Prototype 7, frozen.
 - `p6-10/index.html`: Prototype 6.10, frozen.
@@ -26,10 +28,10 @@
 |---|---|---|---|---|
 | Move | WASD / arrows | stick or d-pad | analog stick, left | — |
 | Dash | SPACE or K | A (or RT) | A | start; Battery recharges it faster |
-| Jump | L or SHIFT | B | B | Legs 1 |
-| Pick up a cone | J or E, tap | X, tap | X, tap | Hands 1 (one cone), Hands 2 (two) |
+| Jump | L or SHIFT | B | B | Legs 1 (by drone) |
+| Pick up a cone | J or E, tap | X, tap | X, tap | Hands 1 by drone (one cone), Hands 2 (two) |
 | Put a cone down | J or E, hold 0.3 s | X, hold | X, hold | Hands 1 |
-| Push off a car | I or Q, after a hit or beside a car | Y | Y | Arms 1 |
+| Push off a car | I or Q, after a hit or beside a car | Y | Y | Arms 1 (by drone) |
 | Pause | ESC or P | START | ❚❚ PAUSE | — |
 | Pad setup | G | hold START | — | — |
 
@@ -37,6 +39,14 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.3 changes
+
+- Verbs are given, levels are bought. Legs 1, Hands 1 and Arms 1 arrive by drone; the shop never sells them.
+- Story: Monument hands out a verb every three tiles: Legs 1 at C1, Hands 1 at A2, Arms 1 at C3.
+- Arcade: the same verbs in the same order, one after each write-off.
+- You see the drone bring it: a glowing case under the drone, lowered onto the dummy.
+- Then a gift screen: the dummy's body, large; the new part falls onto it with a flash, rays and a fanfare. A continues; the drone carries you on.
 
 ## What 7.2 changes
 
