@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.10
+# DUMMIES — Prototype 7.11
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 91.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 92.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.10:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-10/
 - **Prototype 7.9:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-9/
 - **Prototype 7.8:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-8/
 - **Prototype 7.7:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-7/
@@ -21,7 +22,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.10. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.11. Arcade and Story. One file; no server.
+- `p7-10/index.html`: Prototype 7.10, frozen.
 - `p7-9/index.html`: Prototype 7.9, frozen.
 - `p7-8/index.html`: Prototype 7.8, frozen.
 - `p7-7/index.html`: Prototype 7.7, frozen.
@@ -56,6 +58,14 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - Arcade: the workshop opens after each write-off; credits buy parts. Story: parts come by drone. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.11 changes
+
+- The story is Narrative A, Certified. You arrive off the factory floor as Farsight's new staff; the cars are your colleagues.
+  - Act I, Monument: Induction. Act II, Parkland: Opening Day. Act III, Waterfront: Customs. Every tile has a new tale.
+  - The end: your model passes and will be manufactured; a drone takes you to a ship bound for a market far away.
+- New tile names: The welcome wall, The neon shops, The dome by the canal, the east and west customs posts.
+- New tile art, for looks only: the LED wall shows your face and WELCOME; neon shop signs; the gateway reads THANK YOU · DRIVE SAFE; a paper lantern; water falling down the cascade; CUSTOMS on the pier towers; a container ship on the river.
 
 ## What 7.10 changes
 

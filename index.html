@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="screen-orientation" content="landscape"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>DUMMIES P7.10</title>
+<title>DUMMIES P7.11</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&family=Nunito:wght@700;800;900&display=swap">
@@ -65,7 +65,7 @@ body.touch #game { touch-action: none; }
 </head>
 <body>
 <div class="stage" id="stage">
-  <canvas id="game" tabindex="0" aria-label="DUMMIES P7.10 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
+  <canvas id="game" tabindex="0" aria-label="DUMMIES P7.11 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
 </div>
 <div class="wrap">
   <div class="bar" hidden> <!-- Edit 86: kept for its handlers and the build line; the pause menu carries options and controls -->
@@ -294,7 +294,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
     'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
-    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'world.dummyMonument': 0, // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 2,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -6586,6 +6586,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
         sc.floorsX.push({ kind: 'roof', z: 1, x: lx + 2, y: ly, w: w - 4, h: h - 20, key: ly + h + 0.6, drop: true });
       } else if (b.type === 'pier') {
         const plinth = Z1 + RIV, Hh = (b.storeys - 2) * STY, S0 = PIX.building(Math.round(w / U), Math.round(h / U), plinth, PIX.rng(491 + i), CON.l, 2); // P6.3: the plinth's roof at Z1
+        if (ART()) customsSign(S0, plinth); // Edit 92: the pier towers are customs posts
         sc.props.push({ spr: S0, x: u(lx), y: u(ly) + RIV, by: ly + h, bldg: 'pier', plan: [lx, ly, w, h] }); // the plinth, its foot in the water
         sc.props.push({ spr: brutal(u(w - 36), u(h - 38), Hh, PIX.rng(497 + i), led, null, 'n', 'slab'), x: u(lx + 18), y: u(ly + 12) - Z1, by: ly + h + 0.2 });
         sc.floorsX.push({ kind: 'roof', z: 1, x: lx, y: ly, w, h, key: ly + h + 0.6, drop: true }); sc.solidsZ.push({ x: lx + 18, y: ly + 12, w: w - 36, h: h - 38, z: 1 }); // the walkway lands on the plinth roof
@@ -6607,6 +6608,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       wl.front = 1e6; sc.layers.push(wl); sc.walk = wl;
     }
     if (name === 'B2' && ACCESS && ACCESS.monument) dummyMonument(sc, B, [VP.ring[0] - ox, VP.ring[1] - oy]); // Edit 91
+    if (name === 'B3' && ART()) containerShip(B, 140, 276); // Edit 92: the ship that takes the certified model to market (art px)
   }
   // Edit 91 (P7.10): the DUMMY MONUMENT on the circus's island (Waterfront B2): the dummy, three times life, in white stone with
   // black joints and its calibration mark; a stepped plinth with a lit plaque; paving and a ring of LEDs round the island
@@ -6640,6 +6642,84 @@ document.getElementById('btn-full').addEventListener('click', () => {
     for (let t = 0; t < 40; t++) for (let j = -9; j <= 9; j++) B.shade(x0 - 4 - t * 0.7 + j * 0.7, y0 + t * 0.7 + j * 0.7, 0.7); // the long shadow, down-left
     captureRect(cx - 44, cy - 18, 88, 36, 'sculpture');
     sc.props.push({ spr: dummyStatue(), x: x0, y: y0, by: cy + 18, bldg: 'dummy monument' }); sc.dummyMonument = { cx, cy };
+  }
+  // ---------- Edit 92 (P7.11): the story's tile art (world.storyArt). Cosmetic only: pixels on sprites already placed, flat marks on the
+  // ground, props never captured. No solid, floor, stair, spawn or cone home changes
+  const ART = () => !!(ACCESS && ACCESS.storyArt);
+  const onSpr = (S) => ({ put: (x, y, c) => { x = Math.round(x); y = Math.round(y); if (x >= 0 && y >= 0 && x < S.w && y < S.h && S.d[y * S.w + x]) S.d[y * S.w + x] = c; } }); // paints only where the sprite is
+  const lumOf = (c) => ((c & 255) * 0.3 + ((c >>> 8) & 255) * 0.59 + ((c >>> 16) & 255) * 0.11) / 255;
+  function welcomeWall(S, H0) { // Monument A1: the LED wall greets the new chassis: its face in the screen's cyan, WELCOME, NEW STAFF
+    const top = S.h - Math.round(H0 * 0.85), bot = S.h - 4, x0 = 3, x1 = S.w - 5, B2 = onSpr(S), DK = [c32('#0B1530'), c32('#0F1D3E')];
+    for (let y = top + 1; y < bot - 1; y++) for (let x = x0 + 1; x < x1; x++) B2.put(x, y, DK[y % 2]);
+    const D = PIX.doll({}, '', []), cx0 = 14, cy0 = 4, cw = 36, ch = Math.min(31, bot - top - 4), fx = x0 + 8, fy = top + Math.max(2, Math.round((bot - top - ch) / 2));
+    for (let j = 0; j < ch; j++) for (let i = 0; i < cw; i++) { const c = D.d[(cy0 + j) * D.w + cx0 + i]; if (!c) continue; const l = lumOf(c);
+      B2.put(fx + i, fy + j, (fy + j) % 2 && l > 0.3 ? mixK(N.cyan, K.white, 0.25) : l > 0.78 ? K.white : l > 0.55 ? mixK(N.cyan, K.white, 0.45) : l > 0.3 ? N.cyan : mixK(N.cyan, DK[0], 0.7)); }
+    const tx = fx + cw + 8, ty = top + Math.round((bot - top) / 2) - 9;
+    PIX.smallText(B2, 'WELCOME', tx, ty, K.white); PIX.smallText(B2, 'NEW STAFF', tx, ty + 9, N.magenta); PIX.smallText(B2, 'FARSIGHT', tx, ty + 18, N.cyan);
+    return S;
+  }
+  function shopSigns(S, H0, k) { // Monument A2: the neon shops: two shopfronts, a lit sign over each, the windows below
+    const top = S.h - Math.round(H0 * 0.85), bot = S.h - 4, x0 = 3, x1 = S.w - 5, B2 = onSpr(S), n = 2, w = (x1 - x0 - 2) / n, words = [['OPEN', 'SALE'], ['24H', 'NEW']][k % 2], cols = [N.magenta, N.cyan, LEDS[2 % LEDS.length]];
+    for (let q = 0; q < n; q++) {
+      const a = Math.round(x0 + 1 + q * w), b = Math.round(x0 + 1 + (q + 1) * w) - 2, col = cols[(q + k) % 3], sh = Math.min(8, bot - top - 4);
+      for (let y = top + 1; y < bot - 1; y++) for (let x = a; x <= b; x++) B2.put(x, y, y < top + 1 + sh ? (y === top + 1 || y === top + sh || x === a || x === b ? col : c32('#0A0F1E')) : (x === a || x === b) ? K.bldgOutline : (y + x) % 5 === 0 ? K.white : mixK(col, c32('#0A0F1E'), 0.55));
+      const t = words[q], tw = PIX.smallWidth(t); PIX.smallText(B2, t, Math.round((a + b) / 2 - tw / 2) + 1, top + 2 + Math.max(0, Math.floor((sh - 6) / 2)), K.white);
+    }
+    return S;
+  }
+  function cubeRim(S, H, col) { // Monument A3: each cube lit on its edges, the roof's front edge brightest
+    const at = (x, y) => (x < 0 || y < 0 || x >= S.w || y >= S.h ? 0 : S.d[y * S.w + x]), out = new Uint32Array(S.d), e = S.h - H;
+    for (let y = 0; y < S.h; y++) for (let x = 0; x < S.w; x++) { if (!at(x, y)) continue; if (!at(x - 1, y) || !at(x + 1, y) || !at(x, y - 1) || !at(x, y + 1)) out[y * S.w + x] = y < e ? K.white : col; else if (y === e || y === e - 1) out[y * S.w + x] = y === e ? col : K.white; }
+    S.d = out; return S;
+  }
+  function gatewayLayer(B, ax, top, bot, Hh) { // Monument C3: the LED gateway: two pylons, a deep lit beam over the road reading THANK YOU · DRIVE SAFE, its shadow across the lanes
+    const L = new PIX.Buf(AW, AH), X0 = Math.round(ax / U), yT = Math.round(top / U), yB = Math.round(bot / U), BW = 10, PW = 8;
+    for (let y = yT - 4; y <= yB + 4; y++) for (let x = X0 - BW; x <= X0 + BW; x++) B.shade(x - Math.round(Hh * 0.7), y + Math.round(Hh * 0.7), 0.78); // the beam's shadow
+    for (const py of [yT, yB]) {
+      for (let y = py - 5; y <= py + 5; y++) for (let x = X0 - PW; x <= X0 + PW; x++) B.shade(x - 5, y + 5, 0.72);
+      for (let z = 0; z < Hh; z++) for (let i = -PW; i <= PW; i++) L.put(X0 + i, py + 5 - z, Math.abs(i) === PW ? K.bldgOutline : Math.abs(i) < 2 ? (z % 6 < 3 ? N.cyan : N.magenta) : i < 0 ? CON.d : CON.l);
+      for (let y = py - 5; y <= py + 5; y++) for (let i = -PW; i <= PW; i++) L.put(X0 + i, y - Hh, Math.abs(i) === PW || y === py - 5 ? K.bldgOutline : CON.l);
+    }
+    for (let y = yT - Hh - 5; y <= yB - Hh + 5; y++) for (let i = -BW; i <= BW; i++) {
+      const edge = Math.abs(i) === BW || y === yT - Hh - 5 || y === yB - Hh + 5, rail = Math.abs(i) === BW - 1, chev = ((y - yT) - Math.abs(i) * 1.5 + 64) % 8 < 3;
+      L.put(X0 + i, y, edge ? K.bldgOutline : rail ? (y % 2 ? N.cyan : K.white) : Math.abs(i) <= 4 ? c32('#0A0F1E') : chev ? N.cyan : N.magenta);
+    }
+    const vtext = (t, y0, c) => { let cy = y0; for (const ch of t) { if (ch === ' ') { cy += 4; continue; } const w = PIX.smallWidth(ch); const G = { put: (x, y) => L.put(X0 + 3 - y, cy + x, c) }; PIX.smallText(G, ch, 0, 0, c); cy += w + 1; } return cy; }; // reads top to bottom
+    const t1 = 'THANK YOU', t2 = 'DRIVE SAFE', len = (t) => [...t].reduce((a, ch) => a + (ch === ' ' ? 4 : PIX.smallWidth(ch) + 1), 0), mid = Math.round((yT + yB) / 2) - Hh;
+    vtext(t1, mid - len(t1) - 3, K.white); vtext(t2, mid + 4, N.cyan);
+    return L;
+  }
+  function lanternSprite() { // Parkland C1: the paper lantern, the Expo's first exhibit, lit again on its pavilion
+    const W = 30, H = 46, cx = 15, S = { w: W, h: H, d: new Uint32Array(W * H), ox: cx, oy: H - 1 }, put = (x, y, c) => { if (x >= 0 && y >= 0 && x < W && y < H) S.d[y * W + x] = c; };
+    const cy = 22, rx = 12, ry = 16;
+    for (let y = -ry; y <= ry; y++) for (let x = -rx; x <= rx; x++) { const d = (x / rx) ** 2 + (y / ry) ** 2; if (d > 1) continue; put(cx + x, cy + y, d > 0.86 ? mixK(K.white, N.cyan, 0.45) : Math.abs(y) % 5 === 0 ? mixK(K.white, CON.d, 0.45) : x > 4 ? mixK(K.white, N.cyan, 0.18) : K.white); }
+    for (let x = -6; x <= 6; x++) for (let t = 0; t < 3; t++) { put(cx + x, cy - ry - t, t === 2 ? K.bldgOutline : CON.d); put(cx + x, cy + ry + t, t === 2 ? K.bldgOutline : CON.d); }
+    for (let t = 0; t < 4; t++) put(cx, cy - ry - 3 - t, CON.d); // the hanger
+    for (let t = 0; t < 6; t++) put(cx, cy + ry + 3 + t, t > 3 ? N.magenta : CON.l); // the tassel
+    return S;
+  }
+  function falls(B, x0, x1, yTop, yFoot) { // Parkland B1: water spilling over a pool's front lip, down its face
+    const a = Math.round(x0 + (x1 - x0) * 0.3), b = Math.round(x0 + (x1 - x0) * 0.7);
+    for (let y = Math.round(yTop); y <= Math.round(yFoot); y++) for (let x = a; x <= b; x++) B.put(x, y, (x + y * 2) % 5 === 0 ? K.white : x % 2 ? N.water2 : mixK(N.cyan, K.white, 0.3));
+    for (let x = a - 1; x <= b + 1; x++) B.put(x, Math.round(yFoot) + 1, (x % 2) ? K.white : mixK(N.cyan, K.white, 0.5)); // foam at the foot
+  }
+  function runnel(B, cx, y0, y1) { // a grated channel across the path to the next pool
+    for (let y = Math.round(y0); y <= Math.round(y1); y++) for (let x = Math.round(cx) - 2; x <= Math.round(cx) + 2; x++) B.put(x, y, Math.abs(x - cx) > 1.5 ? CON.l : y % 2 ? N.water2 : CON.d);
+  }
+  function customsSign(S, plinth) { // Waterfront A3, C3: the pier towers are customs posts: CUSTOMS on the plinth, lit
+    const B2 = onSpr(S), t = 'CUSTOMS', tw = PIX.smallWidth(t), y = S.h - plinth + 3, x = Math.round(S.w / 2 - tw / 2);
+    for (let yy = y - 2; yy < y + 8; yy++) for (let xx = x - 3; xx < x + tw + 3; xx++) B2.put(xx, yy, yy === y - 2 || yy === y + 7 ? N.cyan : c32('#0A0F1E'));
+    PIX.smallText(B2, t, x, y, K.white);
+    return S;
+  }
+  function containerShip(B, x0, y0) { // Waterfront B3: the ship that will take the certified model to market, moored on the river
+    const L = 120, Wd = 22, put = (x, y, c) => B.put(x0 + x, y0 + y, c);
+    for (let t = 0; t < 30; t++) for (let x = 6; x < L; x++) B.shade(x0 + x - t * 0.7, y0 + Wd + t * 0.7, 0.9); // its shadow on the water
+    for (let y = 0; y < Wd; y++) for (let x = 0; x < L; x++) { const bow = x > L - 14 ? (x - (L - 14)) * 0.8 : 0; if (Math.abs(y - Wd / 2) > Wd / 2 - bow) continue; put(x, y, Math.abs(y - Wd / 2) > Wd / 2 - bow - 1.5 ? K.white : c32('#2A3346')); }
+    const cols = [N.cyan, N.magenta, c32('#5F6E86'), c32('#C9D3DA'), LEDS[2 % LEDS.length]];
+    for (let r = 0; r < 3; r++) for (let q = 0; q < 8; q++) { const bx = 24 + q * 10, by = 3 + r * 6; for (let y = 0; y < 5; y++) for (let x = 0; x < 9; x++) put(bx + x, by + y - 2, y === 0 || x === 0 ? K.bldgOutline : cols[(q * 3 + r * 2 + q * r) % cols.length]); }
+    for (let y = 2; y < Wd - 2; y++) for (let x = 6; x < 18; x++) put(x, y - 6, y === 2 || x === 6 || x === 17 ? K.bldgOutline : y % 3 === 0 ? N.cyan : K.white); // the bridge
+    for (let x = -10; x < 0; x++) for (const yy of [Wd / 2 - 3, Wd / 2 + 3]) if ((x + 20) % 3) put(x, Math.round(yy + x * 0.2), mixK(N.cyan, K.white, 0.5)); // the wake
   }
   DISTRICTS.splice(1, 0, WATER);
   // ---------- traffic on one screen (the dummy away)
@@ -6754,6 +6834,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       const S = ledPanel(PIX.building(w, h, H, PIX.rng(seed + i), [N.magenta, N.cyan, LEDS[2 % LEDS.length]][i % 3], Math.max(2, Math.round(H / STY))), H, [[N.magenta, N.cyan], [N.cyan, LEDS[2 % LEDS.length]], [LEDS[2 % LEDS.length], N.magenta]][i % 3]);
       if (i === 0) brutalShadow(B, x, y, w, h, Math.round(cubes.reduce((a, c) => a + c[4], 0) * 0.55), null);
       if (i === 0) captureRect(x * U, y * U, w * U, h * U);
+      if (ART()) cubeRim(S, H, [N.magenta, N.cyan, LEDS[2 % LEDS.length]][i % 3]); // Edit 92: each cube lit on its edges
       sc.props.push({ spr: S, x, y: y - base, by, key: by + i * 0.01, bldg: i === 0 ? 'cubes' : undefined }); base += H;
     });
   }
@@ -6963,7 +7044,10 @@ document.getElementById('btn-full').addEventListener('click', () => {
       for (let i = 0; i < 3; i++) { const x0 = sp[0] + 8 + i * 32, x1 = sp[2] - 8 - i * 32, y0 = sp[1] + 8 + i * 6, y1 = sp[3] - 8 - i * 96, base = i * 4; waterBlock(B, u(x0), u(y0), u(x1), u(y1), 8, base, 3);
         if (i) for (let x = Math.round(u(x0 + (x1 - x0) * 0.3)); x <= Math.round(u(x0 + (x1 - x0) * 0.7)); x++) if (x % 2 === 0) for (let t = 0; t <= base + 3; t++) B.put(x, Math.round(u(y1)) - t, t > base + 1 ? K.white : x % 4 === 0 ? mixK(N.cyan, K.white, 0.5) : N.water2); }
       sc.terraces = true; }
+    const cas = (r, i) => [u(r[0] + 12), u(r[1] + (i ? 16 : 32)), u(r[2] - 12), u(r[3] - 12), 12 - i * 3]; // Edit 92: the cascade's pools, as drawn
+    if (name === 'B1' && ART()) pools.forEach((r, i) => { if (i + 1 >= pools.length) return; const a = cas(r, i), b = cas(pools[i + 1], i + 1); runnel(B, (a[0] + a[2]) / 2, a[3] + 1, b[1]); });
     if (name === 'B1') pools.forEach((r, i) => waterBlock(B, u(r[0] + 12), u(r[1] + (i ? 16 : 32)), u(r[2] - 12), u(r[3] - 12), 6, 12 - i * 3, 3)); // the top pool clear of the north flight by more than a body // cascade, falling south beside the highway
+    if (name === 'B1' && ART()) pools.forEach((r, i) => { if (i + 1 >= pools.length) return; const a = cas(r, i); falls(B, a[0], a[2], a[3] - a[4] - 2, a[3]); }); // Edit 92: water spills over each lip
     if (name === 'C1') { // footbridge over the avenue (x = 160) at Z1; Edit 55.2: it runs on west to the B1 highway. 6.2: its flight down the south side, on the x 480 path; the lantern pavilion in its cell
       const esc = [escC1];
       const wpoly = [[-40, 304], [480 + SWD / 2, 304], [480 + SWD / 2, 336], [-40, 336]]; wpoly.spine = [[-40, 320], [480, 320]]; const wl = walkwayLayer([wpoly], [], esc.map((st) => [st.x, st.y, st.w, st.h]), () => true, sc.roadC);
@@ -6971,6 +7055,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       wl.cols = [[80, 320], [240, 320]].map(([x, y]) => ({ cx: x, cy: y, key: y + 8, x: x - 8, y: y - 8, spr: PIX.column(4, 4, Z1) }));
       wl.front = 9e5; sc.layers.push(wl); sc.walk = wl; wl.shadeOn(B); wl._shaded = true;
       block(B, u(sp[0] + 4), u(sp[1] + 6), u(sp[2] - 4), u(sp[3] - 6), 4, 0, 10, 'conc', LEDS[0], true); block(B, u(sp[0] + 20), u(sp[1] + 20), u(sp[2] - 20), u(sp[3] - 20), 3, 10, 2, 'grass', LEDS[3 % LEDS.length], false);
+      if (ART()) sc.props.push({ spr: lanternSprite(), x: u((sp[0] + sp[2]) / 2), y: u((sp[1] + sp[3]) / 2) - 12, by: sp[3] - 5, bldg: 'lantern' }); // Edit 92: the paper lantern, lit; never solid
     }
     if (name === 'A2') poolFP(B, chamf(sp[0] + 8, sp[1] + 8, sp[2] - 8, sp[3] - 8, 8)); // canal under the highway's south edge (6.2: in its cells)
     if (name === 'B1' || name === 'A1') { // Edit 55.2: the Z1 walkway from C1 joins the B1 highway at both parapets and lands in A1 by escalator
@@ -7000,7 +7085,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
   function monumentTile(sc, B, name, roadOk, free, rng, runs) {
     const u = (v) => v / U, R = sc.reserve, bld = (x, y, w, h, st, i, panel) => { let S = PIX.building(Math.round(u(w)), Math.round(u(h)), st * EXT(P['world.storeyHeight']), PIX.rng(700 + i * 31 + sc.col * 7 + sc.row * 3), LEDS[(i + sc.col + sc.row) % LEDS.length], st); if (panel) S = ledPanel(S, st * EXT(P['world.storeyHeight']), [N.magenta, N.cyan, LEDS[2 % LEDS.length]]); sc.props.push({ spr: S, x: u(x), y: u(y), by: y + h, bldg: 'block' }); R.push([x, y, w, h]); captureRect(x, y, w, h); };
     if (name === 'B2') return monumentCentre(sc, B, roadOk);
-    if (name === 'A1') bld(40, 24, 240, 180, 12, 1, true); // LED-wall tower facing the entry
+    if (name === 'A1') { bld(40, 24, 240, 180, 12, 1, true); if (ART()) { const p = sc.props[sc.props.length - 1]; welcomeWall(p.spr, 12 * EXT(P['world.storeyHeight'])); } } // LED-wall tower facing the entry; Edit 92: it greets the new chassis
     if (name === 'B1') { // the skybridge from a podium roof south over the road to the walkway ring
       const pod = [300, 16, 200, 140]; captureRect(...pod); sc.roofs.push({ rect: pod, z: 1 }); sc.solidsZ.push({ x: 310, y: 20, w: 120, h: 70, z: 1 });
       sc.props.push({ spr: PIX.building(Math.round(u(pod[2])), Math.round(u(pod[3])), Z1, PIX.rng(77), LEDS[1], 1), x: u(pod[0]), y: u(pod[1]), by: pod[1] + pod[3], podium: true, bldg: 'podium' });
@@ -7012,7 +7097,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       sc.stairs.push(st); sc.props.push(Object.assign(stairProp(st, Z1), { key: 1e6 })); // after the podium
     }
     if (name === 'C1') { const dx = 450, dy = 540, rx = 56, ry = 28; capture((wx, wy) => ((wx - dx) / rx) ** 2 + ((wy - dy) / ry) ** 2 <= 1, dx - rx, dy - ry, dx + rx, dy + ry, true); const S = drum(rx / U, ry / U, 12 * EXT(P['world.storeyHeight']), N.cyan); sc.props.push({ spr: S, x: u(dx), y: u(dy), by: dy + ry + 2, bldg: 'drum', plan: [dx - 39, dy - 19, 78, 38] }); R.push([dx - rx - 16, dy - ry - 16, 2 * rx + 32, 2 * ry + 32]); } // LED drum in the bend (P6.3: solid to its ellipse)
-    if (name === 'A2') { bld(656, 416, 136, 96, 3, 2, true); bld(336, 430, 128, 80, 3, 5, true); } // neon arcades either side of the highway, south of the road
+    if (name === 'A2') { bld(656, 416, 136, 96, 3, 2, true); bld(336, 430, 128, 80, 3, 5, true); if (ART()) sc.props.slice(-2).forEach((p, k) => { shopSigns(p.spr, 3 * EXT(P['world.storeyHeight']), k); for (let x = Math.round(p.x) + 2; x < p.x + p.spr.w - 3; x++) for (let t = 1; t <= 3; t++) B.mix(x, Math.round(p.by / U) + t, [N.magenta, N.cyan][(Math.floor(x / 8) + k) % 2], 0.4 - t * 0.1); }); } // neon arcades either side of the highway, south of the road; Edit 92: shopfronts and their glow
     if (name === 'C2') chongqing(sc, B, sc.D.chongqing);
     if (name === 'A3') { tiles(B, (wx, wy) => wx > 200 && wx < 472 && wy > 416 && wy < 632 && roadOk(wx, wy, OUTER), true); cubeStack(sc, B, [[144, 262, 64, 40, 28], [166, 252, 62, 38, 26], [134, 258, 56, 34, 24]], 604, 640); R.push([184, 400, 300, 240]); } // on a lit plaza // Edit 54: stacked LED cubes, each cantilevered off the one below
     if (name === 'B3') { // the LED canyon either side of the jog; Edit 54: a Z1 skybridge crosses the jog at 90°. P6.3 (Edit 65): from podium roof
@@ -7032,9 +7117,12 @@ document.getElementById('btn-full').addEventListener('click', () => {
     }
     if (name === 'C3') { // an LED gateway arch over the road: pylons either side, a lit beam above the traffic
       const ax = 560, top = 400 - 24, bot = 560 + 24, Hh = 40;
-      const Lr = new PIX.Buf(AW, AH);
-      for (const py of [top, bot]) for (let z = 0; z < Hh; z++) for (let i = -2; i <= 2; i++) Lr.put(u(ax) + i, u(py) - z, i < 0 ? CON.d : i > 0 ? CON.l : CON.m);
-      for (let y = u(top) - Hh; y <= u(bot) - Hh; y++) for (let i = -3; i <= 3; i++) Lr.put(u(ax) + i, y, Math.abs(i) === 3 ? K.bldgOutline : (y + i) % 4 < 2 ? N.magenta : N.cyan);
+      let Lr = new PIX.Buf(AW, AH);
+      if (ART()) Lr = gatewayLayer(B, ax, top, bot, Hh); // Edit 92: pylons, a deep beam with chevrons, its shadow
+      else {
+        for (const py of [top, bot]) for (let z = 0; z < Hh; z++) for (let i = -2; i <= 2; i++) Lr.put(u(ax) + i, u(py) - z, i < 0 ? CON.d : i > 0 ? CON.l : CON.m);
+        for (let y = u(top) - Hh; y <= u(bot) - Hh; y++) for (let i = -3; i <= 3; i++) Lr.put(u(ax) + i, y, Math.abs(i) === 3 ? K.bldgOutline : (y + i) % 4 < 2 ? N.magenta : N.cyan);
+      }
       sc.layers.push({ L: Lr, lift: 0, z: 0, cols: [], front: 1e6 + 5, inBand: () => false, gate: true });
     }
     // further blocks: commerce with LED façades
@@ -7690,7 +7778,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       this.p6 = true; this.levelId = id; this.list = LEVEL_LIST; this.roadIndex = LEVEL_LIST.indexOf(id); this.isFinal = !!opts.single || this.roadIndex === LEVEL_LIST.length - 1; this.isCity = true;
       const bud = overrides && overrides['run.appearances.road'] != null ? overrides['run.appearances.road'] : P['run.appearances.road'];
       this.P['run.appearances.road'] = bud;
-      const acc = this.P['world.deckDropGaps'] || this.P['world.deckFlightsMin'] || this.P['props.cone.minVisible'] || this.P['world.dummyMonument'] ? { dropGaps: this.P['world.deckDropGaps'], flightsMin: this.P['world.deckFlightsMin'], coneVisible: this.P['props.cone.minVisible'], monument: this.P['world.dummyMonument'] } : null; // Edit 85 (P7.4). Edit 91: the circus's monument
+      const acc = this.P['world.deckDropGaps'] || this.P['world.deckFlightsMin'] || this.P['props.cone.minVisible'] || this.P['world.dummyMonument'] || this.P['world.storyArt'] ? { dropGaps: this.P['world.deckDropGaps'], flightsMin: this.P['world.deckFlightsMin'], coneVisible: this.P['props.cone.minVisible'], monument: this.P['world.dummyMonument'], storyArt: this.P['world.storyArt'] } : null; // Edit 85 (P7.4). Edit 91: the circus's monument. Edit 92: the story's tile art
       this.W6 = opts.world || buildWorld(id, { budget: bud, warm: opts.warm, access: acc, density: opts.density });
       this.reset();
     }
@@ -10789,20 +10877,22 @@ window.FLEET_DB = {
 window.DUMMIES_STORY = {
  "meta": {
   "name": "DUMMIES story: the Test City, tile by tile",
-  "version": "edit91-2026-10-28",
-  "status": "Proposed (tales, briefs and gifts); the order of tiles is user-decided",
-  "consumers": ["prototypes/p7 (story.js, game.js): Prototype 7.10"],
-  "sources": ["GDD Edit 26 §3 Setting", "world6.js tile notes (Edits 62–68)", "circus_valley.js PLAN.tiles", "GDD Edits 81–85", "GDD Edit 91"],
+  "version": "edit92-2026-10-28",
+  "status": "Narrative A, Certified (user-decided, 28 October; Edit 92). Tales, act lines and the ending proposed in its voice; briefs, gifts and the order of tiles as before",
+  "consumers": ["prototypes/p7 (story.js, game.js): Prototype 7.11"],
+  "sources": ["GDD Edit 26 §3 Setting", "world6.js tile notes (Edits 62–68)", "circus_valley.js PLAN.tiles", "GDD Edits 81–85", "GDD Edit 91", "GDD Edit 92: Narrative A, Certified"],
   "rules": [
    "Numbers live in the registry: tasks and gifts name parameter IDs, never values.",
    "A task tests the hit that writes the chassis off (the fatal hit).",
    "Tile names are column-row, as in the game: A1 is the top-left tile.",
    "Each tile's write-offs are story.writeOffs.<district>.<tile> in the registry (Edit 82).",
    "Edit 91: every part comes by drone on a fixed tile, eleven in all. Monument: Battery 1 (the dash) B1, Legs 1 C1, Hands 1 A2, Arms 1 C3. Parkland: Battery 2 C1, Legs 2 A3, Arms 2 A1, Hands 2 B1. Waterfront: Battery 3 A1, Legs 3 B1, Arms 3 B3.",
+   "Edit 92: Narrative A, Certified. Act I Monument (Induction), Act II Parkland (Opening Day), Act III Waterfront (Customs). Farsight narrates: polite, procedural, dry; no exclamation marks. The cars are colleagues; the briefs are duties; the parts are equipment.",
    "A gift rides in on the drone that carries the dummy into its tile (Edit 84). Arcade sells every part for credits; its chassis ships with Battery 1 (Edit 91).",
    "Each tile's traffic is story.traffic.<district>.<tile> in the registry, on the tile and its neighbours (Edit 85)."
   ]
  },
+ "ending": "Your model has passed. It will now be manufactured. A Farsight drone carries you over the river to a container ship. Destination: a market far away. Please remain still for the voyage.",
  "tasks": {
   "any": { "label": "ANY WRITE-OFF", "brief": "General coverage. Any write-off in this tile counts." },
   "drop": { "label": "DROP ONTO A CAR", "brief": "Coverage gap: falls. The final hit must be a drop onto a car from above." },
@@ -10819,77 +10909,80 @@ window.DUMMIES_STORY = {
  "districts": [
   {
    "id": "monument", "name": "Monument",
-   "intro": "Neon commerce and LED walls. Farsight built Monument first, to sell the city to itself.",
+   "act": "ACT I · INDUCTION",
+   "intro": "Off the factory floor. Farsight greets you as new staff; the cars are your colleagues.",
    "order": ["A1", "B1", "C1", "C2", "B2", "A2", "A3", "B3", "C3"],
    "tiles": {
-    "A1": { "title": "The LED wall", "task": { "kind": "any" }, "gift": null,
-     "tale": "The first building in the Test City was a screen. Farsight needed someone to greet the investors, so it built a tower that greets everyone. It still shows the face of whoever walks in. Today that is you." },
+    "A1": { "title": "The welcome wall", "task": { "kind": "any" }, "gift": null,
+     "tale": "A conveyor sets you down beside a tower. Its screen shows your face and the word WELCOME. Farsight is pleased to have you. Your first duty is simple: stand in the road until a colleague notices you." },
     "B1": { "title": "The podium bridge", "task": { "kind": "drop" }, "gift": { "node": "battery1" },
-     "tale": "The podium was poured for a mall that was never approved. Farsight kept the roof and ran a skybridge from it to nowhere, then built the nowhere. Pedestrians are rare here. Data is not." },
+     "tale": "Your first equipment has arrived: a battery, for the dash. The skybridge was built for shoppers who never came; it now serves as an observation deck for staff. Observe a car from above, then join it." },
     "C1": { "title": "The LED drum", "task": { "kind": "jump" }, "gift": { "node": "legs1" },
-     "tale": "The drum tower went up overnight to hide the bend under the high road. Engineers call it a lighthouse for cars. The cars call it the clock: every turn it lights is a turn they must not miss." },
+     "tale": "The drum lights each bend before a car reaches it, so no colleague is ever surprised. Today you will surprise one. Legs 1 is fitted for the purpose. Your enthusiasm will be noted in your file." },
     "C2": { "title": "The portal tower", "task": { "kind": "level" }, "gift": null,
-     "tale": "The high road was planned first. The tower was planned in its way. Neither would move, so Farsight drove the road through the tower and opened a plaza on its roof. The tenants say the traffic is good company." },
+     "tale": "The high road runs through this tower at the sixth floor. The tenants say the traffic is good company. Today your duty is on the road itself, at height. The view is not part of the job." },
     "B2": { "title": "The monument", "task": { "kind": "struck" }, "gift": null,
-     "tale": "Nobody agrees what the monument commemorates. Its plaque reads ZERO ACCIDENTS and gives no date. The road splits around it out of respect. The walkway ring circles it out of habit." },
-    "A2": { "title": "The neon arcade", "task": { "kind": "cone" }, "gift": { "node": "hands1" },
-     "tale": "The arcade was a car park until the cars learned to park themselves. Shops moved in under the highway. Their signs flash prices at the traffic. The traffic has no money, but it reads every sign." },
+     "tale": "The plaque reads ZERO ACCIDENTS. New staff ask whether this is a record. It is a target. Stand near it and let a colleague find you. Walking is permitted. Dashing would spoil the data." },
+    "A2": { "title": "The neon shops", "task": { "kind": "cone" }, "gift": { "node": "hands1" },
+     "tale": "The shops under the highway sell nothing. Their signs flash prices at the traffic, which reads every word. Hands 1 is fitted, so you can place a cone. Colleagues are trained to respect cones. Use this." },
     "A3": { "title": "The stacked cubes", "task": { "kind": "combo", "param": "story.task.comboEasy" }, "gift": null,
-     "tale": "Each cube was built on the last as the budget arrived, one quarter at a time. Every cube leans out further than the one below. The planners call this growth. The wind calls it a dare." },
+     "tale": "Each cube was added as the budget arrived, one quarter at a time, each leaning further than the last. Farsight calls this growth. Today's duty is the same: one hit, then another before the first is forgotten." },
     "B3": { "title": "The LED canyon", "task": { "kind": "jump" }, "gift": null,
-     "tale": "Two advertising walls were raised to face each other, and the road had to jog between them. Now the screens advertise to each other all night. The skybridge was added so that someone would watch." },
+     "tale": "Two screens face each other across the road and advertise to each other all night. The skybridge was added so that someone would watch. You are now someone. Jump into a car between the screens." },
     "C3": { "title": "The LED gateway", "task": { "kind": "push" }, "gift": { "node": "arms1" },
-     "tale": "The gateway marks the edge of Monument, where the neon stops. Every car that passes under it is thanked for driving safely. It has no choice in the matter." }
+     "tale": "The gateway thanks every car for driving safely. It thanked the last one seconds after that car wrote you off. Your file is updated: ROLE: DESTRUCTIVE TESTING. Arms 1 is fitted. Push off one colleague into the next." }
    }
   },
   {
    "id": "parkland", "name": "Parkland",
-   "intro": "Farsight's Expo site: a garden grid, pavilions and pools, built to prove the city could be calm.",
+   "act": "ACT II · OPENING DAY",
+   "intro": "The Expo opens to the public when this park passes. Nine tiles, nine days. Visitors are booked.",
    "order": ["C1", "C2", "C3", "B3", "A3", "A2", "A1", "B1", "B2"],
    "tiles": {
     "C1": { "title": "The lantern pavilion", "task": { "kind": "drop" }, "gift": { "node": "battery2" },
-     "tale": "The lantern was the Expo's first exhibit: a paper lamp the size of a house. Visitors crossed the footbridge to see it lit. When the Expo closed, the bridge stayed and the cars moved in underneath." },
+     "tale": "The paper lantern was the Expo's first exhibit, and it is lit again for the visitors. Battery 2 is fitted: a second charge. Farsight calls it safety equipment. Drop onto a car from the footbridge." },
     "C2": { "title": "The amphitheatre", "task": { "kind": "cls", "cls": "van" }, "gift": null,
-     "tale": "The terraces were cut for an audience that never came. They face a stage where the avenue now turns. The seats still face the road, so every crossing is a performance." },
+     "tale": "Farsight's board will watch from these terraces on opening day. The seats face the avenue, so every crossing is a performance. A van delivers the catering. Arrange for it to deliver you." },
     "C3": { "title": "The arch and the roundabout", "task": { "kind": "bounce" }, "gift": null,
-     "tale": "The arch was the Expo's gate. Planners put a roundabout in front of it so visitors would circle once before entering. Now the cars circle all day, and nobody enters." },
+     "tale": "The arch is the Expo's gate. Visitors will circle the roundabout once before they enter, which gives the cars time to learn them. You go round faster. Be thrown into a car while the last one still throws you." },
     "B3": { "title": "The obelisk court", "task": { "kind": "cls", "cls": "police" }, "gift": null,
-     "tale": "The obelisk stands where the surveyors drove their first stake. Farsight lit a row of bollards beside it so the first stake would never be lost. The highway passes overhead, measuring nothing." },
+     "tale": "The obelisk marks the surveyors' first stake. A school party will visit it on opening day, escorted by the police fleet. Farsight would like to know how the police fleet handles a dummy first." },
     "A3": { "title": "The belvedere", "task": { "kind": "jump" }, "gift": { "node": "legs2" },
-     "tale": "The belvedere was heaped from the earth dug out for the pools: four tiers of borrowed ground. On top grows an orchard of black monoliths in rows. They bear no fruit. They record everything." },
-    "A2": { "title": "The canal", "task": { "kind": "level" }, "gift": null,
-     "tale": "The canal was dug to cool the highway's foundations. Ducks arrived without permits. Farsight registered them as volunteers." },
+     "tale": "A wedding is booked on the belvedere for opening day. The couple asked for a view of the traffic. Legs 2 is fitted: longer in the air. Land on a car here, so that no guest ever does." },
+    "A2": { "title": "The dome by the canal", "task": { "kind": "level" }, "gift": null,
+     "tale": "The dome is the Expo's showroom. The canal beside it cools the highway's footings; the ducks are registered volunteers. On opening day the visitors will look up at the highway. Be on it." },
     "A1": { "title": "The reservoir terraces", "task": { "kind": "push" }, "gift": { "node": "arms2" },
-     "tale": "Three stepped pools hold the Expo's water. Each step is a different depth, so the sensors can calibrate their reflections. The boulevard was laid along the top to give the reflections something to show." },
+     "tale": "The gardener keeps the three pools level by hand. She has asked that the cars learn to stop before the water. Arms 2 is fitted: a stronger push. Teach them by hitting one car into the next." },
     "B1": { "title": "The cascade", "task": { "kind": "cone" }, "gift": { "node": "hands2" },
-     "tale": "The cascade carries the reservoir's water down beside the highway, one pool per garden cell. It was designed to drown out the traffic. The traffic got louder to compensate." },
+     "tale": "The cascade steps the reservoir's water down beside the highway, pool by pool. It was built to drown out the traffic. Hands 2 is fitted: two cones. Lay them where the visitors will walk, and see who stops." },
     "B2": { "title": "The ring over the pools", "task": { "kind": "combo", "param": "story.task.comboHard" }, "gift": null,
-     "tale": "Two highways were meant to cross here. Instead of a junction, Farsight raised a ring and laid pools beneath it, so the cars could watch themselves go round. The boulevard passes through the hole in the middle, unimpressed." }
+     "tale": "Inspection day. The board watches the ring. When the cars come round clean, the board applauds the cars. Farsight notes that the public prefers the product to the test. Give the board a chain of three." }
    }
   },
   {
    "id": "waterfront", "name": "Waterfront",
-   "intro": "The valley by the river: a hill walled by towers, a circus on the valley floor, two bridges to the far bank.",
+   "act": "ACT III · CUSTOMS",
+   "intro": "The river is a border; ships wait beyond it. Your papers are being prepared.",
    "order": ["A1", "B1", "C1", "C2", "C3", "B3", "A3", "A2", "B2"],
    "tiles": {
     "A1": { "title": "The west portal", "task": { "kind": "cls", "cls": "bus" }, "gift": { "node": "battery3" },
-     "tale": "The upper town was built on the hill first, for the engineers. When the west bridge was approved, it was approved straight through a building. The portal block kept its tenants and lost its view." },
+     "tale": "The upper town houses the engineers, and the bus carries them to the bridge. Battery 3 is fitted: a faster recharge. Farsight requires the bus fleet's data before anyone crosses the river." },
     "B1": { "title": "The tunnel portal", "task": { "kind": "jump" }, "gift": { "node": "legs3" },
-     "tale": "The tunnel was bored north under the hill to reach the next valley. Nobody has been cleared to see what is there. Cars go in. Some data comes back." },
+     "tale": "The tunnel runs north under the hill to the next valley. Cars go in. Data comes back. Legs 3 is fitted: the longest flight. Where your data goes after the tunnel is not within your role." },
     "C1": { "title": "The east portal", "task": { "kind": "cls", "cls": "police" }, "gift": null,
-     "tale": "The east bridge was built a year after the west one, to correct its mistakes. It made new ones. Its portal block is the same, except that it faces the other way and pretends not to know its twin." },
+     "tale": "The east bridge was built a year after the west, to correct its mistakes. Its portal block faces the other way and pretends not to know its twin. The police here check papers. Yours are being prepared." },
     "C2": { "title": "The east beach terrace", "task": { "kind": "drop" }, "gift": null,
-     "tale": "The cliff-top walkway was meant to carry tourists to the beach terrace. The tourists were replaced by joggers, then by sensors. The sensors take the stairs." },
-    "C3": { "title": "The east pier tower", "task": { "kind": "bounce" }, "gift": null,
-     "tale": "The coastal drive runs on the old seawall and swings inland here to step round the bridge's feet. The pier tower watches the river for anything that floats. So far it has logged one dummy." },
+     "tale": "The terrace was built for tourists, then joggers, then sensors. From its rail you can see the ships in the estuary and the cranes that load them. Drop onto a car below. The ships will wait." },
+    "C3": { "title": "The east customs post", "task": { "kind": "bounce" }, "gift": null,
+     "tale": "The pier tower is a customs post. It logs everything that floats on the river: containers, ducks and, so far, one dummy, inbound. Be thrown into a car. Customs is watching." },
     "B3": { "title": "The stilt houses", "task": { "kind": "push" }, "gift": { "node": "arms3" },
-     "tale": "The stilt houses are older than the city. Farsight could not demolish them without a hearing, so it joined them to the walkways and called them heritage. The residents moved out. The heritage stayed." },
-    "A3": { "title": "The west pier tower", "task": { "kind": "level" }, "gift": null,
-     "tale": "The west bridge leaves the hill and crosses the drive and the river in one reach. Its pier tower was a lighthouse, then a radar post, then a tea house. Now it is a sensor mast with a tea house in it." },
+     "tale": "The stilt houses are older than the city, kept as heritage. Behind glass in one of them stands Chassis 0, the prototype before you. A ship is moored beyond. Arms 3 is fitted. Show Chassis 0 how far the model has come." },
+    "A3": { "title": "The west customs post", "task": { "kind": "level" }, "gift": null,
+     "tale": "The west tower keeps the customs log. Your entry reads ORIGIN OVERSEAS · DECLARED VALUE ONE UNIT · PURPOSE DESTRUCTION. You were shipped here to be tested. Honour the declaration on the raised road." },
     "A2": { "title": "The west beach terrace", "task": { "kind": "cone" }, "gift": null,
-     "tale": "The valley used to begin here: a cliff, an avenue, a beach. The terrace was the first thing finished, a deck and a canopy over sand brought in from three provinces." },
+     "tale": "The valley began here: a cliff, an avenue, and a beach of sand brought from three provinces. The ceremony is being prepared in the circus. Place a cone. Farsight would like one more clean reading before the speeches." },
     "B2": { "title": "The circus", "task": { "kind": "combo", "param": "story.task.comboHard" }, "gift": null,
-     "tale": "Everything in the valley meets here: the avenue, the tunnel road and the beach road. On the sand, an obelisk and an arch wait for a ceremony postponed since opening day. When this tile is cleared, the Test City is certified complete." }
+     "tale": "Everything in the valley meets here. On the island stands the monument, cast from every chassis you lost. Its plaque reads ZERO ACCIDENTS (EXCLUDING TESTS). One last chain of three certifies the city. And you." }
    }
   }
  ]
@@ -10935,7 +11028,8 @@ window.DUMMIES_STORY = {
   const P7SIM = { 'proto.recoilScale': 0.7, 'proto.bounce.maxThrow': 40, // Edit 83: the ricochet the dummy survives; Arcade and Story
     'world.deckDropGaps': 1, 'world.deckFlightsMin': 1, 'props.cone.minVisible': 0.9, // Edit 85: every highway a flight and a drop gap; cones in view
     'battery.dashJumpCost': 0, 'abilities.hands.tapDrop': 1, // Edit 90: a dash's jump is free; X taps a cone down when none is in reach
-    'proto.batteryModel': 1, 'world.dummyMonument': 1 }; // Edit 91: Battery 1 the dash, 2 a second charge, 3 a faster recharge; the circus's monument
+    'proto.batteryModel': 1, 'world.dummyMonument': 1, // Edit 91: Battery 1 the dash, 2 a second charge, 3 a faster recharge; the circus's monument
+    'world.storyArt': 1 }; // Edit 92: the story's tile art (Narrative A, Certified), cosmetic only
   const BASE = Object.assign({}, X.REG, X.PROTO, X.OVERRIDES, W6.P6SIM, P7SIM);
 
   // ---------- progress: one plain object, JSON-safe
@@ -11438,7 +11532,7 @@ window.DUMMIES_STORY = {
   if (FLEET) for (const m of FLEET.models) for (const sid of m.simIds) FMODEL.set(sid, m);
   const CPARAM = {};
   for (const part of [CJ, CI, CG, CB, CH, CTM, CP, CD]) if (part && part.params) for (const p of part.params) CPARAM[p.id] = p.value;
-  const BUILD = STORY ? 'P7.10' : W6 ? 'P6.10' : 'P5.3'; // Prototype 7.10 (GDD Edit 91: every Story part by drone on its tile, Arcade parts for credits; Battery 1 the dash; a miss holds the chassis at 1; on foot, a lighter chassis; points small, top right; damage in red on the chassis, its numbers beside each part; the circus's monument); 7.9 (GDD Edit 90: the dash's jump paid by the dash; X taps a cone down; buttons named only when fitted, OK and BACK in menus); 7.8 (GDD Edit 89: touch on every menu; Story levels from points and upgrades, not credits; the workshop, around the chassis); 7.7 (GDD Edit 88: three named save slots with time stamps; the save screen; the name entry); 7.6 (GDD Edit 87: the HUD on one top edge, the objective on top, a stats box; touch controls placed and sized by the player); 7.5 (GDD Edit 86: a clean screen: options in the pause menu, controls per device, a compact BODY panel); 7.4 (GDD Edit 85: Story traffic per tile; every highway a flight and a drop gap; cones in view); 7.3 (GDD Edit 84: verbs issued by drone, the gift screen, Arcade's verbs); 7.2 (GDD Edit 83: the ricochet tamed, the drone ferry, the map, bubbles, the objective line); 7.1 (GDD Edit 82: a credit a body, story prices 3–5, write-offs per tile); 7 (Edit 81: ARCADE and STORY) // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
+  const BUILD = STORY ? 'P7.11' : W6 ? 'P6.10' : 'P5.3'; // Prototype 7.11 (GDD Edit 92: Narrative A, Certified: tile names, tales, act lines, the ending; the story's tile art, cosmetic only); 7.10 (GDD Edit 91: every Story part by drone on its tile, Arcade parts for credits; Battery 1 the dash; a miss holds the chassis at 1; on foot, a lighter chassis; points small, top right; damage in red on the chassis, its numbers beside each part; the circus's monument); 7.9 (GDD Edit 90: the dash's jump paid by the dash; X taps a cone down; buttons named only when fitted, OK and BACK in menus); 7.8 (GDD Edit 89: touch on every menu; Story levels from points and upgrades, not credits; the workshop, around the chassis); 7.7 (GDD Edit 88: three named save slots with time stamps; the save screen; the name entry); 7.6 (GDD Edit 87: the HUD on one top edge, the objective on top, a stats box; touch controls placed and sized by the player); 7.5 (GDD Edit 86: a clean screen: options in the pause menu, controls per device, a compact BODY panel); 7.4 (GDD Edit 85: Story traffic per tile; every highway a flight and a drop gap; cones in view); 7.3 (GDD Edit 84: verbs issued by drone, the gift screen, Arcade's verbs); 7.2 (GDD Edit 83: the ricochet tamed, the drone ferry, the map, bubbles, the objective line); 7.1 (GDD Edit 82: a credit a body, story prices 3–5, write-offs per tile); 7 (Edit 81: ARCADE and STORY) // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
   function pv(id) {
     if (id == null) return null;
     if (app.tune[id] != null) return app.tune[id];
@@ -13851,7 +13945,7 @@ window.DUMMIES_STORY = {
     const sel = app.mapSel || storyCursor(), gap = 24, gw = (w - 48 - 2 * gap) / 3, g = 6, cw = (gw - 2 * g) / 3, ch = Math.round(cw * 0.8), top = y + 86;
     STORY.DIST.forEach((d, di) => {
       const gx = x + 24 + di * (gw + gap), here = !pr.complete && pr.district === d.id, dn = STORY.doneIn(pr, d.id);
-      txt(d.name.toUpperCase(), gx, top - 12, fLab, here ? FT.accent : dn.length ? FT.text : FT.dim);
+      fitText((d.act ? d.act.split(' · ')[0].replace('ACT ', '') + ' · ' : '') + d.name.toUpperCase(), gx, top - 12, gw - 48, TY.sec, 13, here ? FT.accent : dn.length ? FT.text : FT.dim); // Edit 92: the act's numeral
       txt(dn.length + '/' + d.order.length, gx + gw, top - 12, fLab, FT.dim, 'right');
       const at = (t) => { const [c, r] = STORY.cellOf(t); return [gx + c * (cw + g), top + r * (ch + g)]; };
       for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
@@ -13899,7 +13993,7 @@ window.DUMMIES_STORY = {
     const pr = s.story, t = s.screenName(), d = STORY.districtOf(s.levelId), tile = d.tiles[t], P = s.P, tx = STORY.taskText(tile.task, P), need = STORY.needOf(d.id, t, P);
     const x = FX + 36, y = FY + 26, w = FW - 72, h = FH - 52;
     panel(x, y, w, h); hitbox(x, y, w, h, 'brief', () => menuQ.push('ok')); // Edit 89: a tap begins
-    txt(d.name.toUpperCase() + ' · TILE ' + t + ' · ' + STORY.tileNumber(d.id, t) + ' OF ' + STORY.TOTAL, x + 30, y + 44, fLab, FT.accent);
+    fitText((d.act ? d.act + ' · ' : '') + d.name.toUpperCase() + ' · TILE ' + t + ' · ' + STORY.tileNumber(d.id, t) + ' OF ' + STORY.TOTAL, x + 30, y + 44, w - 60, TY.sec, 13, FT.accent); // Edit 92: the act
     txt(tile.title, x + 30, y + 96, '900 40px ' + F_BRAND, FT.text);
     let yy = y + 138;
     if (d.order[0] === t && !STORY.doneIn(pr, d.id).length) { yy += 28 * wrapText(d.intro, x + 32, yy, w - 64, 28, '700 19px ' + F_UI, FT.dim, 2) + 8; }
@@ -14382,11 +14476,12 @@ window.DUMMIES_STORY = {
     txt('CONTRACT RESULT', x + 28, y + 44, fLab, FT.accent);
     const title = { Licensed: 'LICENSED', 'Failed test': 'FAILED TEST', 'Non-compliant': 'NON-COMPLIANT', Certified: 'CERTIFIED' }[e.kind] || e.kind; // Edit 81: the story's end
     txt(title, x + 26, y + 104, '900 54px ' + F_BRAND, e.kind === 'Licensed' ? FT.text : e.kind === 'Failed test' ? C.warning : FT.dim);
-    wrapText(e.kind === 'Certified' ? 'All ' + STORY.TOTAL + ' tiles of the Test City are tested and certified complete. Farsight thanks you for your body. Your freedom remains in progress.' : copy('endings.' + e.kind, ''), x + 28, y + 146, w - 56, 28, fTxt, FT.dim, 2);
+    wrapText(e.kind === 'Certified' ? (STORY.DATA.ending || 'All ' + STORY.TOTAL + ' tiles of the Test City are tested and certified complete.') : copy('endings.' + e.kind, ''), x + 28, y + 146, w - 56, 28, fTxt, FT.dim, e.kind === 'Certified' ? 3 : 2); // Edit 92: Narrative A's ending
     const imp = s.events.filter((v) => v.type === 'impact');
     const stats = [['TIME', fmtT(e.t)], ['WRITE-OFFS', String(e.writeOffs)], ['POINTS', num(e.points)], ['BEST HIT', imp.length ? num(Math.max(...imp.map((v) => v.assessed))) : '—']];
     const cw = (w - 56) / stats.length;
-    stats.forEach(([k, v], i) => { txt(k, x + 28 + i * cw, y + 222, fLab, FT.dim); txt(v, x + 28 + i * cw, y + 262, fNum, FT.text); });
+    const sy = e.kind === 'Certified' ? 30 : 0; // Edit 92: the ending's third line
+    stats.forEach(([k, v], i) => { txt(k, x + 28 + i * cw, y + 222 + sy, fLab, FT.dim); txt(v, x + 28 + i * cw, y + 262 + sy, fNum, FT.text); });
     const items = endItems(s);
     menuList(items, app.endSel, x + 28, y + h - 20 - items.length * 54, 460, null, 0, (i) => { app.endSel = i; });
   }
