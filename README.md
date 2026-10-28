@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.6
+# DUMMIES — Prototype 7.7
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 87.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 88.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.6:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-6/
 - **Prototype 7.5:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-5/
 - **Prototype 7.4:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-4/
 - **Prototype 7.3:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-3/
@@ -17,7 +18,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.6. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.7. Arcade and Story. One file; no server.
+- `p7-6/index.html`: Prototype 7.6, frozen.
 - `p7-5/index.html`: Prototype 7.5, frozen.
 - `p7-4/index.html`: Prototype 7.4, frozen.
 - `p7-3/index.html`: Prototype 7.3, frozen.
@@ -47,6 +49,14 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.7 changes
+
+- Save games. STORY opens a save screen: NEW GAME and three slots.
+- Each slot shows its name, the date and time of its last save, where the story stands (map, tile, tiles cleared), points, credits, upgrades and chassis.
+- CONTINUE, RENAME (up to 12 characters) or ERASE a slot. Erasing and overwriting ask twice.
+- Type the name on a keyboard; on a pad, use the letter grid; on a phone, tap the keys or tap the name for the phone's keyboard.
+- The game saves by itself after every write-off, clear, gift and purchase. A story from 7.6 in your browser appears in slot 1.
 
 ## What 7.6 changes
 
