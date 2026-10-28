@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.7
+# DUMMIES — Prototype 7.8
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 88.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 89.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.7:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-7/
 - **Prototype 7.6:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-6/
 - **Prototype 7.5:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-5/
 - **Prototype 7.4:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-4/
@@ -18,7 +19,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.7. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.8. Arcade and Story. One file; no server.
+- `p7-7/index.html`: Prototype 7.7, frozen.
 - `p7-6/index.html`: Prototype 7.6, frozen.
 - `p7-5/index.html`: Prototype 7.5, frozen.
 - `p7-4/index.html`: Prototype 7.4, frozen.
@@ -44,11 +46,20 @@
 | Pad setup | G | hold START | — | — |
 
 - ESC, START or ❚❚ pauses. **Options** (sound, palette, full screen, tuning, pad setup) and **Controls** (for the keyboard, pad or touch you are using) are in the pause menu.
-- Touch controls show only on touch screens. Add `#touch` to the address to force them.
+- Touch controls show on touch screens, and appear at your first touch on any phone (S Pen phones too). Add `#touch` to the address to force them.
+- On a phone, tap any menu item, card, tile or button. A mouse click works too.
 - Touch: Pause › Controls › Adjust layout. Drag the stick or the buttons anywhere, size them (60–160%), Reset. Saved in your browser.
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.8 changes
+
+- Touch everywhere: every menu answers a tap. Touch controls appear at the first touch, also on S Pen phones (Galaxy S25 Ultra).
+- Story has no credits now. Points level the dummy up: level 2 at 6,500 points, up to level 9. Each level gives one upgrade.
+- LEVEL UP flashes across the screen in play, with a fanfare. The top-right box shows your points, level and a bar to the next.
+- The workshop: your next chassis stands in the middle, its parts around it. Tap a part, then FIT. Parts a drone has not brought yet stay hidden ("???").
+- Arcade keeps credits, in the same workshop.
 
 ## What 7.7 changes
 
