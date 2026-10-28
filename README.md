@@ -1,16 +1,18 @@
-# DUMMIES — Prototype 6.10
+# DUMMIES — Prototype 7
 
-**27 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 80.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 81.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 6.10 (before the modes):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p6-10/
 - Plain web pages: gamepads, touch and keys all work. Claude's hosted preview blocks gamepads.
-- **Source:** [lawrencelek/ELVTR-dummies-agent-crew](https://github.com/lawrencelek/ELVTR-dummies-agent-crew/tree/assignment4/content-pipeline/prototypes), `p6/`, `jump/`, `controls/`.
+- **Source:** [lawrencelek/ELVTR-dummies-agent-crew](https://github.com/lawrencelek/ELVTR-dummies-agent-crew/tree/assignment4/content-pipeline/prototypes), `p7/`, `p6/`, `jump/`, `controls/`.
 
 ## Files
 
-- `index.html`: the game. Three districts: Parkland, Waterfront, Monument. One file; no server.
+- `index.html`: the game, Prototype 7. Arcade and Story. One file; no server.
+- `p6-10/index.html`: Prototype 6.10, frozen.
 - `jump/index.html`: the jump test yard. Moving traffic, parked cars, barriers, a ruler, a side view of each jump.
 - `controls/index.html`: the control test yard. Pads, touch, keys; three turn models.
 
@@ -32,7 +34,26 @@
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
 
-## What 6.10 adds
+## What 7 adds
+
+- The title offers two modes.
+- **ARCADE:** the 6.10 game. Pick Parkland, Waterfront or Monument; each district is a whole run.
+- **STORY:** the Test City, tile by tile. Monument, then Parkland, then Waterfront: 27 tiles.
+  - Each tile tells how that part of the city came to be, and gives Farsight's brief.
+  - Three write-offs that meet the brief clear a tile. Other write-offs score but don't count.
+  - The tile is fenced until it is cleared. The fences can't be jumped. Cleared tiles stay open.
+  - A clear pays a power-up; so does every 15,000 points. Some tiles bring a gift.
+  - The map opens one tile at a time. Progress is saved in your browser.
+
+## Menus
+
+| | Keys | Gamepad | Touch |
+|---|---|---|---|
+| Choose | arrows | stick or d-pad | stick |
+| Select, begin | SPACE | A | A |
+| Back | SHIFT | B | B |
+
+## 6.10
 
 - Hands (X), two levels: tap to pick up a cone, hold 0.3 s to put it down. Hands 1 carries one cone, Hands 2 two. No throw.
 - Arms (Y), three levels: push off a car you just hit or touch, a ricochet you time.
