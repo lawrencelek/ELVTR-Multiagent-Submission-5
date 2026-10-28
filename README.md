@@ -1,17 +1,19 @@
-# DUMMIES — Prototype 7
+# DUMMIES — Prototype 7.1
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 81.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 82. The final P7.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7 (before 7.1's economy):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7/
 - **Prototype 6.10 (before the modes):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p6-10/
 - Plain web pages: gamepads, touch and keys all work. Claude's hosted preview blocks gamepads.
 - **Source:** [lawrencelek/ELVTR-dummies-agent-crew](https://github.com/lawrencelek/ELVTR-dummies-agent-crew/tree/assignment4/content-pipeline/prototypes), `p7/`, `p6/`, `jump/`, `controls/`.
 
 ## Files
 
-- `index.html`: the game, Prototype 7. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.1. Arcade and Story. One file; no server.
+- `p7/index.html`: Prototype 7, frozen.
 - `p6-10/index.html`: Prototype 6.10, frozen.
 - `jump/index.html`: the jump test yard. Moving traffic, parked cars, barriers, a ruler, a side view of each jump.
 - `controls/index.html`: the control test yard. Pads, touch, keys; three turn models.
@@ -34,15 +36,22 @@
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
 
+## What 7.1 changes
+
+- One credit for every body destroyed, in both modes.
+- Story upgrades: level 1 costs 3 credits, level 2 costs 4, level 3 costs 5. Arcade keeps 1, 2, 3.
+- Each story tile wants its own number of write-offs, 1 to 3: 62 bodies to certify the city.
+- Only the last hit counts against Farsight's brief. Arcade plays one district a run.
+
 ## What 7 adds
 
 - The title offers two modes.
 - **ARCADE:** the 6.10 game. Pick Parkland, Waterfront or Monument; each district is a whole run.
 - **STORY:** the Test City, tile by tile. Monument, then Parkland, then Waterfront: 27 tiles.
   - Each tile tells how that part of the city came to be, and gives Farsight's brief.
-  - Three write-offs that meet the brief clear a tile. Other write-offs score but don't count.
+  - Write-offs that meet the brief clear a tile. Other write-offs score but don't count.
   - The tile is fenced until it is cleared. The fences can't be jumped. Cleared tiles stay open.
-  - A clear pays a power-up; so does every 15,000 points. Some tiles bring a gift.
+  - Every body pays a credit. Some tiles bring a gift.
   - The map opens one tile at a time. Progress is saved in your browser.
 
 ## Menus
