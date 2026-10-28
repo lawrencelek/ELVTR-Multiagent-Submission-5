@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.4
+# DUMMIES — Prototype 7.5
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 85.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 86.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.4:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-4/
 - **Prototype 7.3:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-3/
 - **Prototype 7.2:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-2/
 - **Prototype 7.1:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-1/
@@ -15,7 +16,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.4. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.5. Arcade and Story. One file; no server.
+- `p7-4/index.html`: Prototype 7.4, frozen.
 - `p7-3/index.html`: Prototype 7.3, frozen.
 - `p7-2/index.html`: Prototype 7.2, frozen.
 - `p7-1/index.html`: Prototype 7.1, frozen.
@@ -37,10 +39,17 @@
 | Pause | ESC or P | START | ❚❚ PAUSE | — |
 | Pad setup | G | hold START | — | — |
 
+- ESC, START or ❚❚ pauses. **Options** (sound, palette, full screen, tuning, pad setup) and **Controls** (for the keyboard, pad or touch you are using) are in the pause menu.
 - Touch controls show only on touch screens. Add `#touch` to the address to force them.
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.5 changes
+
+- A clean screen: nothing under the game. Options and controls moved into the pause menu.
+- The pause menu's Controls page shows the device you are holding: keyboard, gamepad or touch.
+- BODY is as tall as DASH, so the map sits higher and the touch stick has room. No FARSIGHT logo in play.
 
 ## What 7.4 changes
 
