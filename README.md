@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.8
+# DUMMIES — Prototype 7.9
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 89.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 90.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.8:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-8/
 - **Prototype 7.7:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-7/
 - **Prototype 7.6:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-6/
 - **Prototype 7.5:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-5/
@@ -19,7 +20,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.8. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.9. Arcade and Story. One file; no server.
+- `p7-8/index.html`: Prototype 7.8, frozen.
 - `p7-7/index.html`: Prototype 7.7, frozen.
 - `p7-6/index.html`: Prototype 7.6, frozen.
 - `p7-5/index.html`: Prototype 7.5, frozen.
@@ -40,7 +42,7 @@
 | Dash | SPACE or K | A (or RT) | A | start; Battery recharges it faster |
 | Jump | L or SHIFT | B | B | Legs 1 (by drone) |
 | Pick up a cone | J or E, tap | X, tap | X, tap | Hands 1 by drone (one cone), Hands 2 (two) |
-| Put a cone down | J or E, hold 0.3 s | X, hold | X, hold | Hands 1 |
+| Put a cone down | J or E, tap away from cones (or hold) | X, tap away from cones | X, tap away from cones (it reads DROP) | Hands 1 |
 | Push off a car | I or Q, after a hit or beside a car | Y | Y | Arms 1 (by drone) |
 | Pause | ESC or P | START | ❚❚ PAUSE | — |
 | Pad setup | G | hold START | — | — |
@@ -52,6 +54,12 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.9 changes
+
+- Dash, then jump: the jump out of a dash no longer needs a second charge.
+- Cones: tap X to pick one up; tap X again, away from cones, to put it down. On a phone the button reads GRAB or DROP.
+- Buttons tell the truth: in menus A reads OK and B BACK; in play a button shows its move only once you have it.
 
 ## What 7.8 changes
 
