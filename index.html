@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="screen-orientation" content="landscape"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>DUMMIES P7.1</title>
+<title>DUMMIES P7.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&family=Nunito:wght@700;800;900&display=swap">
@@ -65,7 +65,7 @@ body.touch #game { touch-action: none; }
 </head>
 <body>
 <div class="stage" id="stage">
-  <canvas id="game" tabindex="0" aria-label="DUMMIES P7.1 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
+  <canvas id="game" tabindex="0" aria-label="DUMMIES P7.2 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
 </div>
 <div class="wrap">
   <div class="bar">
@@ -288,10 +288,11 @@ document.getElementById('btn-full').addEventListener('click', () => {
     // Edit 81 (P7): Story mode. Write-offs a tile; power-ups for a clear, a gift and a score; the brief's combo lengths; the story's shift
     'story.tileWriteOffs': 3, 'story.clearPowerUps': 1, 'story.pointsPerPowerUp': 15000, 'story.giftPowerUps': 1, 'story.task.comboEasy': 2, 'story.task.comboHard': 3, 'story.shiftCars': 5000,
     // Edit 82 (P7.1): a credit a body (Arcade and Story); story prices 3, 4, 5; a credit gift; write-offs per tile, in the story's order
+    'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, // Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
-    'story.writeOffs.monument.A1': 2, 'story.writeOffs.monument.B1': 2, 'story.writeOffs.monument.C1': 2, 'story.writeOffs.monument.C2': 2, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 2, 'story.writeOffs.monument.A3': 2, 'story.writeOffs.monument.B3': 2, 'story.writeOffs.monument.C3': 2,
-    'story.writeOffs.parkland.C1': 2, 'story.writeOffs.parkland.C2': 3, 'story.writeOffs.parkland.C3': 2, 'story.writeOffs.parkland.B3': 2, 'story.writeOffs.parkland.A3': 3, 'story.writeOffs.parkland.A2': 3, 'story.writeOffs.parkland.A1': 3, 'story.writeOffs.parkland.B1': 2, 'story.writeOffs.parkland.B2': 2,
-    'story.writeOffs.waterfront.A1': 1, 'story.writeOffs.waterfront.B1': 3, 'story.writeOffs.waterfront.C1': 2, 'story.writeOffs.waterfront.C2': 3, 'story.writeOffs.waterfront.C3': 3, 'story.writeOffs.waterfront.B3': 3, 'story.writeOffs.waterfront.A3': 3, 'story.writeOffs.waterfront.A2': 2, 'story.writeOffs.waterfront.B2': 3,
+    'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 2,
+    'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
+    'story.writeOffs.waterfront.A1': 1, 'story.writeOffs.waterfront.B1': 2, 'story.writeOffs.waterfront.C1': 1, 'story.writeOffs.waterfront.C2': 2, 'story.writeOffs.waterfront.C3': 1, 'story.writeOffs.waterfront.B3': 1, 'story.writeOffs.waterfront.A3': 2, 'story.writeOffs.waterfront.A2': 1, 'story.writeOffs.waterfront.B2': 2,
     'proto.parts.armPushLoss': 1, 'proto.parts.armPushFloor': 0.5,
     // Edit 79: combos. Variety pays; the clock stops in the air; a thrown cone that hits a car links the chain
     'scoring.comboVariety': 0, 'scoring.comboAirPause': 0, 'scoring.coneLink': 0, 'scoring.coneHitPoints': 20,
@@ -2124,7 +2125,12 @@ document.getElementById('btn-full').addEventListener('click', () => {
       this.emit('jump-land', { x: +b.x.toFixed(1), y: +b.y.toFixed(1), d: +hyp(b.x - J.x0, b.y - J.y0).toFixed(1), kind: J.kind, speed: +J.v0.toFixed(1), level: b.level });
     }
     // Ricochet (Legs): the bounce off a hit goes upgrades.ricochetScale as far
-    bounce(knock) { const k = this.has('ricochet') ? this.P['upgrades.ricochetScale'] : 1; return k === 1 ? knock : { x: knock.x * k, y: knock.y * k }; }
+    bounce(knock) {
+      const P = this.P, k = this.has('ricochet') ? P['upgrades.ricochetScale'] : 1, out = k === 1 ? knock : { x: knock.x * k, y: knock.y * k };
+      const mt = P['proto.bounce.maxThrow']; if (!(mt > 0)) return out; // Edit 83 (P7.2): a knock throws the dummy at most proto.bounce.maxThrow on its slide (0: no cap)
+      const vmax = Math.sqrt(2 * P['physics.slideFriction'] * P['physics.gravity'] * P['proto.scale.unitsPerMetre'] * mt), v = hyp(out.x, out.y);
+      return v > vmax ? { x: out.x * vmax / v, y: out.y * vmax / v } : out;
+    }
     nearestCone() {
       const P = this.P, b = this.body, rr = P['body.radius'] + P['props.cone.radius'];
       let best = null, bd = Infinity;
@@ -10682,15 +10688,16 @@ window.FLEET_DB = {
 window.DUMMIES_STORY = {
  "meta": {
   "name": "DUMMIES story: the Test City, tile by tile",
-  "version": "edit82-2026-10-28",
+  "version": "edit83-2026-10-28",
   "status": "Proposed (tales, briefs and gifts); the order of tiles is user-decided",
-  "consumers": ["prototypes/p7 (story.js, game.js): Prototype 7.1"],
-  "sources": ["GDD Edit 26 §3 Setting", "world6.js tile notes (Edits 62–68)", "circus_valley.js PLAN.tiles", "GDD Edits 81–82"],
+  "consumers": ["prototypes/p7 (story.js, game.js): Prototype 7.2"],
+  "sources": ["GDD Edit 26 §3 Setting", "world6.js tile notes (Edits 62–68)", "circus_valley.js PLAN.tiles", "GDD Edits 81–83"],
   "rules": [
    "Numbers live in the registry: tasks and gifts name parameter IDs, never values.",
    "A task tests the hit that writes the chassis off (the fatal hit).",
    "Tile names are column-row, as in the game: A1 is the top-left tile.",
-   "Each tile's write-offs are story.writeOffs.<district>.<tile> in the registry (Edit 82)."
+   "Each tile's write-offs are story.writeOffs.<district>.<tile> in the registry (Edit 82).",
+   "Gifts are only the verbs a brief needs: Legs 1, Hands 1, Arms 1 (Edit 83)."
   ]
  },
  "tasks": {
@@ -10726,7 +10733,7 @@ window.DUMMIES_STORY = {
      "tale": "The arcade was a car park until the cars learned to park themselves. Shops moved in under the highway. Their signs flash prices at the traffic. The traffic has no money, but it reads every sign." },
     "A3": { "title": "The stacked cubes", "task": { "kind": "combo", "param": "story.task.comboEasy" }, "gift": null,
      "tale": "Each cube was built on the last as the budget arrived, one quarter at a time. Every cube leans out further than the one below. The planners call this growth. The wind calls it a dare." },
-    "B3": { "title": "The LED canyon", "task": { "kind": "struck" }, "gift": { "node": "battery1" },
+    "B3": { "title": "The LED canyon", "task": { "kind": "struck" }, "gift": null,
      "tale": "Two advertising walls were raised to face each other, and the road had to jog between them. Now the screens advertise to each other all night. The skybridge was added so that someone would watch." },
     "C3": { "title": "The LED gateway", "task": { "kind": "combo", "param": "story.task.comboHard" }, "gift": null,
      "tale": "The gateway marks the edge of Monument, where the neon stops. Every car that passes under it is thanked for driving safely. It has no choice in the matter." }
@@ -10737,7 +10744,7 @@ window.DUMMIES_STORY = {
    "intro": "Farsight's Expo site: a garden grid, pavilions and pools, built to prove the city could be calm.",
    "order": ["C1", "C2", "C3", "B3", "A3", "A2", "A1", "B1", "B2"],
    "tiles": {
-    "C1": { "title": "The lantern pavilion", "task": { "kind": "drop" }, "gift": { "credits": "story.giftCredits" },
+    "C1": { "title": "The lantern pavilion", "task": { "kind": "drop" }, "gift": null,
      "tale": "The lantern was the Expo's first exhibit: a paper lamp the size of a house. Visitors crossed the footbridge to see it lit. When the Expo closed, the bridge stayed and the cars moved in underneath." },
     "C2": { "title": "The amphitheatre", "task": { "kind": "cls", "cls": "van" }, "gift": null,
      "tale": "The terraces were cut for an audience that never came. They face a stage where the avenue now turns. The seats still face the road, so every crossing is a performance." },
@@ -10762,7 +10769,7 @@ window.DUMMIES_STORY = {
    "intro": "The valley by the river: a hill walled by towers, a circus on the valley floor, two bridges to the far bank.",
    "order": ["A1", "B1", "C1", "C2", "C3", "B3", "A3", "A2", "B2"],
    "tiles": {
-    "A1": { "title": "The west portal", "task": { "kind": "cls", "cls": "bus" }, "gift": { "credits": "story.giftCredits" },
+    "A1": { "title": "The west portal", "task": { "kind": "cls", "cls": "bus" }, "gift": null,
      "tale": "The upper town was built on the hill first, for the engineers. When the west bridge was approved, it was approved straight through a building. The portal block kept its tenants and lost its view." },
     "B1": { "title": "The tunnel portal", "task": { "kind": "jump" }, "gift": null,
      "tale": "The tunnel was bored north under the hill to reach the next valley. Nobody has been cleared to see what is there. Cars go in. Some data comes back." },
@@ -10787,16 +10794,19 @@ window.DUMMIES_STORY = {
 ;
 </script>
 <script>
-/* DUMMIES P7.1 (GDD Edits 81–82): Story mode. The Test City, tile by tile: Monument, then Parkland, then Waterfront.
+/* DUMMIES P7.2 (GDD Edits 81–83): Story mode. The Test City, tile by tile: Monument, then Parkland, then Waterfront.
    - A district opens on its first tile (content/story/story.json, `order`). The dummy spawns there.
    - A tile wants story.writeOffs.<district>.<tile> write-offs that meet Farsight's brief: a test on the hit that writes the
      chassis off (Edit 82: a count per tile; only the last hit counts, D66).
-   - Fences hold the tile in test on every side; they cannot be jumped. A cleared tile drops its fences. The next tile opens
-     until the dummy enters it, then its fences close behind.
-   - Cleared tiles stay open: walk back through them. Write-offs there score, but count for nothing.
+   - Edit 83: fences hold every edge toward a tile not yet open; they cannot be jumped. Open tiles: the cleared ones and the
+     tile in test. Cleared tiles stay open: walk back through them. Write-offs there score, but count for nothing.
    - Edit 82: every body written off pays economy.creditsPerWriteOff, counted or not. Levels cost story.price.ability.level1–3
      (3, 4, 5): a level-1 power-up is three bodies.
    - Some tiles carry a gift: an ability level installed on arrival, or story.giftCredits credits.
+   - Edit 83: a clear calls a Farsight drone. It lifts the dummy, carries it across the edge into the next tile, and sets it
+     down off the road near where it crossed (story.ferryDepth). Then the next tile's card.
+   - Edit 83: P7SIM, the P7.2 values for both modes: the knock keeps proto.recoilScale of the Newtonian velocity and slides at
+     most proto.bounce.maxThrow.
    - The map reveals cleared tiles and the one in test. Progress is one plain object (`progress`), saved by the page.
    Headless in Node: require('./story.js'). In the page: window.STORY. */
 (function (root) {
@@ -10809,7 +10819,8 @@ window.DUMMIES_STORY = {
   const nameOf = (c, r) => 'ABC'[c] + (r + 1);
   const cellOf = (t) => ['ABC'.indexOf(t[0]), +t[1] - 1];
   const DIST = DATA.districts, TOTAL = DIST.reduce((a, d) => a + d.order.length, 0);
-  const BASE = Object.assign({}, X.REG, X.PROTO, X.OVERRIDES, W6.P6SIM);
+  const P7SIM = { 'proto.recoilScale': 0.7, 'proto.bounce.maxThrow': 40 }; // Edit 83: the ricochet the dummy survives; Arcade and Story
+  const BASE = Object.assign({}, X.REG, X.PROTO, X.OVERRIDES, W6.P6SIM, P7SIM);
 
   // ---------- progress: one plain object, JSON-safe
   function newProgress() {
@@ -10858,7 +10869,7 @@ window.DUMMIES_STORY = {
   class StorySim extends W6.Sim6 {
     // progress: newProgress() or a saved one, its district = this district. opts: Sim6's (world, warm)
     constructor(id, overrides, progress, opts) {
-      const pr = progress, ov = Object.assign({}, overrides || {}), P0 = Object.assign({}, BASE, ov);
+      const pr = progress, ov = Object.assign({}, P7SIM, overrides || {}), P0 = Object.assign({}, BASE, ov);
       ov['run.appearances.road'] = P0['story.shiftCars']; // the story has no shift clock: a district's traffic runs for story.shiftCars cars
       for (const L of [1, 2, 3]) ov['economy.price.ability.level' + L] = P0['story.price.ability.level' + L]; // Edit 82: the story's prices, 3, 4, 5
       const carry = { owned: Object.assign({}, pr.owned), credits: pr.credits, points: pr.points, chassis: pr.chassis, writeOffs: pr.writeOffs, t: pr.t, purchases: [], milestones: pr.milestones || {} };
@@ -10889,14 +10900,66 @@ window.DUMMIES_STORY = {
     step(cmd) {
       if (this.phase === 'brief') return;
       super.step(cmd);
-      if (this.phase === 'play' && this.pendingBrief) { this.pendingBrief = false; this.phase = 'brief'; }
+      if (this.phase === 'play' && this.pendingBrief && !this.rescue) { this.pendingBrief = false; this.phase = 'brief'; } // after a ferry lands
     }
-    // a tile may be crossed into when both sides are cleared, or from a cleared tile into the next one before the dummy enters it
+    // ----- Edit 83: the ferry. After a clear, a drone carries the new chassis from the cleared tile into the next one
+    leaveShop() {
+      const st = this.report && this.report.story;
+      super.leaveShop();
+      if (this.storyMode && st && st.cleared && st.next && !st.districtDone && this.phase === 'play') this.startFerry(st.tile, st.next);
+    }
+    startFerry(from, to) {
+      const b = this.body, P = this.P, W = P['world.width'], H = P['world.height'], [fc, fr] = cellOf(from), [tc, tr] = cellOf(to);
+      const side = tc > fc ? 'E' : tc < fc ? 'W' : tr > fr ? 'S' : 'N', [sx, sy] = SIDES[side];
+      const hx = sx ? (sx > 0 ? W + 40 : -40) : b.x, hy = sy ? (sy > 0 ? H + 40 : -40) : b.y; // the drone comes in from the next tile's side
+      b.mode = 'rescue'; Object.assign(b, { lunge: null, stair: null, jump: null, z: 0, vx: 0, vy: 0, level: 0, floor: null, _spr: null });
+      this.rescue = { ferry: true, side, cell: [tc, tr], tile: to, t: 0, phase: 'inbound', k: 0, under: 0, up: 0, lift: P['proto.droneLiftSeconds'], v: P['proto.droneSpeed'], to: null,
+        drone: { x: hx, y: hy, alt: 1, state: 'inbound', rescue: true, hx, hy } };
+      this.emit('story-ferry', { from, to, side });
+    }
+    arrivalPoint(side) { // off the road (landPoints: free ground or the hilltop), within story.ferryDepth of the entry edge, nearest the crossing
+      const P = this.P, b = this.body, W = P['world.width'], H = P['world.height'], dep = P['story.ferryDepth'], r = P['body.radius'];
+      const depth = (q) => (side === 'E' ? q.x : side === 'W' ? W - q.x : side === 'S' ? q.y : H - q.y); // in from the edge it entered by
+      const ex = side === 'E' ? 0 : side === 'W' ? W : b.x, ey = side === 'S' ? 0 : side === 'N' ? H : b.y;
+      const pts = this.landPoints().filter((q) => depth(q) >= r + 24); // clear of the edge by a body and more
+      const near = pts.filter((q) => depth(q) <= dep), pool = near.length ? near : pts;
+      let best = null; for (const q of pool) { const d = Math.hypot(q.x - ex, q.y - ey); if (!best || d < best.d) best = Object.assign({ d }, q); }
+      return best || Object.assign({ d: 0 }, this.level.spawns[0]);
+    }
+    stepRescue(dt) {
+      const rs = this.rescue;
+      if (!rs || !rs.ferry) return super.stepRescue(dt);
+      const b = this.body, P = this.P, W = P['world.width'], H = P['world.height'], d = rs.drone;
+      rs.t += dt; rs.k += dt;
+      const fly = (x, y) => { const dx = x - d.x, dy = y - d.y, l = Math.hypot(dx, dy), st = rs.v * dt; if (l <= st) { d.x = x; d.y = y; return true; } d.x += dx / l * st; d.y += dy / l * st; return false; };
+      const next = (ph) => { rs.phase = ph; rs.k = 0; d.state = ph; };
+      if (rs.phase === 'inbound') { if (fly(b.x, b.y)) next('lift'); }
+      else if (rs.phase === 'lift') { const f = Math.min(1, rs.k / rs.lift); rs.up = 14 * f; d.alt = 1 - 0.6 * Math.sin(Math.PI * f); if (f >= 1) { next('carry'); d.alt = 1; } }
+      else if (rs.phase === 'carry') { // to the edge and over it
+        const [sx, sy] = SIDES[rs.side], tx = sx ? (sx > 0 ? W + 2 : -2) : Math.max(40, Math.min(W - 40, b.x)), ty = sy ? (sy > 0 ? H + 2 : -2) : Math.max(40, Math.min(H - 40, b.y));
+        fly(tx, ty); b.x = d.x; b.y = d.y; b.px = b.x; b.py = b.y;
+        if ((sx > 0 && d.x > W) || (sx < 0 && d.x < 0) || (sy > 0 && d.y > H) || (sy < 0 && d.y < 0)) {
+          d.x -= sx * W; d.y -= sy * H; d.hx -= sx * W; d.hy -= sy * H;
+          this.flip(rs.side, rs.cell, null); // the screen scrolls; the next tile's fences close behind (arrive)
+          rs.to = this.arrivalPoint(rs.side); next('in');
+        }
+      } else if (rs.phase === 'in') { const arrived = fly(rs.to.x, rs.to.y); b.x = d.x; b.y = d.y; b.px = b.x; b.py = b.y; if (arrived) next('drop'); }
+      else if (rs.phase === 'drop') {
+        const f = Math.min(1, rs.k / rs.lift); rs.up = 14 * (1 - f);
+        if (f >= 1) {
+          Object.assign(b, { x: rs.to.x, y: rs.to.y, px: rs.to.x, py: rs.to.y, level: rs.to.level || 0, floor: rs.to.floor != null ? rs.to.floor : null, mode: 'idle', vx: 0, vy: 0 });
+          const [sx, sy] = SIDES[rs.side]; d.hx = sx ? (sx > 0 ? W + 40 : -40) : d.x; d.hy = sy ? (sy > 0 ? H + 40 : -40) : d.y; d.state = 'outbound'; (this.leaving = this.leaving || []).push(d); // on, the way it was going
+          this.rescue = null;
+          this.emit('story-ferried', { tile: this.screenName(), x: +b.x.toFixed(1), y: +b.y.toFixed(1), seconds: +rs.t.toFixed(2) });
+        }
+      }
+    }
+    // Edit 83: the open tiles are the cleared ones and the tile in test. An edge between two open tiles is open; every other edge
+    // of an open tile is fenced. Cleared tiles stay reachable from the tile in test (P7–7.1 closed it behind the dummy)
     canCross(to) {
       if (!this.storyMode) return true;
-      const pr = this.story, dn = doneIn(pr, this.levelId), act = activeTile(pr, this.levelId), from = this.screenName(), tn = nameOf(to[0], to[1]);
-      if (dn.includes(from) && dn.includes(tn)) return true;
-      return !this.entered && tn === act && dn.includes(from);
+      const pr = this.story, dn = doneIn(pr, this.levelId), act = activeTile(pr, this.levelId), open = (t) => dn.includes(t) || t === act;
+      return open(this.screenName()) && open(nameOf(to[0], to[1]));
     }
     fenceSides() { // the current screen's sides that a fence holds
       if (!this.storyMode) return [];
@@ -10993,7 +11056,7 @@ window.DUMMIES_STORY = {
     trace() { const tr = super.trace(); tr.story = JSON.parse(JSON.stringify(this.story)); return tr; }
   }
 
-  const api = { DATA, DIST, TOTAL, newProgress, districtOf, doneIn, activeTile, clearedCount, tileNumber, nextDistrict, tileState, tileOf, needOf, taskText, meets, nameOf, cellOf, StorySim };
+  const api = { P7SIM, DATA, DIST, TOTAL, newProgress, districtOf, doneIn, activeTile, clearedCount, tileNumber, nextDistrict, tileState, tileOf, needOf, taskText, meets, nameOf, cellOf, StorySim };
   if (NODE) module.exports = api; else root.STORY = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -11177,7 +11240,7 @@ window.DUMMIES_STORY = {
   if (FLEET) for (const m of FLEET.models) for (const sid of m.simIds) FMODEL.set(sid, m);
   const CPARAM = {};
   for (const part of [CJ, CI, CG, CB, CH, CTM, CP, CD]) if (part && part.params) for (const p of part.params) CPARAM[p.id] = p.value;
-  const BUILD = STORY ? 'P7.1' : W6 ? 'P6.10' : 'P5.3'; // Prototype 7.1 (GDD Edit 82: a credit a body, story prices 3–5, write-offs per tile); 7 (Edit 81: ARCADE and STORY) // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
+  const BUILD = STORY ? 'P7.2' : W6 ? 'P6.10' : 'P5.3'; // Prototype 7.2 (GDD Edit 83: the ricochet tamed, the drone ferry, the map, bubbles, the objective line); 7.1 (GDD Edit 82: a credit a body, story prices 3–5, write-offs per tile); 7 (Edit 81: ARCADE and STORY) // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
   function pv(id) {
     if (id == null) return null;
     if (app.tune[id] != null) return app.tune[id];
@@ -11236,7 +11299,7 @@ window.DUMMIES_STORY = {
     const nL = ((window.DISTRICT_DB || {}).districts || {})[LEVEL_LIST[i]], nLay = nL && nL.length ? nL.length : 1;
     const layout = app.tune['proto.layout'] != null ? app.tune['proto.layout'] : 1 + Math.floor(Math.random() * nLay);
     app.sim = W6 && app.mode === 'story' && STORY ? new STORY.StorySim(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, app.tune, FIELD), app.story) // Edit 81: the district's tile in test
-      : W6 ? new W6.Sim6(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, app.tune, FIELD), carry, STORY ? { single: true } : undefined) // Edit 81: Arcade plays one district a run
+      : W6 ? new W6.Sim6(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, STORY ? STORY.P7SIM : {}, app.tune, FIELD), carry, STORY ? { single: true } : undefined) // Edit 81: Arcade plays one district a run
       : new Sim(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty, 'proto.layout': layout }, app.tune, FIELD), carry);
     app.tuned = Object.keys(app.tune).length > 0;
     app.screen = 'game'; app.paused = false; app.lastEv = 0; app.shopCol = 0; app.shopRow = 0; app.endSel = 0;
@@ -11859,6 +11922,8 @@ window.DUMMIES_STORY = {
         case 'story-miss': Snd.tone(200, 150, 0.12, 'square', 0.05); toast(e.why === 'task' ? 'NOT COUNTED · the brief wants ' + STORY.taskText(STORY.tileOf(s.levelId, e.tile).task, s.P).label.toLowerCase() : e.why === 'cleared' ? 'NOT COUNTED · ' + e.tile + ' is already cleared' : 'NOT COUNTED · ' + e.tile + ' is not in test'); break;
         case 'story-clear': [523, 659, 784, 1046].forEach((f, j) => Snd.tone(f, f, 0.14, 'triangle', 0.07, j * 0.09)); toast('TILE ' + e.tile + ' CLEARED' + (e.next ? ' · ' + e.next + ' OPEN' : '')); break;
         case 'story-gift': toast('FARSIGHT GIFT · ' + (e.node ? NODE(e.node).name.toUpperCase() + ' INSTALLED' : '+' + plural(e.credits, 'CREDIT'))); break;
+        case 'story-ferry': Snd.tone(150, 210, 0.6, 'sawtooth', 0.025); toast('FARSIGHT DRONE · CARRYING YOU TO ' + e.to); break; // Edit 83
+        case 'story-ferried': Snd.tone(240, 150, 0.1, 'square', 0.05); break;
         case 'story-fence': Snd.tone(140, 120, 0.08, 'square', 0.05); toast(e.cleared ? 'Fence: ' + e.to + ' is not yet surveyed' : 'Fence: clear ' + e.tile + ' first (' + s.story.tileWO + ' / ' + STORY.needOf(s.levelId, e.tile, s.P) + ')'); break;
         case 'ending': if (e.kind === 'Licensed' || e.kind === 'Certified') [523, 659, 784, 1046].forEach((f, j) => Snd.tone(f, f, 0.16, 'triangle', 0.07, 1.1 + j * 0.09)); break;
         default: break;
@@ -12726,7 +12791,7 @@ window.DUMMIES_STORY = {
     if (b.mode !== 'rescue') drawNose(s);
     drawEffects(s); drawRingsStreaks(); drawParts(s);
     for (const d of s.drawDrones()) { // P6.1 (D37): the rescue drone flies in from the edge, then carries the dummy below it
-      const rs = s.rescue, held = d.rescue && rs && rs.drone === d && (rs.phase === 'lift' || rs.phase === 'carry' || rs.phase === 'drop');
+      const rs = s.rescue, held = d.rescue && rs && rs.drone === d && (rs.phase === 'lift' || rs.phase === 'carry' || rs.phase === 'in' || rs.phase === 'drop'); // Edit 83: the ferry's 'in'
       if (!held) { drawDrone(s, d); continue; }
       const up = rs.up + 20, x = Math.round(d.x / U), y = Math.round(d.y / U) - up; PIX.line(x, y + 2, x, y + 7, (px, py) => FB.put(px, py, K.label));
       drawDrone(s, Object.assign({}, d, { y: d.y - up * U + d.alt * 4 * U }));
@@ -12784,6 +12849,7 @@ window.DUMMIES_STORY = {
   // Frame-layer messages over the field: road intro and toasts, at ui.typeSecondary.
   function drawFieldHD(s) {
     const P = s.P;
+    drawBubblesHD(s); // Edit 83: barks are speech bubbles on the cars again
     const since = s.t - (s.tStart || 0);
     if (since < 4 && s.phase === 'play' && !s.storyMode) { // Edit 81: the story's tile card replaces the banner
       const iv = { road: s.roadIndex + 1, roads: s.list.length, roadName: INFO(s.levelId).name, quota: s.quota, difficulty: s.difficulty, health: P['damage.bodyHealth'] };
@@ -12811,10 +12877,70 @@ window.DUMMIES_STORY = {
     }
     return best;
   }
+  // Edit 83 (P7.2): car barks are speech bubbles on the cars, drawn at a legible size in the frame layer: speech solid, shout
+  // doubled, mutter dashed, thought dotted. Above the car's tag, else below; never over the dummy or another bubble.
+  function drawBubblesHD(s) {
+    if (!STORY || !fx.bubbles.size) return;
+    const dur = pv('proto.barks.seconds') || 2.4, now = app.realT, size = Math.max(kMin(), 16), font = '700 ' + size + 'px ' + F_UI, lh = size + 3, pad = 8, maxW = 230;
+    const toC = (ax, ay) => [FX + ax * RA, FY + ay * RA], placed = [], cars = carsOf(s);
+    if (s.body.alive) { const [bx, by] = toC(s.body.x / U - 10, s.body.y / U - 16); placed.push({ x: bx, y: by, w: 20 * RA, h: 24 * RA }); }
+    const hit = (r) => placed.some((q) => r.x < q.x + q.w && r.x + r.w > q.x && r.y < q.y + q.h && r.y + r.h > q.y);
+    const order = [...fx.bubbles.entries()].sort((a, b2) => b2[1].priority - a[1].priority || b2[1].t0 - a[1].t0);
+    for (const [id, bk] of order) {
+      const c = cars.find((q) => q.id === id), age = now - bk.t0; if (!c || age > dur) continue;
+      const lines = wrapLines(bk.text, maxW - 2 * pad, font).slice(0, 3); ctx.font = font;
+      const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 2 * pad, h = lines.length * lh + 2 * pad - 2;
+      const t = tagRect(c), [cx, top] = toC(c.x / U, t.y0), [, bot] = toC(0, c.y / U - (c._lift || 0) + Math.max(c.L, c.W) / U / 2);
+      let x = clamp(cx - w / 2, FX + 4, FX + FW - w - 4), y = top - 10 - h, below = false;
+      if (y < FY + 4 || hit({ x, y, w, h })) { y = bot + 10; below = true; }
+      if (y + h > FY + FH - 4 || hit({ x, y, w, h })) { if (bk.priority < 2) continue; y = clamp(top - 10 - h, FY + 4, FY + FH - h - 4); below = false; }
+      placed.push({ x, y, w, h }); app.bubblesDrawn = (app.bubblesDrawn || 0) + 1;
+      const st = bk.style, edge = kCss(K.barkEdge), fill = kCss(K.barkFill), ink = kCss(K.barkInk), ax = clamp(cx, x + 16, x + w - 16);
+      ctx.save(); ctx.globalAlpha = Math.min(1, 3 * (dur - age));
+      if (st === 'thought') { const ty = below ? y - 6 : y + h + 6; [[0, 0, 4], [3, below ? -7 : 7, 2.5]].forEach(([dx, dy, r]) => { ctx.beginPath(); ctx.arc(ax + dx, ty + dy, r, 0, TAU); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = edge; ctx.lineWidth = 1.5; ctx.stroke(); }); }
+      else { ctx.beginPath(); const by = below ? y : y + h; ctx.moveTo(ax - 7, by); ctx.lineTo(ax, by + (below ? -10 : 10)); ctx.lineTo(ax + 7, by); ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.stroke(); }
+      rr(x, y, w, h, 10); ctx.fillStyle = fill; ctx.fill();
+      ctx.setLineDash(st === 'mutter' ? [6, 4] : st === 'thought' ? [2, 4] : []); ctx.lineWidth = 2; ctx.strokeStyle = edge; ctx.stroke(); ctx.setLineDash([]);
+      if (st === 'shout') { rr(x - 3, y - 3, w + 6, h + 6, 12); ctx.lineWidth = 1.5; ctx.stroke(); }
+      if (st !== 'thought') { ctx.beginPath(); const by = below ? y + 1 : y + h - 1; ctx.moveTo(ax - 5, by); ctx.lineTo(ax + 5, by); ctx.strokeStyle = fill; ctx.lineWidth = 3; ctx.stroke(); }
+      lines.forEach((l, k) => txt(l, x + w / 2, y + pad + size * 0.82 + k * lh, font, ink, 'center'));
+      ctx.restore();
+    }
+  }
+  // Edit 83 (P7.2): the bottom line carries the objective: the story's brief for the tile in test, or the Arcade district's quota.
+  // A toast takes the line while it lives.
+  function objective(s) {
+    if (!s) return null;
+    if (s.storyMode) {
+      const pr = s.story, id = s.levelId, act = STORY.activeTile(pr, id), here = s.screenName();
+      if (s.rescue && s.rescue.ferry) return ['FARSIGHT DRONE', 'Carrying the chassis to ' + s.rescue.tile + '.'];
+      if (!act) return ['STORY', INFO(id).name + ' is cleared.'];
+      const task = STORY.tileOf(id, act).task, need = STORY.needOf(id, act, s.P), lab = STORY.taskText(task, s.P).label.toLowerCase(), cnt = ' (' + pr.tileWO + ' of ' + need + ')';
+      const what = (need === 1 ? 'Write off a body' : 'Write off ' + need + ' bodies') + (task.kind === 'any' ? '' : '. Last hit: ' + lab);
+      if (here === act) return ['OBJECTIVE · ' + act, what + cnt + '.'];
+      return ['OBJECTIVE · ' + act, 'Back to ' + act + ': ' + what.charAt(0).toLowerCase() + what.slice(1) + cnt + '.'];
+    }
+    if (s.isCity && s.quota) return ['OBJECTIVE · ' + INFO(s.levelId).name.toUpperCase(), 'Write off ' + s.quota + ' bodies (' + s.run.writeOffs + ' of ' + s.quota + ').'];
+    return null;
+  }
   function drawMessages(s) {
     const items = [];
     if (app.toast && app.realT - app.toast.t < 1.6) items.push({ kind: 'toast', text: app.toast.msg, a: Math.min(1, 3 * (1.6 - (app.realT - app.toast.t))) });
-    const bk = s && liveBark(s); if (bk) items.push({ kind: 'bark', text: bk.bk.text, tag: bk.tag, spent: bk.spent, dim: bk.bk.style === 'mutter', a: bk.a });
+    if (!STORY) { const bk = s && liveBark(s); if (bk) items.push({ kind: 'bark', text: bk.bk.text, tag: bk.tag, spent: bk.spent, dim: bk.bk.style === 'mutter', a: bk.a }); }
+    if (STORY && !items.length) { // Edit 83: the objective line
+      const ob = objective(s); if (!ob) return;
+      const top = FY + FH + 8, bot = VH - 2, cy = (top + bot) / 2, MIN = kMin(); let size = TY.sec;
+      const fit = () => { ctx.font = '700 ' + size + 'px ' + F_UI; const lw = ctx.measureText(ob[0]).width + 24; ctx.font = '400 ' + size + 'px ' + F_UI; return lw + 12 + ctx.measureText(ob[1]).width <= FW - 16; };
+      while (!fit() && size > MIN) size--;
+      ctx.font = '700 ' + size + 'px ' + F_UI; const lw = ctx.measureText(ob[0]).width + 24; ctx.font = '400 ' + size + 'px ' + F_UI;
+      let text = ob[1]; while (text.length > 8 && lw + 12 + ctx.measureText(text).width > FW - 16) text = text.slice(0, -2);
+      if (text !== ob[1]) text = text.replace(/\s+\S*$/, '') + '…';
+      const total = lw + 12 + ctx.measureText(text).width, x0 = FX + FW / 2 - total / 2, ph = size + 10;
+      rr(x0, cy - ph / 2, lw, ph, 10); ctx.fillStyle = C.dummy; ctx.fill();
+      txt(ob[0], x0 + 12, cy + size * 0.36, '700 ' + size + 'px ' + F_UI, C.primary);
+      txt(text, x0 + lw + 12, cy + size * 0.36, '400 ' + size + 'px ' + F_UI, FT.text);
+      return;
+    }
     if (!items.length) return;
     const top = FY + FH + 8, bot = VH - 2, GAP = 28;
     const widthOf = (it, size, pill) => { ctx.font = '700 ' + size + 'px ' + F_UI; const tw = ctx.measureText(it.text).width; if (it.kind === 'toast') return tw + (pill ? 24 : 0); ctx.font = '700 ' + size + 'px ' + F_MONO; return ctx.measureText(it.tag).width + 14 + 10 + tw; };
@@ -12908,7 +13034,7 @@ window.DUMMIES_STORY = {
   // Top bar: where you are and how the shift stands. Cars left is the shift's clock.
   function drawTopBar(s) {
     const r = s.run, left = s.carsLeft ? s.carsLeft() : Math.max(0, s.schedule.length - (r.admitted - (s.allCars ? s.allCars() : s.cars).filter((c) => !c.deck).length)); // P6.1: shift cars still to appear // deck traffic is off the shift's clock; P5.3: every car still in the district
-    const b = s.body, f = bodyFloor(s), where = b.mode === 'rescue' ? ' · RIVER RESCUE' : !b.alive || b.level === 0 && !b.stair ? '' : b.stair ? ' · STAIRS' : b.mode === 'drop' ? ' · FALLING' : ' · Z' + b.level + ' ' + (f && WHERE6[f.kind] ? WHERE6[f.kind] : f && f.kind === 'roof' ? 'ROOF' : f && f.kind === 'bridge' ? 'BRIDGE' : 'HIGHWAY'); // Edit 44; P6 floors
+    const b = s.body, f = bodyFloor(s), where = b.mode === 'rescue' ? (s.rescue && s.rescue.ferry ? ' · DRONE' : ' · RIVER RESCUE') : !b.alive || b.level === 0 && !b.stair ? '' : b.stair ? ' · STAIRS' : b.mode === 'drop' ? ' · FALLING' : ' · Z' + b.level + ' ' + (f && WHERE6[f.kind] ? WHERE6[f.kind] : f && f.kind === 'roof' ? 'ROOF' : f && f.kind === 'bridge' ? 'BRIDGE' : 'HIGHWAY'); // Edit 44; P6 floors
     const items = s.storyMode ? [[null, INFO(s.levelId).name.toUpperCase() + ' · ' + s.screenName() + where], ['TILE', s.story.tileWO + ' / ' + STORY.needOf(s.levelId, STORY.activeTile(s.story, s.levelId) || s.screenName(), s.P)], ['POINTS', num(r.points)], ['CREDITS', String(r.credits)]] // Edit 81
       : [[null, roadLabel(s.p6 ? s.levelId : s.level.id) + (s.district ? ' · ' + s.screenName() : '') + where], ['WRITE-OFFS', r.writeOffs + ' / ' + s.quota], ['POINTS', num(r.points)], ['CARS LEFT', String(left)]];
     const w = items.map(([k, v]) => { ctx.font = fLab; const kw = k ? ctx.measureText(k).width + 10 : 0; ctx.font = k ? fNum : fLab; return kw + ctx.measureText(v).width; });
@@ -13003,8 +13129,7 @@ window.DUMMIES_STORY = {
     const Wd = s.P['world.width'], Hd = s.P['world.height'], lanes = !!(s.W6 && s.W6.recs), mc = lanes ? mapCanvas(s, G) : null;
     for (let iy = 0; iy < D.rows; iy++) for (let ix = 0; ix < D.cols; ix++) {
       const x = gx + ix * (cw + g), y = gy + iy * (ch + g), cur = D.cur[0] === ix && D.cur[1] === iy, cell = D.cells[iy][ix];
-      const st = sm ? STORY.tileState(s.story, s.levelId, 'ABC'[ix] + (iy + 1)) : null, seen = sm ? st !== 'hidden' : D.visited.has(iy * D.cols + ix);
-      if (sm && st === 'hidden') { rr(x, y, cw, ch, 5); ctx.fillStyle = FT.track; ctx.fill(); ctx.strokeStyle = FT.itemEdge; ctx.lineWidth = 1; ctx.stroke(); txt('?', x + cw / 2, y + ch / 2 + 7, fLab, FT.off, 'center'); continue; }
+      const st = sm ? STORY.tileState(s.story, s.levelId, 'ABC'[ix] + (iy + 1)) : null, seen = sm ? st === 'cleared' : D.visited.has(iy * D.cols + ix); // Edit 83: only cleared tiles at full strength
       rr(x, y, cw, ch, 5); ctx.fillStyle = lanes ? (seen || cur ? FT.item : FT.track) : cur ? FT.sel : seen ? FT.item : FT.track; ctx.fill();
       ctx.save(); rr(x, y, cw, ch, 5); ctx.clip();
       if (iy === 0 && !W6) { ctx.fillStyle = rgba(PIX.PAL.water.length === 7 ? PIX.PAL.water : '#4FC3E8', 0.9); ctx.fillRect(x, y, cw, 4); }
@@ -13022,12 +13147,13 @@ window.DUMMIES_STORY = {
       }
       if (cell.focal) { ctx.beginPath(); ctx.arc(x + cw / 2, y + ch / 2, 3, 0, TAU); ctx.fillStyle = FT.accent; ctx.fill(); }
       ctx.restore();
-      rr(x, y, cw, ch, 5); ctx.strokeStyle = cur ? FT.accent : FT.itemEdge; ctx.lineWidth = cur ? 3 : 1;
-      if (cur && FT.neon) { ctx.save(); ctx.shadowColor = FT.accent; ctx.shadowBlur = 8; ctx.stroke(); ctx.restore(); } else ctx.stroke();
+      if (sm && st === 'active') { rr(x - 1.5, y - 1.5, cw + 3, ch + 3, 6); ctx.strokeStyle = C.dummy; ctx.lineWidth = 3; ctx.stroke(); } // Edit 83: the live tile, ringed in yellow
+      else if (sm && !cur) { rr(x, y, cw, ch, 5); ctx.strokeStyle = FT.itemEdge; ctx.lineWidth = 1; ctx.stroke(); }
+      if (sm && st === 'hidden') { rr(x, y, cw, ch, 5); ctx.fillStyle = 'rgba(40,46,56,0.55)'; ctx.fill(); } // greyed out until cleared
+      if (!sm || (cur && st !== 'active')) { rr(x, y, cw, ch, 5); ctx.strokeStyle = cur ? FT.accent : FT.itemEdge; ctx.lineWidth = cur ? 3 : 1;
+        if (cur && FT.neon) { ctx.save(); ctx.shadowColor = FT.accent; ctx.shadowBlur = 8; ctx.stroke(); ctx.restore(); } else ctx.stroke(); }
     }
-    if (sm) drawMapFences(s, G);
-    const b = s.body;
-    if (sm) drawBriefFoot(s, X, gy + D.rows * ch + (D.rows - 1) * g + 10, W);
+    const b = s.body; // Edit 83: the objective sits on the bottom line; the live tile's yellow ring marks its fences
     if (b.alive) { const x = gx + D.cur[0] * (cw + g) + clamp(b.x / Wd, 0, 1) * cw, y = gy + D.cur[1] * (ch + g) + clamp(b.y / Hd, 0, 1) * ch; ctx.beginPath(); ctx.arc(x, y, 5, 0, TAU); ctx.fillStyle = C.dummy; ctx.fill(); ctx.strokeStyle = C.joints; ctx.lineWidth = 2; ctx.stroke(); }
   }
   // Right: the chassis. Each part shows the damage it took (sim: impact.part, body.parts); installed modules glow aqua.
@@ -13138,7 +13264,7 @@ window.DUMMIES_STORY = {
     txt(TOUCH.on || app.device === 'pad' ? 'PRESS A TO START' : TT && TT.start ? TT.start.toUpperCase() : 'PRESS SPACE TO START', x + w / 2, y + h - 22, fLab, FT.accent, 'center');
   }
   // ---------- Edit 81 (P7): the title's two modes; the story map; the tile card; the brief under the district map; fences
-  const STORY_FOOT = 64; // the brief under the district map, reference units
+  const STORY_FOOT = 0; // Edit 83: the brief moved from under the district map to the bottom line
   const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 'S');
   function storyCursor() { // the tile in test (or the last one, once certified), as [column 0–8, row 0–2] on the story map
     const pr = app.story, D = STORY.DIST, did = pr.complete ? D[D.length - 1].id : pr.district, di = D.findIndex((d) => d.id === did);
@@ -13196,13 +13322,11 @@ window.DUMMIES_STORY = {
       const at = (t) => { const [c, r] = STORY.cellOf(t); return [gx + c * (cw + g), top + r * (ch + g)]; };
       for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
         const t = 'ABC'[c] + (r + 1), st = STORY.tileState(pr, d.id, t), [cx, cy] = at(t), on = sel[0] === di * 3 + c && sel[1] === r, pulse = st === 'active' && Math.floor(app.realT * 2) % 2 === 0;
-        rr(cx, cy, cw, ch, 6); ctx.fillStyle = st === 'cleared' ? 'rgba(79,195,232,0.22)' : st === 'active' ? (pulse ? FT.sel : FT.keyTop) : FT.track; ctx.fill();
-        ctx.strokeStyle = on || st === 'active' ? FT.accent : FT.itemEdge; ctx.lineWidth = on ? 3 : st === 'active' ? 2 : 1; ctx.stroke();
-        if (st === 'hidden') txt('?', cx + cw / 2, cy + ch / 2 + 7, fLab, FT.off, 'center');
-        else {
-          txt(t, cx + 8, cy + 22, '700 17px ' + F_UI, st === 'active' && pulse ? FT.selText : FT.text);
-          txt(st === 'cleared' ? '✓' : pr.tileWO + '/' + needT(d.id, t), cx + cw - 8, cy + ch - 9, '700 15px ' + F_UI, st === 'cleared' ? FT.accent : pulse ? FT.selText : FT.accent, 'right');
-        }
+        rr(cx, cy, cw, ch, 6); ctx.fillStyle = st === 'cleared' ? 'rgba(79,195,232,0.30)' : st === 'active' ? FT.keyTop : 'rgba(40,46,56,0.55)'; ctx.fill(); // Edit 83: uncleared greyed out
+        ctx.strokeStyle = on ? FT.accent : FT.itemEdge; ctx.lineWidth = on ? 3 : 1; ctx.stroke();
+        if (st === 'active') { rr(cx - 2, cy - 2, cw + 4, ch + 4, 8); ctx.strokeStyle = C.dummy; ctx.lineWidth = pulse ? 4 : 3; ctx.stroke(); } // the live tile, ringed in yellow
+        txt(t, cx + 8, cy + 22, '700 17px ' + F_UI, st === 'hidden' ? FT.off : FT.text);
+        if (st !== 'hidden') txt(st === 'cleared' ? '✓' : pr.tileWO + '/' + needT(d.id, t), cx + cw - 8, cy + ch - 9, '700 15px ' + F_UI, st === 'cleared' ? FT.accent : C.dummy, 'right');
       }
       // the route between revealed tiles, a dot in the gap where one leads to the next
       for (let i = 1; i < d.order.length; i++) {
@@ -13279,20 +13403,14 @@ window.DUMMIES_STORY = {
   }
   const c32 = (hex) => { const n = parseInt(hex.slice(1), 16); return (0xFF000000 | ((n & 255) << 16) | (n & 0xFF00) | ((n >> 16) & 255)) >>> 0; };
   const FENCE = { rail: c32('#F5C542'), band: c32('#1A1F24'), post: c32('#3A4550'), mesh: c32('#E8F0F4') };
-  function drawStoryFence(s) { // Edit 81: a Farsight test fence along every side that holds: hazard rails, mesh, posts. Art pixels
+  function drawStoryFence(s) { // Edit 83: a bounded edge, as in Zelda: no barrier across the road, a yellow glow at the screen's edge. Art pixels
     if (!s.storyMode || !s.fenceSides) return;
     const sides = s.fenceSides(); if (!sides.length) return;
     const at = (sd, i, d) => (sd === 'N' ? [i, d] : sd === 'S' ? [i, AH - 1 - d] : sd === 'W' ? [d, i] : [AW - 1 - d, i]);
+    const pulse = RM ? 1 : 0.8 + 0.2 * Math.sin(app.realT * 4), A = [0.9, 0.6, 0.36, 0.18, 0.08, 0.03];
     for (const sd of sides) {
       const len = sd === 'N' || sd === 'S' ? AW : AH;
-      for (let i = 0; i < len; i++) {
-        for (let d = 0; d < 5; d++) {
-          const [x, y] = at(sd, i, d);
-          if (d === 0 || d === 4) FB.put(x, y, (i >> 2) & 1 ? FENCE.rail : FENCE.band);
-          else FB.mix(x, y, FENCE.mesh, (i + d) % 2 ? 0.6 : 0.18);
-        }
-        if (i % 10 === 0) for (let d = 0; d < 7; d++) { const [x, y] = at(sd, i, d); FB.put(x, y, FENCE.post); }
-      }
+      for (let i = 0; i < len; i++) for (let d = 0; d < A.length; d++) { const [x, y] = at(sd, i, d); FB.mix(x, y, FENCE.rail, A[d] * pulse); }
     }
   }
   function drawReport(s) {
@@ -13591,7 +13709,7 @@ window.DUMMIES_STORY = {
     for (let i = TUNE.length - 1; i >= 0; i--) if (gone.has(TUNE[i][0])) TUNE.splice(i, 1);
   }
   if (STORY) { // Edit 81–82: the story (from the next deploy): a credit a body, its prices, the gift, the brief's combos, each tile's write-offs
-    TUNE.push(['economy.creditsPerWriteOff', 0, 3, 1], ['story.price.ability.level1', 1, 10, 1], ['story.price.ability.level2', 1, 10, 1], ['story.price.ability.level3', 1, 10, 1], ['story.giftCredits', 0, 10, 1], ['story.task.comboEasy', 2, 5, 1], ['story.task.comboHard', 2, 6, 1]);
+    TUNE.push(['proto.bounce.maxThrow', 0, 200, 4], ['story.ferryDepth', 40, 400, 10], ['economy.creditsPerWriteOff', 0, 3, 1], ['story.price.ability.level1', 1, 10, 1], ['story.price.ability.level2', 1, 10, 1], ['story.price.ability.level3', 1, 10, 1], ['story.giftCredits', 0, 10, 1], ['story.task.comboEasy', 2, 5, 1], ['story.task.comboHard', 2, 6, 1]);
     for (const d of STORY.DIST) for (const t of d.order) TUNE.push(['story.writeOffs.' + d.id + '.' + t, 1, 6, 1]);
   }
   for (const id of Object.keys(CPARAM)) { const v = CPARAM[id]; TUNE.push([id, 0, Math.max(1, Math.ceil(v * 3)), v >= 10 ? 1 : 0.01]); } // generated presentation IDs
@@ -13715,6 +13833,7 @@ window.DUMMIES_STORY = {
   window.__dummies = app;
   window.__dummiesScale = () => ({ kpx, scale, ox, oy, width: cv.width, height: cv.height });
   window.__dummiesInput = { TOUCH, pad, touchLayout, touchLayoutCss, FOUR }; // Edit 75–76: for the tests
+  window.__dummiesUI = { objective }; // Edit 83: for the tests
 })();
 
 </script>

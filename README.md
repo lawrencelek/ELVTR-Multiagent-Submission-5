@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.1
+# DUMMIES — Prototype 7.2
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 82. The final P7.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 83.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.1:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-1/
 - **Prototype 7 (before 7.1's economy):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7/
 - **Prototype 6.10 (before the modes):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p6-10/
 - Plain web pages: gamepads, touch and keys all work. Claude's hosted preview blocks gamepads.
@@ -12,7 +13,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.1. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.2. Arcade and Story. One file; no server.
+- `p7-1/index.html`: Prototype 7.1, frozen.
 - `p7/index.html`: Prototype 7, frozen.
 - `p6-10/index.html`: Prototype 6.10, frozen.
 - `jump/index.html`: the jump test yard. Moving traffic, parked cars, barriers, a ruler, a side view of each jump.
@@ -35,6 +37,16 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.2 changes
+
+- By default the dummy has two dashes, the standard recharge and recoil, and no other ability.
+- Story: the upgrade tracks fill only at the end of Waterfront. 35 bodies certify the city.
+- Hits throw the dummy less: a head-on hit slides it about a lane, not across the screen.
+- After a clear, a Farsight drone carries the dummy into the next tile and sets it down off the road.
+- Bounded edges glow yellow, as in Zelda; nothing blocks the road. Cleared tiles stay open.
+- Maps: uncleared tiles grey, the live tile ringed in yellow.
+- Cars speak in bubbles again. The objective sits on the bottom line.
 
 ## What 7.1 changes
 
