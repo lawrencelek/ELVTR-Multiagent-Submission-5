@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.9
+# DUMMIES — Prototype 7.10
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 90.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 91.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.9:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-9/
 - **Prototype 7.8:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-8/
 - **Prototype 7.7:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-7/
 - **Prototype 7.6:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-6/
@@ -20,7 +21,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.9. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.10. Arcade and Story. One file; no server.
+- `p7-9/index.html`: Prototype 7.9, frozen.
 - `p7-8/index.html`: Prototype 7.8, frozen.
 - `p7-7/index.html`: Prototype 7.7, frozen.
 - `p7-6/index.html`: Prototype 7.6, frozen.
@@ -39,11 +41,11 @@
 | | Keys | Gamepad | Touch (phones and tablets, landscape) | Unlocked by |
 |---|---|---|---|---|
 | Move | WASD / arrows | stick or d-pad | analog stick, left | — |
-| Dash | SPACE or K | A (or RT) | A | start; Battery recharges it faster |
-| Jump | L or SHIFT | B | B | Legs 1 (by drone) |
-| Pick up a cone | J or E, tap | X, tap | X, tap | Hands 1 by drone (one cone), Hands 2 (two) |
+| Dash | SPACE or K | A (or RT) | A | Battery 1: by drone after Story's first tile; fitted in Arcade |
+| Jump | L or SHIFT | B | B | Legs 1 (Story: by drone; Arcade: credits) |
+| Pick up a cone | J or E, tap | X, tap | X, tap | Hands 1 (one cone), Hands 2 (two) |
 | Put a cone down | J or E, tap away from cones (or hold) | X, tap away from cones | X, tap away from cones (it reads DROP) | Hands 1 |
-| Push off a car | I or Q, after a hit or beside a car | Y | Y | Arms 1 (by drone) |
+| Push off a car | I or Q, after a hit or beside a car | Y | Y | Arms 1 |
 | Pause | ESC or P | START | ❚❚ PAUSE | — |
 | Pad setup | G | hold START | — | — |
 
@@ -53,7 +55,17 @@
 - Touch: Pause › Controls › Adjust layout. Drag the stick or the buttons anywhere, size them (60–160%), Reset. Saved in your browser.
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
-- The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+- Arcade: the workshop opens after each write-off; credits buy parts. Story: parts come by drone. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.10 changes
+
+- Story: every part comes by drone on a set tile, when its task needs it. No levels; points are your score.
+  - Battery 1, the dash, arrives after the first tile. Battery 2 is a second charge; Battery 3 recharges faster.
+- Arcade: buy every part with credits in the workshop. The dash comes fitted.
+- Story's first tile is on foot, with 500 health.
+- Miss Farsight's brief with a hit that would finish you, and the chassis holds at 1 health. Keep going.
+- Points sit small in the top-right corner. The chassis turns red where it is damaged, with the damage beside each part.
+- A monument to the dummy stands in the middle of Waterfront's circus.
 
 ## What 7.9 changes
 

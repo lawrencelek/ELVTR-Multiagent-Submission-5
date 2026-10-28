@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="screen-orientation" content="landscape"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>DUMMIES P7.9</title>
+<title>DUMMIES P7.10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&family=Nunito:wght@700;800;900&display=swap">
@@ -65,7 +65,7 @@ body.touch #game { touch-action: none; }
 </head>
 <body>
 <div class="stage" id="stage">
-  <canvas id="game" tabindex="0" aria-label="DUMMIES P7.9 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
+  <canvas id="game" tabindex="0" aria-label="DUMMIES P7.10 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
 </div>
 <div class="wrap">
   <div class="bar" hidden> <!-- Edit 86: kept for its handlers and the build line; the pause menu carries options and controls -->
@@ -293,7 +293,8 @@ document.getElementById('btn-full').addEventListener('click', () => {
     'story.traffic.monument.A1': 1.5, 'story.traffic.monument.B1': 1.75, 'story.traffic.monument.C1': 1, 'story.traffic.monument.C2': 1, 'story.traffic.monument.B2': 1, 'story.traffic.monument.A2': 1, 'story.traffic.monument.A3': 1, 'story.traffic.monument.B3': 1, 'story.traffic.monument.C3': 1,
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
-    'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1, // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'world.dummyMonument': 0, // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 2,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -412,6 +413,10 @@ document.getElementById('btn-full').addEventListener('click', () => {
   };
   const NODES10 = {};
   for (const [t, tr] of Object.entries(TRACKS10)) for (let L = 1; L <= (tr.max || 3); L++) NODES10[t + L] = { name: tr.name + ' ' + L, branch: tr.name, track: t, level: L, price: 'economy.price.ability.level' + L, pre: L > 1 ? t + (L - 1) : null, desc: tr.desc[L - 1] };
+  // Edit 91 (P7.10, proto.batteryModel 1): Battery 1 is the dash; 2 a second charge; 3 a faster recharge
+  const TRACKS10D = Object.assign({}, TRACKS10, { battery: Object.assign({}, TRACKS10.battery, {
+    desc: ['A dashes. One charge; a jump out of a dash is free.', 'A second charge: two dashes before a recharge.', 'A faster recharge.'] }) });
+  const NODES10D = Object.assign({}, NODES10); for (let L = 1; L <= 3; L++) NODES10D['battery' + L] = Object.assign({}, NODES10['battery' + L], { desc: TRACKS10D.battery.desc[L - 1] });
   const ABIL10_HAS = { jump: ['legs', 1], carry: ['hands', 1], push: ['arms', 1], throw: null, hitch: null, bigBattery: null, ricochet: null, spine: null, hips: null, grip: null };
   const ABIL9_HAS = { jump: ['legs', 1], carry: ['arms', 1], throw: ['arms', 2], hitch: ['arms', 3], bigBattery: null, ricochet: null, spine: null, hips: null, grip: null };
   const ABIL_HAS = { jump: 'legs', carry: 'arms', throw: 'throw', bigBattery: null, ricochet: null, spine: null, hips: null, grip: null }; // the old names, read from the tracks
@@ -1757,8 +1762,8 @@ document.getElementById('btn-full').addEventListener('click', () => {
       if (!this.net) this.fillDeckCars();
     }
 
-    tracks() { const m = this.P['proto.abilities']; return m === 3 ? TRACKS10 : m === 2 ? TRACKS9 : TRACKS; } // Edit 79–80
-    nodes() { const m = this.P['proto.abilities']; return m === 3 ? NODES10 : m === 2 ? NODES9 : NODES7; }
+    tracks() { const m = this.P['proto.abilities']; return m === 3 ? (this.P['proto.batteryModel'] === 1 ? TRACKS10D : TRACKS10) : m === 2 ? TRACKS9 : TRACKS; } // Edit 79–80; Edit 91
+    nodes() { const m = this.P['proto.abilities']; return m === 3 ? (this.P['proto.batteryModel'] === 1 ? NODES10D : NODES10) : m === 2 ? NODES9 : NODES7; }
     trackMax(t) { const tr = this.tracks()[t]; return Math.min(tr && tr.max ? this.P['abilities.' + t + '.maxLevel'] || tr.max : 4, this.P['abilities.maxLevel']); } // Edit 80: Hands stop at two
     has(n) { if (this.P['proto.abilities'] === 3 && n in ABIL10_HAS) { const q = ABIL10_HAS[n]; return q ? this.tier(q[0]) >= q[1] : false; } if (this.P['proto.abilities'] === 2 && n in ABIL9_HAS) { const q = ABIL9_HAS[n]; return q ? this.tier(q[0]) >= q[1] : false; } if (this.P['proto.abilities'] && n in ABIL_HAS) { const t = ABIL_HAS[n]; return t ? this.tier(t) >= 1 : false; } return !!this.run.owned[n]; }
     tier(t) { const mx = this.P['proto.abilities'] === 3 ? this.trackMax(t) : this.P['abilities.maxLevel']; let n = 0; while (n < 4 && n < mx && this.run.owned[t + (n + 1)]) n++; return n; } // Edit 77: an ability track's level, 0–4 (this.level is the screen)
@@ -1766,6 +1771,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     secondsPerCharge() { // Edit 77: Battery levels speed the recharge; torso damage slows it
       const P = this.P; if (!P['proto.abilities']) return P['battery.secondsPerCharge'];
       const L = this.tier('battery');
+      if (P['proto.batteryModel'] === 1) return (L >= 3 ? P['abilities.battery.level3Seconds'] : P['battery.secondsPerCharge']) / this.partEffect('recharge'); // Edit 91: Battery 3 the faster recharge
       if (P['proto.abilities'] >= 2) return (L ? P['abilities.battery.level' + L + 'Seconds'] : P['battery.secondsPerCharge']) / this.partEffect('recharge'); // Edit 79: a value per level
       return Math.max(0.05, P['battery.secondsPerCharge'] - P['abilities.battery.rechargeCut'] * L) / this.partEffect('recharge'); // Edit 78: linear
     }
@@ -1776,7 +1782,9 @@ document.getElementById('btn-full').addEventListener('click', () => {
     carriedCones() { const b = this.body; return b.carried && b.carried.length ? b.carried : b.held ? [b.held] : []; }
     takeCone(cn) { const b = this.body; cn.state = 'held'; if (!b.carried) b.carried = []; b.carried.push(cn); b.held = cn; this.emit('pickup', { cone: cn.id, n: b.carried.length }); this.mile('use:carry'); }
     popCone() { const b = this.body; let cn = null; if (b.carried && b.carried.length) { cn = b.carried.pop(); b.held = b.carried[b.carried.length - 1] || null; } else { cn = b.held; b.held = null; } return cn; }
-    capacity() { return this.has('bigBattery') ? this.P['upgrades.bigCapacity'] : this.P['battery.capacity']; } // D26: Big battery 3, base 2
+    capacity() { if (this.P['proto.batteryModel'] === 1) return this.tier('battery') >= 2 ? this.P['battery.capacity'] : this.P['abilities.battery.dashCharges']; return this.has('bigBattery') ? this.P['upgrades.bigCapacity'] : this.P['battery.capacity']; } // D26: Big battery 3, base 2. Edit 91: Battery 2 the second charge
+    dashFitted() { return this.P['proto.batteryModel'] !== 1 || this.tier('battery') >= 1; } // Edit 91: Battery 1 is the dash
+    maxHealth() { return this.dashFitted() ? this.P['damage.bodyHealth'] : this.P['damage.bodyHealthOnFoot']; } // Edit 91: on foot, a lighter chassis
     // Each screen keeps its own cones: where you leave one is where you find it.
     conesFor(lv) {
       const cell = this.district && lv.cell ? this.district.cells[lv.cell[1]][lv.cell[0]] : null;
@@ -1820,7 +1828,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       const P = this.P, sp = this.pickSpawn();
       this.run.chassis++;
       this.body = {
-        x: sp.x, y: sp.y, vx: 0, vy: 0, facing: sp.f * DEG, health: P['damage.bodyHealth'],
+        x: sp.x, y: sp.y, vx: 0, vy: 0, facing: sp.f * DEG, health: this.maxHealth(),
         charge: this.capacity(), refillDelay: 0, rampT: 0, mode: 'idle', parts: { head: 0, torso: 0, armL: 0, armR: 0, legL: 0, legR: 0 },
         coastVx: 0, coastVy: 0, coastT: 0, counterVx: 0, counterVy: 0, counterT: 0, counterDur: 0,
         lunge: null, recoverT: 0, held: null, carried: [], gesture: null, alive: true, chassis: this.run.chassis, // Edit 78: carried, every cone held (held: the top)
@@ -1834,7 +1842,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     reach() {
       const P = this.P, b = this.body;
       return P['movement.lungeDistance'] * (P['proto.parts.effects'] ? this.partEffect('dash')
-        : Math.max(P['movement.wearFloor'], Math.min(1, b.health / P['damage.bodyHealth'])));
+        : Math.max(P['movement.wearFloor'], Math.min(1, b.health / this.maxHealth())));
     }
     deny(action, why) { this.body.denied = 0.25; this.emit('denied', why ? { action, why } : { action }); } // Edit 75: why (locked: not installed)
 
@@ -1872,7 +1880,8 @@ document.getElementById('btn-full').addEventListener('click', () => {
       // leg damage slows every ground speed; so does the surface underfoot (world.terrain.<id>.dummySpeed)
       const carryF = (b.held ? P['upgrades.carrySpeed'] : 1) * this.partEffect('speed') * this.underfoot('dummySpeed') * (b.stair ? P['world.stairSpeed'] : 1);
 
-      if (cmd.aPress) {
+      if (cmd.aPress && !this.dashFitted()) { this.deny('lunge', 'locked'); if (cmd.bRelease) b.gesture = null; } // Edit 91: no dash before Battery 1
+      else if (cmd.aPress) {
         const lk = this.underfoot('lunge');
         if (b.mode !== 'lunge' && b.mode !== 'recover' && !b.stair && !(b.landT > 0) && b.charge >= P['battery.lungeCost'] - 1e-9 && lk > 0) this.startLunge(direct && has ? inAng : facing0, lk); // DIRECT: the dash goes where the player points
         else { if (lk <= 0 && b.mode !== 'lunge' && b.mode !== 'recover') this.emit('slip', { surface: this.surfaceAt(b.x, b.y), x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); this.deny('lunge'); }
@@ -2674,7 +2683,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     }
     // P3: which body part took the hit. Side from the contact point against the dummy's facing;
     // height from the hit's size: bumper height hits the legs, harder hits reach the torso and arms, the hardest the head.
-    partShare(k) { const b = this.body; return b && b.parts ? b.parts[k] / this.P['damage.bodyHealth'] : 0; }
+    partShare(k) { const b = this.body; return b && b.parts ? b.parts[k] / this.maxHealth() : 0; }
     // Ability multiplier from part damage, in [floor, 1]. 1 when proto.parts.effects is off.
     partEffect(kind) {
       const P = this.P;
@@ -3395,8 +3404,6 @@ document.getElementById('btn-full').addEventListener('click', () => {
         if (c.spent) { this.emit('touch-spent', { car: c.id }); this.effects.push({ type: 'touch', x: ct.px, y: ct.py, t: this.t }); continue; }
         const { raw, assessed } = P['proto.damageModel'] ? ct.ph : assess(P, ct.closing, ct.zone, c.cls);
         if (raw <= 1e-9) { this.emit('touch', { car: c.id, closing: 0 }); continue; }
-        const lost = Math.min(b.health, assessed);
-        b.health = Math.max(0, b.health - lost);
         c.spent = true;
         const plate = b.level === 0 && this.surfaceAt(b.x, b.y) === 'plate' ? P['damage.plateMultiplier'] : 1; // a calibrated plate scores more (7.3)
         const hw = c.deck ? P['damage.deckMultiplier'] : 1; // P5 (Edit 50): a highway hit scores more
@@ -3404,6 +3411,11 @@ document.getElementById('btn-full').addEventListener('click', () => {
         // Edit 79: each new kind of move in the chain adds scoring.comboVariety; the clock stops in the air (comboClock)
         const kind = ct.drop ? 'drop' : ct.kind || (ct.jump ? 'jump' : ct.lunging ? 'dash' : 'struck');
         const cl = this.comboLink(kind, assessed * plate * hw), combo = cl.n, mult = cl.mult;
+        let lost = Math.min(b.health, assessed); // Edit 91: a hit that would write the chassis off can be held at a floor (Story: a miss of the brief)
+        const floor = lost >= b.health - 1e-9 && this.hitFloor ? this.hitFloor({ kind, cause: ct.cause, cls: c.cls, combo, level: b.level }) : 0;
+        const held = floor > 0 && b.health - lost < floor;
+        if (held) lost = Math.max(0, b.health - floor);
+        b.health = Math.max(0, b.health - lost);
         this.run.points += assessed * plate * hw * mult;
         if (combo > 1) { this.emit('combo', { n: combo, mult, kinds: cl.kinds.slice(), bonus: Math.round(assessed * plate * hw * (mult - 1)), car: c.id }); this.mile('firstCombo', { n: combo }); }
         const bait = ct.carState === 'committed' || ct.carState === 'expiring' || ct.carState === 'interrupted';
@@ -3423,8 +3435,9 @@ document.getElementById('btn-full').addEventListener('click', () => {
           angle: +ct.ph.angle.toFixed(1), dv: +ct.ph.dvd.toFixed(2), strike: +ct.ph.un.toFixed(2),
           raw: +raw.toFixed(3), assessed: +assessed.toFixed(3), lost: +lost.toFixed(3), health: +b.health.toFixed(3),
           carState: ct.carState, cause: ct.cause, bait, lunging: ct.lunging, learned, stopped: ct.stopped, learnedStandoff, plate: plate > 1, highway: hw > 1, drop: !!ct.drop, deck: !!c.deck, dropZ: ct.drop ? ct.dropZ : 0, dropFrom: ct.drop ? ct.dropFrom : null,
-          combo, mult, kind, jump: !!ct.jump, ricochet: !!ct.ricochet };
+          combo, mult, kind, jump: !!ct.jump, ricochet: !!ct.ricochet, held };
         this.emit('impact', ev); b.hits.push(ev);
+        if (held) this.emit('held', { health: b.health, kind, car: c.id });
         this.effects.push({ type: 'burst', x: ct.px, y: ct.py, v: assessed * plate * hw * mult, mult: hw, combo, cmult: mult, t: this.t, zone: ct.zone, angle: ct.ph.angle, layer: lay(c) });
         this.mile('firstHit');
         if (bait) this.mile('firstBaitHit');
@@ -3820,7 +3833,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     }
   }
 
-  const api = { Sim, JUMP, REG, PROTO, OVERRIDES, NODES, NODES4, NODES7, TRACKS, NODES9, TRACKS9, NODES10, TRACKS10, LEVELS, LEVEL_LIST: DISTRICT_LIST, ROADS, DISTRICT_LIST, DISTRICTS, INFO, planCity, cityDistrict, bakeCity, DIFFICULTIES, assess, impulseImpact, zoneOf, circleCar, pathAt, pathProject, DEG,
+  const api = { Sim, JUMP, REG, PROTO, OVERRIDES, NODES, NODES4, NODES7, TRACKS, NODES9, TRACKS9, NODES10, TRACKS10, NODES10D, TRACKS10D, LEVELS, LEVEL_LIST: DISTRICT_LIST, ROADS, DISTRICT_LIST, DISTRICTS, INFO, planCity, cityDistrict, bakeCity, DIFFICULTIES, assess, impulseImpact, zoneOf, circleCar, pathAt, pathProject, DEG,
     planDistrict, cellLevel, cellName, edgeSpans, edgeCrossings, laneEnds, seamSight, deckCrossOK, roadCenter, makePatches, roadDist, SIDE, dropImpact, checkZone, buildableArea, zHeight, stairRun, LEVELS3,
     lanesOf, makePath, offsetPts, fillet, filletAny, arcPts, roundaboutCenter, skeletons, routeCenter, edgePoint, deckLanesOf, fleetClass, minBend }; // P4: the Turn Lab builds its tracks with these
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -4267,7 +4280,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
   const CRACK = { head: [[38, 5], [37, 7], [39, 9], [37, 11], [38, 13]], torso: [[21, 38], [24, 40], [23, 43], [26, 45], [25, 48]],
     armR: [[16, 39], [14, 42], [16, 45], [14, 48]], armL: [[48, 39], [50, 42], [48, 45], [50, 48]],
     legR: [[29, 68], [26, 71], [28, 74], [26, 77]], legL: [[35, 83], [38, 86], [36, 89], [38, 92]] };
-  function doll(levels, flash, mods) {
+  function doll(levels, flash, mods, reds) { // Edit 91: reds (part → 0–1) redden each part's shell by its damage
     levels = levels || {}; const has = (m) => !!mods && (mods.includes ? mods.includes(m) : mods.has(m));
     const W = DOLL_W, H = DOLL_H, N = W * H;
     const role = new Uint8Array(N), sid = new Int32Array(N).fill(-1), part = new Array(N), seamy = new Uint8Array(N), tone = new Uint8Array(N), flat = new Array(N);
@@ -4436,7 +4449,9 @@ document.getElementById('btn-full').addEventListener('click', () => {
       if (!role[i]) continue;
       let hex = role[i] === FLAT ? flat[i] : ramps[role[i]][tone[i]];
       const l = part[i] === 'mod' ? 0 : lv(part[i]);
-      if (role[i] === BODY && l) hex = mixHex(hex, PAL.worn, [0, 0.18, 0.4, 0.62][l]);
+      const rd = reds && part[i] !== 'mod' ? reds[part[i]] || 0 : 0;
+      if (role[i] === BODY && rd > 0) hex = mixHex(hex, PAL.warn, 0.06 + 0.74 * Math.min(1, rd));
+      else if (role[i] === BODY && l) hex = mixHex(hex, PAL.worn, [0, 0.18, 0.4, 0.62][l]);
       col[i] = hex;
     }
     const onPart = (x, y, pt) => { const yy = y + DOY; return x >= 0 && yy >= 0 && x < W && yy < H && part[yy * W + x] === pt && (role[yy * W + x] === BODY || role[yy * W + x] === CHROME); };
@@ -5747,7 +5762,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
   const apronOf = (st) => { const dir = Math.sign(st.high - st.low); return st.axis === 'y' ? { x: st.x - 8, y: dir < 0 ? st.low : st.low - APRON, w: st.w + 16, h: APRON } : { x: dir < 0 ? st.low : st.low - APRON, y: st.y - 8, w: APRON, h: st.h + 16 }; }; // clear ground beyond a flight's foot
   // P6: solids captured while a screen is built. Every mass, pool and sculpture drawn into the ground records its footprint
   // (16-unit cells, merged into row runs) as a level-0 solid of the screen being built.
-  let ACCESS = null; // Edit 85 (P7.4): { dropGaps, flightsMin, coneVisible } for a P7 world (world.deckDropGaps, world.deckFlightsMin, props.cone.minVisible); null: 6.x
+  let ACCESS = null; // Edit 85 (P7.4): { dropGaps, flightsMin, coneVisible } for a P7 world (world.deckDropGaps, world.deckFlightsMin, props.cone.minVisible); null: 6.x. Edit 91: monument (world.dummyMonument)
   let CAP = null, CAPH = null; // CAPH: the drawn top (art px) of the mass being captured (Edit 75: the jumpable tag)
   function capture(fp, x0, y0, x1, y1, world) { // fp in art px (or world units when world), the box in the same units
     if (!CAP) return;
@@ -6591,6 +6606,40 @@ document.getElementById('btn-full').addEventListener('click', () => {
       const wl = walkwayLayer(polys, ends, deckJoins, (x, y) => roadOk(x, y, OUTER + 8) && !inHill(x + ox, y + oy), sc.roadC, (x, y) => inHill(x + ox, y + oy));
       wl.front = 1e6; sc.layers.push(wl); sc.walk = wl;
     }
+    if (name === 'B2' && ACCESS && ACCESS.monument) dummyMonument(sc, B, [VP.ring[0] - ox, VP.ring[1] - oy]); // Edit 91
+  }
+  // Edit 91 (P7.10): the DUMMY MONUMENT on the circus's island (Waterfront B2): the dummy, three times life, in white stone with
+  // black joints and its calibration mark; a stepped plinth with a lit plaque; paving and a ring of LEDs round the island
+  function dummyStatue() {
+    const D = PIX.dummy(Math.PI / 2, 0), k = 3, cY = PIX.c32(PIX.PAL.dummy), cy = PIX.c32(PIX.PAL.dummyD), cW = PIX.c32(PIX.PAL.dummyL);
+    const at = (i, j) => (i < 0 || j < 0 || i >= D.w || j >= D.h ? 0 : D.d[j * D.w + i]), edge = (i, j) => !at(i - 1, j) || !at(i + 1, j) || !at(i, j - 1) || !at(i, j + 1);
+    const tone = (c, i, j) => (c === cW ? N.stoneL : c === cY ? N.stone : c === cy ? N.stoneD : edge(i, j) ? N.stoneD : K.joint); // the silhouette in stone; the joints black
+    const W = 52, sh = D.h * k, H = sh + 44, cx = 26, by = H - 2;
+    const S = { w: W, h: H, d: new Uint32Array(W * H), ox: cx, oy: by - 9 };
+    const put = (x, y, c) => { if (x >= 0 && y >= 0 && x < W && y < H) S.d[y * W + x] = c; };
+    const box = (x0, x1, y0, y1, b, h, top, front, led) => { // a footprint x0..x1 × y0..y1, its base b and height h: top face, front face, a lit coping
+      for (let y = y0 - b - h; y <= y1 - b - h; y++) for (let x = x0; x <= x1; x++) put(x, y, x === x0 || x === x1 || y === y0 - b - h ? CON.l : top);
+      for (let y = y1 - b - h + 1; y <= y1 - b; y++) for (let x = x0; x <= x1; x++) put(x, y, y === y1 - b - h + 1 && led ? led : x === x0 || x === x1 ? CON.d : front);
+    };
+    box(cx - 22, cx + 22, by - 17, by, 0, 3, CON.m, CON.d, N.cyan); // the steps
+    box(cx - 16, cx + 16, by - 14, by - 3, 3, 3, CON.l, CON.m, null);
+    box(cx - 8, cx + 8, by - 12, by - 6, 6, 14, N.stone, N.stoneD, null); // the pedestal
+    for (let x = cx - 5; x <= cx + 5; x++) { put(x, by - 15, K.bldgOutline); put(x, by - 14, x % 2 ? N.cyan : K.white); put(x, by - 13, K.bldgOutline); } // the plaque, lit
+    const fx = cx - Math.floor(D.w * k / 2), fy = by - 6 - 14 - 9 - sh + 3; // feet on the pedestal's top face
+    for (let j = 0; j < D.h; j++) for (let i = 0; i < D.w; i++) { const c = D.d[j * D.w + i]; if (!c) continue; const t = tone(c, i, j); for (let b = 0; b < k; b++) for (let a = 0; a < k; a++) put(fx + i * k + a, fy + j * k + b, t); }
+    const mx = fx + 6 * k + 1, my = fy + 10 * k + 1; // the quartered calibration mark on the chest
+    for (let y = -3; y <= 3; y++) for (let x = -3; x <= 3; x++) if (x * x + y * y <= 10) put(mx + x, my + y, (x < 0) === (y < 0) ? K.joint : N.stoneL);
+    const out = new Uint32Array(S.d); // a one-pixel outline round the figure
+    for (let y = fy - 1; y <= fy + sh; y++) for (let x = fx - 1; x <= fx + D.w * k; x++) { const i = y * W + x; if (y < 0 || x < 0 || x >= W || y >= H || S.d[i]) continue; if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([a, b]) => { const xx = x + a, yy = y + b; return xx >= 0 && yy >= 0 && xx < W && yy < H && S.d[yy * W + xx] && xx >= fx && xx < fx + D.w * k && yy >= fy && yy < fy + sh; })) out[i] = K.bldgOutline; }
+    S.d = out;
+    return S;
+  }
+  function dummyMonument(sc, B, at) {
+    const [cx, cy] = at, x0 = cx / U, y0 = cy / U, R = 25;
+    for (let y = -R; y <= R; y++) for (let x = -R; x <= R; x++) { const d = Math.hypot(x, y); if (d > R) continue; B.put(x0 + x, y0 + y, d > R - 1.5 ? ((Math.round(Math.atan2(y, x) * 12) % 2) ? N.cyan : CON.l) : (x % 6 === 0 || y % 6 === 0) ? CON.m : ISL); } // paving and an LED ring
+    for (let t = 0; t < 40; t++) for (let j = -9; j <= 9; j++) B.shade(x0 - 4 - t * 0.7 + j * 0.7, y0 + t * 0.7 + j * 0.7, 0.7); // the long shadow, down-left
+    captureRect(cx - 44, cy - 18, 88, 36, 'sculpture');
+    sc.props.push({ spr: dummyStatue(), x: x0, y: y0, by: cy + 18, bldg: 'dummy monument' }); sc.dummyMonument = { cx, cy };
   }
   DISTRICTS.splice(1, 0, WATER);
   // ---------- traffic on one screen (the dummy away)
@@ -7641,7 +7690,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       this.p6 = true; this.levelId = id; this.list = LEVEL_LIST; this.roadIndex = LEVEL_LIST.indexOf(id); this.isFinal = !!opts.single || this.roadIndex === LEVEL_LIST.length - 1; this.isCity = true;
       const bud = overrides && overrides['run.appearances.road'] != null ? overrides['run.appearances.road'] : P['run.appearances.road'];
       this.P['run.appearances.road'] = bud;
-      const acc = this.P['world.deckDropGaps'] || this.P['world.deckFlightsMin'] || this.P['props.cone.minVisible'] ? { dropGaps: this.P['world.deckDropGaps'], flightsMin: this.P['world.deckFlightsMin'], coneVisible: this.P['props.cone.minVisible'] } : null; // Edit 85 (P7.4)
+      const acc = this.P['world.deckDropGaps'] || this.P['world.deckFlightsMin'] || this.P['props.cone.minVisible'] || this.P['world.dummyMonument'] ? { dropGaps: this.P['world.deckDropGaps'], flightsMin: this.P['world.deckFlightsMin'], coneVisible: this.P['props.cone.minVisible'], monument: this.P['world.dummyMonument'] } : null; // Edit 85 (P7.4). Edit 91: the circus's monument
       this.W6 = opts.world || buildWorld(id, { budget: bud, warm: opts.warm, access: acc, density: opts.density });
       this.reset();
     }
@@ -10740,17 +10789,17 @@ window.FLEET_DB = {
 window.DUMMIES_STORY = {
  "meta": {
   "name": "DUMMIES story: the Test City, tile by tile",
-  "version": "edit85-2026-10-28",
+  "version": "edit91-2026-10-28",
   "status": "Proposed (tales, briefs and gifts); the order of tiles is user-decided",
-  "consumers": ["prototypes/p7 (story.js, game.js): Prototype 7.4"],
-  "sources": ["GDD Edit 26 §3 Setting", "world6.js tile notes (Edits 62–68)", "circus_valley.js PLAN.tiles", "GDD Edits 81–85"],
+  "consumers": ["prototypes/p7 (story.js, game.js): Prototype 7.10"],
+  "sources": ["GDD Edit 26 §3 Setting", "world6.js tile notes (Edits 62–68)", "circus_valley.js PLAN.tiles", "GDD Edits 81–85", "GDD Edit 91"],
   "rules": [
    "Numbers live in the registry: tasks and gifts name parameter IDs, never values.",
    "A task tests the hit that writes the chassis off (the fatal hit).",
    "Tile names are column-row, as in the game: A1 is the top-left tile.",
    "Each tile's write-offs are story.writeOffs.<district>.<tile> in the registry (Edit 82).",
-   "Gifts are only the verbs a brief needs: Legs 1, Hands 1, Arms 1 (Edit 83), one every three tiles: Monument C1, A2, C3 (Edit 84).",
-   "A gift rides in on the drone that carries the dummy into its tile (Edit 84). Arcade issues the same verbs in the same order, one per arcade.giftEvery write-offs.",
+   "Edit 91: every part comes by drone on a fixed tile, eleven in all. Monument: Battery 1 (the dash) B1, Legs 1 C1, Hands 1 A2, Arms 1 C3. Parkland: Battery 2 C1, Legs 2 A3, Arms 2 A1, Hands 2 B1. Waterfront: Battery 3 A1, Legs 3 B1, Arms 3 B3.",
+   "A gift rides in on the drone that carries the dummy into its tile (Edit 84). Arcade sells every part for credits; its chassis ships with Battery 1 (Edit 91).",
    "Each tile's traffic is story.traffic.<district>.<tile> in the registry, on the tile and its neighbours (Edit 85)."
   ]
  },
@@ -10775,7 +10824,7 @@ window.DUMMIES_STORY = {
    "tiles": {
     "A1": { "title": "The LED wall", "task": { "kind": "any" }, "gift": null,
      "tale": "The first building in the Test City was a screen. Farsight needed someone to greet the investors, so it built a tower that greets everyone. It still shows the face of whoever walks in. Today that is you." },
-    "B1": { "title": "The podium bridge", "task": { "kind": "drop" }, "gift": null,
+    "B1": { "title": "The podium bridge", "task": { "kind": "drop" }, "gift": { "node": "battery1" },
      "tale": "The podium was poured for a mall that was never approved. Farsight kept the roof and ran a skybridge from it to nowhere, then built the nowhere. Pedestrians are rare here. Data is not." },
     "C1": { "title": "The LED drum", "task": { "kind": "jump" }, "gift": { "node": "legs1" },
      "tale": "The drum tower went up overnight to hide the bend under the high road. Engineers call it a lighthouse for cars. The cars call it the clock: every turn it lights is a turn they must not miss." },
@@ -10798,7 +10847,7 @@ window.DUMMIES_STORY = {
    "intro": "Farsight's Expo site: a garden grid, pavilions and pools, built to prove the city could be calm.",
    "order": ["C1", "C2", "C3", "B3", "A3", "A2", "A1", "B1", "B2"],
    "tiles": {
-    "C1": { "title": "The lantern pavilion", "task": { "kind": "drop" }, "gift": null,
+    "C1": { "title": "The lantern pavilion", "task": { "kind": "drop" }, "gift": { "node": "battery2" },
      "tale": "The lantern was the Expo's first exhibit: a paper lamp the size of a house. Visitors crossed the footbridge to see it lit. When the Expo closed, the bridge stayed and the cars moved in underneath." },
     "C2": { "title": "The amphitheatre", "task": { "kind": "cls", "cls": "van" }, "gift": null,
      "tale": "The terraces were cut for an audience that never came. They face a stage where the avenue now turns. The seats still face the road, so every crossing is a performance." },
@@ -10806,13 +10855,13 @@ window.DUMMIES_STORY = {
      "tale": "The arch was the Expo's gate. Planners put a roundabout in front of it so visitors would circle once before entering. Now the cars circle all day, and nobody enters." },
     "B3": { "title": "The obelisk court", "task": { "kind": "cls", "cls": "police" }, "gift": null,
      "tale": "The obelisk stands where the surveyors drove their first stake. Farsight lit a row of bollards beside it so the first stake would never be lost. The highway passes overhead, measuring nothing." },
-    "A3": { "title": "The belvedere", "task": { "kind": "jump" }, "gift": null,
+    "A3": { "title": "The belvedere", "task": { "kind": "jump" }, "gift": { "node": "legs2" },
      "tale": "The belvedere was heaped from the earth dug out for the pools: four tiers of borrowed ground. On top grows an orchard of black monoliths in rows. They bear no fruit. They record everything." },
     "A2": { "title": "The canal", "task": { "kind": "level" }, "gift": null,
      "tale": "The canal was dug to cool the highway's foundations. Ducks arrived without permits. Farsight registered them as volunteers." },
-    "A1": { "title": "The reservoir terraces", "task": { "kind": "push" }, "gift": null,
+    "A1": { "title": "The reservoir terraces", "task": { "kind": "push" }, "gift": { "node": "arms2" },
      "tale": "Three stepped pools hold the Expo's water. Each step is a different depth, so the sensors can calibrate their reflections. The boulevard was laid along the top to give the reflections something to show." },
-    "B1": { "title": "The cascade", "task": { "kind": "cone" }, "gift": null,
+    "B1": { "title": "The cascade", "task": { "kind": "cone" }, "gift": { "node": "hands2" },
      "tale": "The cascade carries the reservoir's water down beside the highway, one pool per garden cell. It was designed to drown out the traffic. The traffic got louder to compensate." },
     "B2": { "title": "The ring over the pools", "task": { "kind": "combo", "param": "story.task.comboHard" }, "gift": null,
      "tale": "Two highways were meant to cross here. Instead of a junction, Farsight raised a ring and laid pools beneath it, so the cars could watch themselves go round. The boulevard passes through the hole in the middle, unimpressed." }
@@ -10823,9 +10872,9 @@ window.DUMMIES_STORY = {
    "intro": "The valley by the river: a hill walled by towers, a circus on the valley floor, two bridges to the far bank.",
    "order": ["A1", "B1", "C1", "C2", "C3", "B3", "A3", "A2", "B2"],
    "tiles": {
-    "A1": { "title": "The west portal", "task": { "kind": "cls", "cls": "bus" }, "gift": null,
+    "A1": { "title": "The west portal", "task": { "kind": "cls", "cls": "bus" }, "gift": { "node": "battery3" },
      "tale": "The upper town was built on the hill first, for the engineers. When the west bridge was approved, it was approved straight through a building. The portal block kept its tenants and lost its view." },
-    "B1": { "title": "The tunnel portal", "task": { "kind": "jump" }, "gift": null,
+    "B1": { "title": "The tunnel portal", "task": { "kind": "jump" }, "gift": { "node": "legs3" },
      "tale": "The tunnel was bored north under the hill to reach the next valley. Nobody has been cleared to see what is there. Cars go in. Some data comes back." },
     "C1": { "title": "The east portal", "task": { "kind": "cls", "cls": "police" }, "gift": null,
      "tale": "The east bridge was built a year after the west one, to correct its mistakes. It made new ones. Its portal block is the same, except that it faces the other way and pretends not to know its twin." },
@@ -10833,7 +10882,7 @@ window.DUMMIES_STORY = {
      "tale": "The cliff-top walkway was meant to carry tourists to the beach terrace. The tourists were replaced by joggers, then by sensors. The sensors take the stairs." },
     "C3": { "title": "The east pier tower", "task": { "kind": "bounce" }, "gift": null,
      "tale": "The coastal drive runs on the old seawall and swings inland here to step round the bridge's feet. The pier tower watches the river for anything that floats. So far it has logged one dummy." },
-    "B3": { "title": "The stilt houses", "task": { "kind": "push" }, "gift": null,
+    "B3": { "title": "The stilt houses", "task": { "kind": "push" }, "gift": { "node": "arms3" },
      "tale": "The stilt houses are older than the city. Farsight could not demolish them without a hearing, so it joined them to the walkways and called them heritage. The residents moved out. The heritage stayed." },
     "A3": { "title": "The west pier tower", "task": { "kind": "level" }, "gift": null,
      "tale": "The west bridge leaves the hill and crosses the drive and the river in one reach. Its pier tower was a lighthouse, then a radar post, then a tea house. Now it is a sensor mast with a tea house in it." },
@@ -10862,14 +10911,15 @@ window.DUMMIES_STORY = {
    - Edit 84: gifts ride in on the drone. The drone that ferries the dummy into a gift tile carries the module in view, lowers
      it onto the dummy (proto.droneLiftSeconds), and the sim pauses in phase 'gift' for the gift screen (continueGift). Then it
      carries the dummy across. Monument: Legs 1 at C1, Hands 1 at A2, Arms 1 at C3.
-   - Edit 84: ArcadeSim. One district a run; the drone issues the same verbs, in the story's order, to the new chassis after every
-     arcade.giftEvery write-offs.
+   - Edit 84: ArcadeSim. One district a run. Edit 91: every part for credits; the chassis ships with Battery 1 (arcade.giftEvery
+     retired).
    - Edit 83: P7SIM, the P7.2 values for both modes: the knock keeps proto.recoilScale of the Newtonian velocity and slides at
      most proto.bounce.maxThrow.
-   - Edit 89: Story has no credits. Points level the dummy up: story.level.firstPoints to level 2, each next level
-     story.level.stepPoints more, to story.level.max. A level-up grants story.level.upgrades upgrades; one fits the next level of
-     an unlocked track in the workshop (after a write-off). Verbs still come by drone; a track opens with its verb. Battery is
-     open from the start. Arcade keeps credits.
+   - Edit 89: Story has no credits. Edit 91 (P7.10): no levels either. Every part comes by drone on a fixed tile (story.json
+     gifts, eleven in all): Battery 1 (the dash) at Monument B1 ... Arms 3 at Waterfront B3. Points are the score. The dummy starts
+     on foot (proto.batteryModel 1: no dash before Battery 1; damage.bodyHealthOnFoot). In the tile in test, a hit that would
+     write the chassis off but misses the brief holds it at story.missFloor (hitFloor). Arcade: every part for credits; its
+     chassis ships with Battery 1; no drone gifts.
    - The map reveals cleared tiles and the one in test. Progress is one plain object (`progress`), saved by the page.
    Headless in Node: require('./story.js'). In the page: window.STORY. */
 (function (root) {
@@ -10884,7 +10934,8 @@ window.DUMMIES_STORY = {
   const DIST = DATA.districts, TOTAL = DIST.reduce((a, d) => a + d.order.length, 0);
   const P7SIM = { 'proto.recoilScale': 0.7, 'proto.bounce.maxThrow': 40, // Edit 83: the ricochet the dummy survives; Arcade and Story
     'world.deckDropGaps': 1, 'world.deckFlightsMin': 1, 'props.cone.minVisible': 0.9, // Edit 85: every highway a flight and a drop gap; cones in view
-    'battery.dashJumpCost': 0, 'abilities.hands.tapDrop': 1 }; // Edit 90: a dash's jump is free; X taps a cone down when none is in reach
+    'battery.dashJumpCost': 0, 'abilities.hands.tapDrop': 1, // Edit 90: a dash's jump is free; X taps a cone down when none is in reach
+    'proto.batteryModel': 1, 'world.dummyMonument': 1 }; // Edit 91: Battery 1 the dash, 2 a second charge, 3 a faster recharge; the circus's monument
   const BASE = Object.assign({}, X.REG, X.PROTO, X.OVERRIDES, W6.P6SIM, P7SIM);
 
   // ---------- progress: one plain object, JSON-safe
@@ -10916,15 +10967,6 @@ window.DUMMIES_STORY = {
     return (sc) => { const t = !pr.complete && pr.district === id ? activeTile(pr, id) : null; if (!t) return 1; const [c, r] = cellOf(t), dd = Math.abs(sc.col - c) + Math.abs(sc.row - r); return dd === 0 || (dd === 1 && !hasRing(sc)) ? trafficOf(id, t, P) : 1; };
   }
 
-  // ---------- Edit 89: the dummy's level, from its points (both modes may read it; Story spends it)
-  function levelOf(points, P) {
-    P = P || BASE;
-    const first = P['story.level.firstPoints'], step = P['story.level.stepPoints'], max = P['story.level.max'];
-    let level = 1, base = 0, need = first;
-    while (level < max && points >= base + need) { base += need; level++; need += step; }
-    return { level, base, need: level < max ? need : 0, next: level < max ? base + need : null, into: points - base, max, frac: level < max ? Math.max(0, Math.min(1, (points - base) / need)) : 1 };
-  }
-
   // ---------- the brief: text and test
   function taskText(task, P) {
     P = P || BASE;
@@ -10948,11 +10990,13 @@ window.DUMMIES_STORY = {
     }
   }
 
-  // ---------- Edit 84: the verbs Farsight issues, in the story's order (legs1, hands1, arms1), and the drone that brings them
+  // ---------- Edit 84: the parts Farsight issues, in the story's order, and the drone that brings them. Edit 91: all eleven
   const VERBS = (() => { const out = []; for (const d of DIST) for (const t of d.order) { const g = d.tiles[t].gift; if (g && g.node && !out.includes(g.node)) out.push(g.node); } return out; })();
-  const VERB_AT = {}; for (const d of DIST) for (const t of d.order) { const g = d.tiles[t].gift; if (g && g.node && !VERB_AT[g.node]) VERB_AT[g.node] = t; }
-  // Option B (Edit 84): verbs are issued, levels are bought. A verb not yet issued is not in the shop
-  const issued = (sim, n) => !VERBS.includes(n) || !!sim.run.owned[n];
+  const VERB_AT = {}; for (const d of DIST) for (const t of d.order) { const g = d.tiles[t].gift; if (g && g.node && !VERB_AT[g.node]) VERB_AT[g.node] = d.name + ' ' + t; } // Edit 91: 'Monument C1'
+  // Edit 91: the gifts of tiles already cleared (a save from before Edit 91 catches up), and the next gift on the schedule
+  function giftsCleared(pr) { const out = []; for (const d of DIST) for (const t of doneIn(pr, d.id)) { const g = d.tiles[t].gift; if (g && g.node) out.push(g.node); } return out; }
+  function nextGift(pr) { for (const d of DIST) for (const t of d.order) { const g = d.tiles[t].gift; if (g && g.node && !(pr.owned && pr.owned[g.node])) return { node: g.node, district: d.id, tile: t, n: tileNumber(d.id, t) }; } return null; }
+  const partsOwned = (owned) => VERBS.filter((n) => owned && owned[n]).length;
   // a drone flies in from (hx, hy) to the body; with a gift it lowers the module, installs it and pauses the sim for the gift screen
   function droneTo(sim, hx, hy, opts) {
     const b = sim.body, P = sim.P;
@@ -10984,6 +11028,7 @@ window.DUMMIES_STORY = {
     // progress: newProgress() or a saved one, its district = this district. opts: Sim6's (world, warm)
     constructor(id, overrides, progress, opts) {
       const pr = progress, ov = Object.assign({}, P7SIM, overrides || {}), P0 = Object.assign({}, BASE, ov);
+      for (const n of giftsCleared(pr)) pr.owned[n] = true; // Edit 91: a cleared tile's part is on the body
       ov['run.appearances.road'] = P0['story.shiftCars']; // the story has no shift clock: a district's traffic runs for story.shiftCars cars
       for (const L of [1, 2, 3]) ov['economy.price.ability.level' + L] = P0['story.price.ability.level' + L]; // Edit 82: the story's prices, 3, 4, 5
       const carry = { owned: Object.assign({}, pr.owned), credits: pr.credits, points: pr.points, chassis: pr.chassis, writeOffs: pr.writeOffs, t: pr.t, purchases: [], milestones: pr.milestones || {} };
@@ -10993,7 +11038,7 @@ window.DUMMIES_STORY = {
       super.reset();
       if (!this.W6 || !this.opts || !this.opts.story) return; // the base constructor's first reset, before the world exists
       this.story = this.opts.story; this.storyMode = true;
-      this.fenceHit = null; this.storyLast = null; this.lvSeen = levelOf(this.run.points, this.P).level; // Edit 89
+      this.fenceHit = null; this.storyLast = null;
       const t = this.screenName();
       this.entered = t === activeTile(this.story, this.levelId);
       if (this.entered) this.arrive(t);
@@ -11010,9 +11055,9 @@ window.DUMMIES_STORY = {
       this.syncProgress();
       this.emit('story-enter', { tile: t, n: tileNumber(this.levelId, t), task: tile ? tile.task : null });
     }
-    installGift(node) { // Edit 84: the module is on the body
-      const t = (this.rescue && this.rescue.tile) || this.screenName();
-      this.run.owned[node] = true; this.story.gifts[this.levelId + ':' + t] = true; this.syncProgress();
+    installGift(node) { // Edit 84: the module is on the body. Edit 91: a heavier chassis with the dash keeps its damage
+      const t = (this.rescue && this.rescue.tile) || this.screenName(), m0 = this.maxHealth(), b = this.body;
+      this.run.owned[node] = true; if (b && b.alive) b.health = Math.min(this.maxHealth(), b.health + this.maxHealth() - m0); this.story.gifts[this.levelId + ':' + t] = true; this.syncProgress();
       this.emit('gift', { node, tile: t }); this.emit('story-gift', { tile: t, node });
     }
     continueBrief() { if (this.phase === 'brief') this.phase = 'play'; }
@@ -11020,7 +11065,6 @@ window.DUMMIES_STORY = {
     step(cmd) {
       if (this.phase === 'brief' || this.phase === 'gift') return;
       super.step(cmd);
-      if (this.storyMode) { const lv = levelOf(this.run.points, this.P).level; while (this.lvSeen < lv) { this.lvSeen++; this.emit('level-up', { level: this.lvSeen, upgrades: this.upgradesLeft(), points: Math.round(this.run.points) }); } } // Edit 89
       if (this.phase === 'play' && this.pendingBrief && !this.rescue) { this.pendingBrief = false; this.phase = 'brief'; } // after a ferry lands
     }
     // ----- Edit 83: the ferry. After a clear, a drone carries the new chassis from the cleared tile into the next one
@@ -11118,6 +11162,13 @@ window.DUMMIES_STORY = {
       this.fenceHit = hit;
     }
     spawnBody() { super.spawnBody(); if (this.body) this.body.born = this.t; }
+    // Edit 91: in the tile in test, a hit that would write the chassis off but misses the brief leaves story.missFloor
+    hitFloor(h) {
+      if (!this.storyMode || !this.entered || !this.story) return 0;
+      const t = this.screenName(); if (t !== activeTile(this.story, this.levelId)) return 0;
+      const tile = tileOf(this.levelId, t);
+      return !tile || meets(tile.task, h, h.level, this.P) ? 0 : this.P['story.missFloor'] || 0;
+    }
     writeOff() {
       const b = this.body, hit = b.hits[b.hits.length - 1] || null, level = b.level || 0;
       super.writeOff();
@@ -11149,42 +11200,18 @@ window.DUMMIES_STORY = {
         this.emit('story-clear', { tile: res.tile, next, district: id, districtDone, storyDone, points: pr.tilePoints[id + ':' + res.tile] });
       }
       this.syncProgress();
-      const lv = levelOf(r.points, P), lv0 = levelOf(b.points0 || 0, P); // Edit 89: the level before and after this body
       this.report = { chassis: b.chassis, hits: b.hits.slice(), points: Math.round(r.points - b.points0), credits: r.credits,
         roadCleared: districtDone && !storyDone, nextRoad: districtDone ? pr.district : null,
-        story: Object.assign({}, res, { cleared, next, districtDone, storyDone, level: lv, levelBefore: lv0.level, upgrades: this.upgradesLeft(), fit: this.fitList() }) };
+        story: Object.assign({}, res, { cleared, next, districtDone, storyDone, parts: partsOwned(r.owned), nextGift: nextGift(pr) }) }; // Edit 91: parts, not levels
       if (storyDone) { pr.complete = true; this.syncProgress(); return this.end('Certified'); }
       this.phase = 'writeoff'; this.phaseT = P['feedback.writeOffSeconds']; this.pendingPhase = 'report';
     }
-    // ----- Edit 89: upgrades, not credits. Earned by level; one fits the next level of an open track (its verb issued; Battery open)
-    levelInfo() { return levelOf(this.run.points, this.P); }
-    upgradesEarned() { return (this.levelInfo().level - 1) * this.P['story.level.upgrades']; }
-    boughtCount() { return Object.keys(this.run.owned).filter((n) => this.run.owned[n] && this.nodes()[n] && !VERBS.includes(n)).length; }
-    upgradesLeft() { return Math.max(0, this.upgradesEarned() - this.boughtCount()); }
-    trackOpen(t) { const n1 = t + 1; return !VERBS.includes(n1) || !!this.run.owned[n1]; } // a verb-led track opens with its verb
-    fitList() { const out = []; for (const t of Object.keys(this.tracks())) { if (!this.trackOpen(t)) continue; const L = this.tier(t) + 1; if (L <= this.trackMax(t) && this.nodes()[t + L]) out.push(t + L); } return out; } // what an upgrade could fit now
-    canBuy(n) {
-      if (!issued(this, n)) return { ok: false, why: 'gift at ' + VERB_AT[n] }; // Edit 84
-      if (!this.storyMode) return super.canBuy(n);
-      const nd = this.nodes()[n], r = this.run;
-      if (!nd || nd.level > this.trackMax(nd.track)) return { ok: false, why: 'not made' };
-      if (r.owned[n]) return { ok: false, why: 'fitted' };
-      if (nd.pre && !r.owned[nd.pre]) return { ok: false, why: 'needs ' + this.nodes()[nd.pre].name };
-      return this.upgradesLeft() < 1 ? { ok: false, why: 'level up first' } : { ok: true, price: 1, unit: 'upgrade' };
-    }
-    continueReport() { // Edit 89: no upgrade to fit, or nothing to fit it to: straight to the next chassis
-      if (this.storyMode && this.phase === 'report' && (this.upgradesLeft() < 1 || !this.fitList().length) && !(this.report && this.report.roadCleared)) { this.phase = 'shop'; this.leaveShop(); this.emit('shop-skip', {}); return; }
+    // ----- Edit 91: Story has no shop. Every part arrives by drone; the report goes straight to the next chassis
+    canBuy(n) { return this.storyMode ? { ok: false, why: VERB_AT[n] ? 'gift at ' + VERB_AT[n] : 'not issued' } : super.canBuy(n); }
+    buy(n) { if (!this.storyMode) return super.buy(n); const chk = this.canBuy(n); this.emit('purchase-denied', { node: n, why: chk.why }); return chk; }
+    continueReport() {
+      if (this.storyMode && this.phase === 'report' && !(this.report && this.report.roadCleared)) { this.phase = 'shop'; this.leaveShop(); this.emit('shop-skip', {}); return; }
       super.continueReport();
-    }
-    buy(n) {
-      if (!this.storyMode) return super.buy(n);
-      if (this.phase !== 'shop') return { ok: false, why: 'workshop closed' };
-      const chk = this.canBuy(n);
-      if (!chk.ok) { this.emit('purchase-denied', { node: n, why: chk.why }); return chk; }
-      this.run.owned[n] = true; this.run.purchases.push(n);
-      this.emit('purchase', { node: n, price: 1, unit: 'upgrade', upgrades: this.upgradesLeft() });
-      this.mile('firstPurchase', { node: n }); this.syncProgress();
-      return chk;
     }
     syncProgress() {
       const pr = this.story, r = this.run;
@@ -11195,28 +11222,16 @@ window.DUMMIES_STORY = {
     trace() { const tr = super.trace(); tr.story = JSON.parse(JSON.stringify(this.story)); return tr; }
   }
 
-  // ---------- Edit 84: Arcade. One district a run (Sim6 single); P7SIM's ricochet; after every arcade.giftEvery write-offs the next
-  // verb rides in on a drone to the new chassis, with the same gift screen as the story
+  // ---------- Edit 84: Arcade. One district a run (Sim6 single); P7SIM's ricochet. Edit 91: every part for credits, no drone
+  // gifts; the chassis ships with Battery 1 (the dash)
   class ArcadeSim extends W6.Sim6 {
-    constructor(id, overrides, carry, opts) { super(id, Object.assign({}, P7SIM, overrides || {}), carry, Object.assign({ single: true }, opts || {})); }
-    writeOff() {
-      super.writeOff();
-      const n = this.run.writeOffs, every = this.P['arcade.giftEvery'], next = VERBS.find((v) => !this.run.owned[v]);
-      if (next && every > 0 && n % every === 0) this.pendingGift = next;
+    constructor(id, overrides, carry, opts) {
+      const cy = Object.assign({}, carry || {}); cy.owned = Object.assign({ battery1: true }, cy.owned);
+      super(id, Object.assign({}, P7SIM, overrides || {}), cy, Object.assign({ single: true }, opts || {}));
     }
-    canBuy(n) { return issued(this, n) ? super.canBuy(n) : { ok: false, why: 'drone gift' }; }
-    leaveShop() {
-      super.leaveShop();
-      if (this.pendingGift && this.run.owned[this.pendingGift]) this.pendingGift = this.nextVerb();
-      if (this.phase === 'play' && this.pendingGift && !this.run.ending) { const b = this.body; this.rescue = droneTo(this, b.x, -40, { gift: this.pendingGift }); this.emit('arcade-deliver', { node: this.pendingGift }); this.pendingGift = null; }
-    }
-    installGift(node) { this.run.owned[node] = true; this.emit('gift', { node }); }
-    continueGift() { if (this.phase === 'gift') this.phase = 'play'; }
-    stepRescue(dt) { const rs = this.rescue; if (rs && (rs.gift || rs.given !== undefined)) { stepDelivery(this, dt); return; } super.stepRescue(dt); }
-    nextVerb() { return VERBS.find((v) => !this.run.owned[v]) || null; }
   }
 
-  const api = { levelOf, P7SIM, VERBS, VERB_AT, ArcadeSim, trafficOf, storyDensity, hasRing, DATA, DIST, TOTAL, newProgress, districtOf, doneIn, activeTile, clearedCount, tileNumber, nextDistrict, tileState, tileOf, needOf, taskText, meets, nameOf, cellOf, StorySim };
+  const api = { P7SIM, VERBS, giftsCleared, nextGift, partsOwned, VERB_AT, ArcadeSim, trafficOf, storyDensity, hasRing, DATA, DIST, TOTAL, newProgress, districtOf, doneIn, activeTile, clearedCount, tileNumber, nextDistrict, tileState, tileOf, needOf, taskText, meets, nameOf, cellOf, StorySim };
   if (NODE) module.exports = api; else root.STORY = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -11327,7 +11342,7 @@ window.DUMMIES_STORY = {
    Screen: 640 × 360 art pixels, integer-scaled. Field: 400 × 300 art pixels at (120, 30). HUD and screens: 1280 × 720 reference units. */
 (function () {
   'use strict';
-  const { Sim, NODES, NODES4, NODES7: NODES7_4, TRACKS: TRACKS_4, NODES9, TRACKS9, NODES10, TRACKS10, LEVELS, DIFFICULTIES, REG, PROTO, OVERRIDES, DEG, pathAt, DISTRICTS, zHeight } = window.DUMMIES;
+  const { Sim, NODES, NODES4, NODES7: NODES7_4, TRACKS: TRACKS_4, NODES9, TRACKS9, NODES10, TRACKS10, NODES10D, TRACKS10D, LEVELS, DIFFICULTIES, REG, PROTO, OVERRIDES, DEG, pathAt, DISTRICTS, zHeight } = window.DUMMIES;
   const W6 = window.WORLD6 || null; // P6 (Edit 62): Parkland, Waterfront, Monument, built by world6.js
   const LEVEL_LIST = W6 ? W6.LEVEL_LIST : window.DUMMIES.LEVEL_LIST;
   const INFO = (id) => (W6 && W6.INFO(id)) || window.DUMMIES.INFO(id);
@@ -11423,7 +11438,7 @@ window.DUMMIES_STORY = {
   if (FLEET) for (const m of FLEET.models) for (const sid of m.simIds) FMODEL.set(sid, m);
   const CPARAM = {};
   for (const part of [CJ, CI, CG, CB, CH, CTM, CP, CD]) if (part && part.params) for (const p of part.params) CPARAM[p.id] = p.value;
-  const BUILD = STORY ? 'P7.9' : W6 ? 'P6.10' : 'P5.3'; // Prototype 7.9 (GDD Edit 90: the dash's jump paid by the dash; X taps a cone down; buttons named only when fitted, OK and BACK in menus); 7.8 (GDD Edit 89: touch on every menu; Story levels from points and upgrades, not credits; the workshop, around the chassis); 7.7 (GDD Edit 88: three named save slots with time stamps; the save screen; the name entry); 7.6 (GDD Edit 87: the HUD on one top edge, the objective on top, a stats box; touch controls placed and sized by the player); 7.5 (GDD Edit 86: a clean screen: options in the pause menu, controls per device, a compact BODY panel); 7.4 (GDD Edit 85: Story traffic per tile; every highway a flight and a drop gap; cones in view); 7.3 (GDD Edit 84: verbs issued by drone, the gift screen, Arcade's verbs); 7.2 (GDD Edit 83: the ricochet tamed, the drone ferry, the map, bubbles, the objective line); 7.1 (GDD Edit 82: a credit a body, story prices 3–5, write-offs per tile); 7 (Edit 81: ARCADE and STORY) // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
+  const BUILD = STORY ? 'P7.10' : W6 ? 'P6.10' : 'P5.3'; // Prototype 7.10 (GDD Edit 91: every Story part by drone on its tile, Arcade parts for credits; Battery 1 the dash; a miss holds the chassis at 1; on foot, a lighter chassis; points small, top right; damage in red on the chassis, its numbers beside each part; the circus's monument); 7.9 (GDD Edit 90: the dash's jump paid by the dash; X taps a cone down; buttons named only when fitted, OK and BACK in menus); 7.8 (GDD Edit 89: touch on every menu; Story levels from points and upgrades, not credits; the workshop, around the chassis); 7.7 (GDD Edit 88: three named save slots with time stamps; the save screen; the name entry); 7.6 (GDD Edit 87: the HUD on one top edge, the objective on top, a stats box; touch controls placed and sized by the player); 7.5 (GDD Edit 86: a clean screen: options in the pause menu, controls per device, a compact BODY panel); 7.4 (GDD Edit 85: Story traffic per tile; every highway a flight and a drop gap; cones in view); 7.3 (GDD Edit 84: verbs issued by drone, the gift screen, Arcade's verbs); 7.2 (GDD Edit 83: the ricochet tamed, the drone ferry, the map, bubbles, the objective line); 7.1 (GDD Edit 82: a credit a body, story prices 3–5, write-offs per tile); 7 (Edit 81: ARCADE and STORY) // Prototype 6.10 (GDD Edit 80: Hands carry cones, two levels; Arms push off cars, the ricochet); 6.9 (GDD Edit 79: three tracks of three levels, hold X to throw, the hitch, combo variety and air time); 6.8 (GDD Edit 78: four levels with linear steps, cone stacks, Newtonian bounce); 6.7 (GDD Edit 77: ability tracks by level, wear shields, run to clear); 6.6 (GDD Edit 76: fit to screen, glass touch controls on phones and tablets, the Link's Awakening jump, the stair fix); 6.5 (GDD Edit 75: DIRECT turning, four buttons, jump, combo, ricochet, touch, any gamepad); 6.4 (GDD Edit 72: ring capacity, steady signals); 6.3 (Edit 71: driving); 6.2 (Edit 70); 6.1 (Edit 69) was the P6 release with Edits 63–68 and the release tests
   function pv(id) {
     if (id == null) return null;
     if (app.tune[id] != null) return app.tune[id];
@@ -11488,7 +11503,7 @@ window.DUMMIES_STORY = {
     app.tuned = Object.keys(app.tune).length > 0;
     app.screen = 'game'; app.paused = false; app.lastEv = 0; app.shopCol = 0; app.shopRow = 0; app.endSel = 0;
     app.confirmRefuse = false; clearEdges();
-    fx.marks = []; fx.levelUp = null; fx.fit = null; fx.barks.clear(); fx.barked.clear(); fx.partWatch = null; fx.partsSeen.clear(); fx.learnWatch.clear(); fx.pendingLearned = null;
+    fx.marks = []; fx.fit = null; fx.barks.clear(); fx.barked.clear(); fx.partWatch = null; fx.partsSeen.clear(); fx.learnWatch.clear(); fx.pendingLearned = null;
     fx.rings = []; fx.streaks = []; fx.bubbles.clear(); fx.carBarkT.clear(); fx.cars.clear(); fx.nm.clear(); fx.nmDone.clear();
     fx.lungeWatch = null; fx.lastImpact = null; fx.upgradeWatch = null; if (!carry) fx.pendingNodes = [];
     app.present = [];
@@ -11582,7 +11597,8 @@ window.DUMMIES_STORY = {
   const ABIL = !!(W6 && W6.P6SIM && W6.P6SIM['proto.abilities']);
   const ABIL3 = !!(W6 && W6.P6SIM && W6.P6SIM['proto.abilities'] === 2); // Edit 79 (P6.9): Battery, Legs, Arms; three levels; Y has no job
   const ABIL4 = !!(W6 && W6.P6SIM && W6.P6SIM['proto.abilities'] === 3); // Edit 80 (P6.10): Battery, Legs, Hands (two levels), Arms (the push, Y)
-  const TRACKS = ABIL4 ? TRACKS10 : ABIL3 ? TRACKS9 : TRACKS_4, NODES7 = ABIL4 ? NODES10 : ABIL3 ? NODES9 : NODES7_4; // Edit 77 (P6.7): the shop sells four ability tracks by level. Edit 78 (P6.8): four levels
+  const BM1 = !!(STORY && STORY.P7SIM['proto.batteryModel'] === 1 && TRACKS10D); // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge
+  const TRACKS = ABIL4 ? (BM1 ? TRACKS10D : TRACKS10) : ABIL3 ? TRACKS9 : TRACKS_4, NODES7 = ABIL4 ? (BM1 ? NODES10D : NODES10) : ABIL3 ? NODES9 : NODES7_4; // Edit 77 (P6.7): the shop sells four ability tracks by level. Edit 78 (P6.8): four levels
   const held = new Set();
   const q = { a: 0, b: 0, bUp: 0, x: 0, y: 0 };
   const menuQ = [];
@@ -11817,7 +11833,7 @@ window.DUMMIES_STORY = {
   // when a cone is held and none is in reach). A button not yet fitted shows its letter alone, dimmed
   function faceWord(f, s) {
     const inPlay = app.screen === 'game' && s && !app.paused && !app.touchEdit && ['play', 'hitstop', 'writeoff', 'scroll'].includes(s.phase);
-    const node = FACE_NODE[f.id], unlocked = !node || !!(s && s.has(node));
+    const node = FACE_NODE[f.id], unlocked = f.id === 'a' && STORY ? !(s && s.dashFitted) || s.dashFitted() : !node || !!(s && s.has(node)); // Edit 91: A names DASH once Battery 1 is fitted
     if (!STORY) return { word: unlocked ? f.w : 'LOCKED', live: unlocked };
     if (!inPlay) return { word: { a: 'OK', b: 'BACK' }[f.id] || '', live: f.id === 'a' || f.id === 'b' };
     if (!unlocked) return { word: '', live: false };
@@ -11892,6 +11908,7 @@ window.DUMMIES_STORY = {
     monument: 'Lantern monument', fountain: 'Fountain square', roundabout: 'Roundabout', tower: 'FARSIGHT Tower', plate: 'Test plates' };
   const LEVEL6 = { walk: 'Walkway: no traffic up here. Step off the side to drop onto cars below.', hill: 'Hilltop (Z1): streets with traffic. Step off the cliff edge to drop to the valley.',
     terrace: 'Terrace: step off the edge to drop to the beach.', ring: 'Ring deck: highway traffic gives way at the entries. Escalators lead down.' }; // P6 (Edit 62)
+  const maxHP = (s) => (s && s.maxHealth ? s.maxHealth() : s.P['damage.bodyHealth']); // Edit 91: on foot, a lighter chassis
   const DENY_TEXT = { lunge: 'No lunge — charge empty or recovering', pickup: 'No cone within reach', drop: 'No room to place the cone', throw: 'No room to release the cone',
     'push.locked': 'Push needs Arms', 'push.spent': 'No pushes left: land to get them back', 'push.nothing': 'Nothing to push off: hit or touch a car', 'drop.hold': 'Hold X to put the cone down', // Edit 80
     jump: 'No jump — charge empty, or mid-action', 'jump.charge': 'No jump: the battery is empty', 'jump.locked': 'Jump needs the Jump module (Legs)', 'pickup.locked': 'Grab needs the Carry module (Arms)', 'throw.locked': 'Throw needs the Throw module (Arms)', 'throw.empty': 'Grab a cone first (X), then throw (Y)' }; // Edit 75
@@ -11947,7 +11964,7 @@ window.DUMMIES_STORY = {
       Object.assign(out, { model: fm ? fm.id : info.model, cls: info.cls, class: fm ? fm.class : info.cls, tier: fm ? fm.tier : null, seniority: info.seniority });
     }
     const sb = app.sim && app.sim.body;
-    if (sb) out.wear = +(1 - sb.health / app.sim.P['damage.bodyHealth']).toFixed(3);
+    if (sb) out.wear = +(1 - sb.health / maxHP(app.sim)).toFixed(3);
     if (e.type === 'honk') out.at = e.at === 'body' ? 'body' : 'cone';
     return out;
   }
@@ -12227,8 +12244,8 @@ window.DUMMIES_STORY = {
           break;
         }
         case 'purchase': [523, 659, 784].forEach((f, j) => Snd.tone(f, f, 0.1, 'triangle', 0.07, j * 0.07)); Snd.tone(150, 60, 0.18, 'square', 0.06, 0.02); fx.fit = { node: e.node, t0: app.realT }; toast(e.unit === 'upgrade' ? NODE(e.node).name + ' fitted' + (e.upgrades ? ' · ' + e.upgrades + ' upgrade' + (e.upgrades === 1 ? '' : 's') + ' left' : '') : copy('toast.purchase', '{node} installed', { node: NODE(e.node).name })); break; // Edit 89: the fit lands on the workshop's chassis
-        case 'purchase-denied': Snd.tone(180, 140, 0.12, 'square', 0.04); toast(e.why === 'max' ? 'That part is at its top level' : /^gift/.test(e.why) ? 'A Farsight drone brings that part' : e.why === 'level up first' ? 'Level up first: ' + num(Math.max(0, (STORY.levelOf(s.run.points, s.P).next || 0) - s.run.points)) + ' points to go' : e.why[0].toUpperCase() + e.why.slice(1)); break; // Edit 89
-        case 'level-up': fx.levelUp = { level: e.level, upgrades: e.upgrades, t0: app.realT }; levelFanfare(); break; // Edit 89: points level the dummy up
+        case 'purchase-denied': Snd.tone(180, 140, 0.12, 'square', 0.04); toast(e.why === 'max' ? 'That part is at its top level' : /^gift/.test(e.why) ? 'A Farsight drone brings that part' : e.why[0].toUpperCase() + e.why.slice(1)); break; // Edit 89
+        case 'held': Snd.tone(240, 200, 0.16, 'square', 0.05); toast('Not the brief: chassis held at ' + num(e.health)); break; // Edit 91: a miss of the brief does not write the chassis off
         case 'shop-open': if (STORY && ABIL4) { const k = SHOP_GRID.findIndex((g) => { const n = nextLevel(s, g[0]); return n && s.canBuy(n).ok; }); app.shopCol = Math.max(0, k); app.shopRow = k >= 0 ? 0 : SHOP_ROWS; fx.fit = null; } break; // Edit 89: the workshop opens on a part an upgrade fits
         case 'pickup': Snd.tone(700, 950, 0.05, 'triangle', 0.06); if (ABIL && s.coneCapacity() > 1) toast('Cones ' + (e.n || 1) + ' / ' + s.coneCapacity()); break;
         case 'drop': Snd.tone(500, 380, 0.06, 'triangle', 0.05); break;
@@ -12281,10 +12298,7 @@ window.DUMMIES_STORY = {
     Snd.tone(293.66, 293.66, 1.4, 'sine', 0.06, c0);
     [2349.3, 2959.96, 3520, 2637].forEach((f, j) => Snd.tone(f, f, 0.07, 'sine', 0.02, c0 + 0.12 + j * 0.13));
   }
-  function levelFanfare() { // Edit 89: LEVEL UP, a bright climb and a held top note (original)
-    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, j) => { Snd.tone(f, f, 0.12, 'square', 0.03, j * 0.065); Snd.tone(f, f * 1.003, 0.22, 'triangle', 0.06, j * 0.065); });
-    Snd.tone(1046.5, 1046.5, 0.7, 'triangle', 0.05, 0.36); Snd.tone(1568, 1568, 0.5, 'sine', 0.025, 0.42); Snd.noise(3000, 9000, 0.25, 0.02, 0.36);
-  }
+
   function horn() { Snd.tone(440, 430, 0.16, 'square', 0.05); Snd.tone(349, 340, 0.22, 'square', 0.05, 0.18); }
   function dashify(str) { return String(str).replace(/lunge/gi, (m) => (m[0] === 'L' ? (m === 'LUNGE' ? 'DASH' : 'Dash') : 'dash')); } // display name only
   function toast(msg) { app.toast = { msg: dashify(msg), t: app.realT }; }
@@ -12753,7 +12767,7 @@ window.DUMMIES_STORY = {
   }
   function drawBodySprite(s, ghostOnly, liftPx) {
     const b = s.body, P = s.P;
-    const wear = clamp(1 - b.health / P['damage.bodyHealth'], 0, 1), fl = app.realT - fx.flinchT0;
+    const wear = clamp(1 - b.health / maxHP(s), 0, 1), fl = app.realT - fx.flinchT0;
     let jx = 0, jy = 0;
     if (fl < 0.3) { const k = (1 - fl / 0.3) * 2 * MOTION; jx += Math.round(Math.sin(app.realT * 97) * k); jy += Math.round(Math.cos(app.realT * 83) * k); }
     if (wear > 0.6) jx += Math.round(Math.sin(app.realT * 41) * (wear - 0.6) * 2.5 * MOTION);
@@ -13020,7 +13034,7 @@ window.DUMMIES_STORY = {
   function drawParts(s) {
     const b = s.body, P = s.P, now = app.realT;
     if (b.alive && s.phase === 'play') {
-      const wear = 1 - b.health / P['damage.bodyHealth'];
+      const wear = 1 - b.health / maxHP(s);
       if (wear > lowHealth('smokeFrom', 0.45) && now - fx.smokeT > 0.32 - wear * 0.15) { fx.smokeT = now; puff(b.x, b.y - 20, 1, { type: 'smoke', dir: -2.36, spread: 0.6, speed: 18, life: 1.1, size: 4 + 4 * wear }); }
       if (wear > lowHealth('sparkFrom', 0.7) && Math.random() < 0.05) puff(b.x, b.y - 10, 3, { type: 'spark', speed: 110, life: 0.25, size: 1.6 });
     }
@@ -13075,7 +13089,7 @@ window.DUMMIES_STORY = {
     if (fa < fx.flash.dur) { const a = 0.55 * (1 - fa / fx.flash.dur) * (RM ? 0.4 : 1); for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) FB.mix(x, y, K.white, a); }
     drawStamp(s);
     if (b.alive) { // low health: a pulsing warning band on the field edge (colour math, whole pixels)
-      const wear = 1 - b.health / P['damage.bodyHealth'], vf = lowHealth('vignetteFrom', 0.7);
+      const wear = 1 - b.health / maxHP(s), vf = lowHealth('vignetteFrom', 0.7);
       if (wear > vf) {
         const pulse = (0.5 + 0.5 * Math.sin(app.realT * 6)) * (wear - vf) / Math.max(0.05, 1 - vf), band = 8;
         for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) {
@@ -13183,7 +13197,7 @@ window.DUMMIES_STORY = {
     if (fa < fx.flash.dur) { const a = 0.55 * (1 - fa / fx.flash.dur) * (RM ? 0.4 : 1); for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) FB.mix(x, y, K.white, a); }
     if (app.showJumpable) for (const q of s.level.statics) if (q.jumpable) { const x0 = Math.round(q.x / U), y0 = Math.round(q.y / U), x1 = Math.round((q.x + q.w) / U) - 1, y1 = Math.round((q.y + q.h) / U) - 1; for (let x = x0; x <= x1; x++) { FB.put(x, y0, K.label); FB.put(x, y1, K.label); } for (let y = y0; y <= y1; y++) { FB.put(x0, y, K.label); FB.put(x1, y, K.label); } } // Edit 75 (tuning): what a jump clears
     drawStamp(s);
-    if (b.alive) { const wear = 1 - b.health / P['damage.bodyHealth'], vf = lowHealth('vignetteFrom', 0.7); if (wear > vf) { const pulse = (0.5 + 0.5 * Math.sin(app.realT * 6)) * (wear - vf) / Math.max(0.05, 1 - vf), band = 8; for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) { const d = Math.min(x, y, AW - 1 - x, AH - 1 - y); if (d >= band) { x = AW - 1 - band; continue; } if ((x + y) % 2 === 0 || d < 3) FB.mix(x, y, K.warn, (0.12 + 0.3 * pulse) * (1 - d / band)); } } }
+    if (b.alive) { const wear = 1 - b.health / maxHP(s), vf = lowHealth('vignetteFrom', 0.7); if (wear > vf) { const pulse = (0.5 + 0.5 * Math.sin(app.realT * 6)) * (wear - vf) / Math.max(0.05, 1 - vf), band = 8; for (let y = 0; y < AH; y++) for (let x = 0; x < AW; x++) { const d = Math.min(x, y, AW - 1 - x, AH - 1 - y); if (d >= band) { x = AW - 1 - band; continue; } if ((x + y) % 2 === 0 || d < 3) FB.mix(x, y, K.warn, (0.12 + 0.3 * pulse) * (1 - d / band)); } } }
   }
   // Edit 84: the module a drone brings: a small aqua case with a pulsing halo (art pixels)
   const GIFT_ALT = 36;
@@ -13200,7 +13214,7 @@ window.DUMMIES_STORY = {
     const cx = Math.round(b.x / U), wl = Math.round(b.y / U) + 2, t = app.realT, wet = !rs.ferry && !rs.gift && rs.given === undefined && (rs.phase === 'sink' || rs.phase === 'inbound' || rs.phase === 'lift'); // Edit 84: a ferry or a delivery is on land
     if (wet) for (let k = 0; k < 2; k++) { const r = 3 + ((t * 7 + k * 5) % 10); for (const [x, y] of PIX.circle(r)) FB.mix(cx + x, wl + Math.round(y * 0.45), K.white, 0.4 * (1 - r / 13)); } // ripples
     if (rs.under >= 0.999) { if (Math.floor(t * 5) % 2) FB.put(cx + (Math.floor(t * 9) % 3) - 1, wl - 1 - (Math.floor(t * 12) % 4), K.white); return; } // bubbles: under the surface
-    const wear = clamp(1 - b.health / s.P['damage.bodyHealth'], 0, 1), S = PIX.dummy(b.facing, Math.min(5, Math.round(wear * 5)));
+    const wear = clamp(1 - b.health / maxHP(s), 0, 1), S = PIX.dummy(b.facing, Math.min(5, Math.round(wear * 5)));
     const ay = Math.round(b.y / U) + Math.round(rs.under * 18) - Math.round(rs.up), x0 = cx - S.ox, y0 = ay - S.oy;
     for (let j = 0; j < S.h; j++) { const yy = y0 + j; if (wet && yy > wl) break; for (let i = 0; i < S.w; i++) { const c = S.d[j * S.w + i]; if (c) FB.put(x0 + i, yy, c); } }
   }
@@ -13315,8 +13329,6 @@ window.DUMMIES_STORY = {
     if (s.isCity && s.quota) {
       const rs = s.rescue; if (rs && (rs.gift || rs.given)) return ['FARSIGHT DRONE', 'Delivering ' + NODE(rs.gift || rs.given).name + '.']; // Edit 84
       let line = 'Write off ' + s.quota + ' bodies (' + s.run.writeOffs + ' of ' + s.quota + ').';
-      const nv = s.nextVerb && s.nextVerb(), every = s.P['arcade.giftEvery'];
-      if (nv && every > 0) { const k = every - (s.run.writeOffs % every); line += ' ' + NODE(nv).name + (k === 1 ? ' comes with the next write-off.' : ' comes in ' + k + ' write-offs.'); }
       return ['OBJECTIVE · ' + INFO(s.levelId).name.toUpperCase(), line];
     }
     return null;
@@ -13398,7 +13410,7 @@ window.DUMMIES_STORY = {
   function playKeys(s) {
     if (!s || app.screen !== 'game' || app.paused || s.phase !== 'play' || TOUCH.on) return null; // touch: the diamond is the legend
     if (!FOUR) { const keys = [['WASD', 'MOVE'], ['SPACE', 'DASH']]; if (s.has('carry') || s.has('throw')) keys.push(['K', 'CONE']); return keys; }
-    const pd = app.device === 'pad', keys = [[pd ? 'STICK' : 'WASD', 'MOVE'], [pd ? 'A' : 'SPACE', 'DASH']]; // Edit 75: A, B, X, Y as installed
+    const pd = app.device === 'pad', keys = [[pd ? 'STICK' : 'WASD', 'MOVE']].concat(s.dashFitted && !s.dashFitted() ? [] : [[pd ? 'A' : 'SPACE', 'DASH']]); // Edit 75: A, B, X, Y as installed. Edit 91: DASH once Battery 1 is fitted
     if (s.has('jump')) keys.push([pd ? 'B' : 'L', 'JUMP']);
     if (ABIL4) { // Edit 80: X grabs, a hold puts down; Y pushes off a car
       const b = s.body, n = s.carriedCones().length, room = n < s.coneCapacity();
@@ -13439,35 +13451,15 @@ window.DUMMIES_STORY = {
   function fitTextR(t, x, y, w, size, min, color) { while (size > min) { ctx.font = '700 ' + size + 'px ' + F_UI; if (ctx.measureText(t).width <= w) break; size--; } txt(t, x, y, '700 ' + size + 'px ' + F_UI, color, 'right'); }
   function fitNumR(t, x, y, w, size, color) { let z = size; while (z > 14) { ctx.font = '700 ' + z + 'px ' + F_MONO; if (ctx.measureText(t).width <= w) break; z--; } txt(t, x, y, '700 ' + z + 'px ' + F_MONO, color, 'right'); } // Edit 89: a number that keeps clear of its label
   function fitText(t, x, y, w, size, min, color) { while (size > min) { ctx.font = '700 ' + size + 'px ' + F_UI; if (ctx.measureText(t).width <= w) break; size--; } txt(t, x, y, '700 ' + size + 'px ' + F_UI, color); }
-  function drawLevelUp(s) { // Edit 89: LEVEL UP across the field; a burst from the stats box. It does not stop play
-    const lu = fx.levelUp; if (!lu) return; const t = app.realT - lu.t0; if (t > 2.6) { fx.levelUp = null; return; }
-    const a = t < 0.12 ? t / 0.12 : t > 2.1 ? Math.max(0, (2.6 - t) / 0.5) : 1, pop = RM ? 1 : 1 + 0.55 * Math.pow(Math.max(0, 1 - t / 0.25), 2), cx = FX + FW / 2, cy = FY + 132;
-    ctx.save(); ctx.globalAlpha = a;
-    const g = ctx.createLinearGradient(FX, 0, FX + FW, 0); g.addColorStop(0, 'rgba(8,12,24,0)'); g.addColorStop(0.5, 'rgba(8,12,24,0.78)'); g.addColorStop(1, 'rgba(8,12,24,0)'); ctx.fillStyle = g; ctx.fillRect(FX, cy - 62, FW, 128);
-    if (!RM) { ctx.strokeStyle = C.dummy; ctx.lineWidth = 3; ctx.beginPath(); for (let i = 0; i < 14; i++) { const an = i * TAU / 14 + t * 0.8, r0 = 60 + 140 * Math.min(1, t / 0.5), r1 = r0 + 26; ctx.moveTo(cx + Math.cos(an) * r0 * 1.9, cy - 10 + Math.sin(an) * r0 * 0.45); ctx.lineTo(cx + Math.cos(an) * r1 * 1.9, cy - 10 + Math.sin(an) * r1 * 0.45); } ctx.globalAlpha = a * Math.max(0, 1 - t / 0.9); ctx.stroke(); ctx.globalAlpha = a; }
-    ctx.save(); ctx.translate(cx, cy); ctx.scale(pop, pop); if (FT.neon) { ctx.shadowColor = C.dummy; ctx.shadowBlur = 26; } txt('LEVEL UP', 0, 0, '900 66px ' + F_BRAND, C.dummy, 'center'); ctx.restore();
-    txt('LEVEL ' + lu.level + (lu.upgrades > 0 ? '  ·  +1 UPGRADE' : ''), cx, cy + 38, fLab, '#FFFFFF', 'center');
-    if (lu.upgrades > 0) txt('Fit it in the workshop after this body', cx, cy + 60, '400 16px ' + F_UI, FT.dim, 'center');
-    const X = FX + FW + 16, W = VW - X - 16, bx = X + W - 30, by = FY - 6 + 62, u = Math.min(1, t / 0.9); // the stats box bursts
-    if (u < 1 && !RM) for (const [d0, col] of [[0, C.dummy], [0.15, FT.accent]]) { const v = Math.max(0, Math.min(1, (u - d0) / 0.85)); if (v <= 0 || v >= 1) continue; ctx.globalAlpha = 1 - v; ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(bx, by, 8 + 110 * (1 - Math.pow(1 - v, 3)), 0, TAU); ctx.stroke(); }
-    ctx.restore();
-  }
-  function drawStatsBox(s) { // Edit 87: top right, BODY's size: POINTS and CREDITS (Arcade: POINTS and CARS LEFT, its clock)
-    const X = FX + FW + 16, W = VW - X - 16, Y = FY - 6, r = s.run;
-    if (s.storyMode && s.upgradesLeft) { // Edit 89: Story: POINTS and LEVEL; a bar to the next level; unspent upgrades as a badge
-      const lv = STORY.levelOf(r.points, s.P), left = s.upgradesLeft(), lu = fx.levelUp && app.realT - fx.levelUp.t0 < 1.4, blink = lu && Math.floor(app.realT * 8) % 2 === 0;
-      panel(X, Y, W, 86); if (app.hud) app.hud.stats = { x: X, y: Y, w: W, h: 86, rows: 'POINTS LEVEL', level: lv.level, upgrades: left, frac: lv.frac };
-      ctx.font = fLab; const lw = ctx.measureText('POINTS').width; txt('POINTS', X + 14, Y + 32, fLab, FT.dim); fitNumR(num(r.points), X + W - 14, Y + 34, W - 28 - lw - 10, TY.lb, FT.text);
-      txt('LEVEL', X + 14, Y + 62, fLab, blink ? C.dummy : FT.dim); txt(String(lv.level), X + W - 14, Y + 64, fNum, blink ? C.dummy : FT.text, 'right');
-      if (left > 0) { ctx.font = fLab; const lx = X + 14 + ctx.measureText('LEVEL').width + 10, t = '+' + left; ctx.font = '700 15px ' + F_UI; const pw = ctx.measureText(t).width + 14; rr(lx, Y + 46, pw, 22, 11); ctx.fillStyle = C.dummy; ctx.fill(); txt(t, lx + pw / 2, Y + 62, '700 15px ' + F_UI, C.primary, 'center'); }
-      rr(X + 14, Y + 72, W - 28, 6, 3); ctx.fillStyle = FT.track; ctx.fill();
-      if (lv.frac > 0) { rr(X + 14, Y + 72, Math.max(6, (W - 28) * lv.frac), 6, 3); ctx.fillStyle = blink ? '#FFFFFF' : C.dummy; ctx.fill(); }
-      return Y + 86;
-    }
-    const left = s.carsLeft ? s.carsLeft() : 0, rows = s.storyMode ? [['POINTS', num(r.points)], ['CREDITS', String(r.credits)]] : [['POINTS', num(r.points)], ['CARS LEFT', String(left)]];
-    panel(X, Y, W, 86); if (app.hud) app.hud.stats = { x: X, y: Y, w: W, h: 86, rows: rows.map((q) => q[0]).join(' ') };
-    rows.forEach(([k, v], i) => { const y = Y + 34 + i * 34; txt(k, X + 14, y, fLab, FT.dim); ctx.font = fLab; fitNumR(v, X + W - 14, y + 2, W - 28 - ctx.measureText(k).width - 10, TY.lb, FT.text); });
-    return Y + 86;
+  function drawScore(s) { // Edit 91: top right, small, on the strip above the boxes: POINTS (Arcade: and CARS LEFT, its clock)
+    const R = VW - 16, X = FX + FW + 16, W = R - X, r = s.run, rows = s.storyMode ? [['POINTS', num(r.points)]] : [['POINTS', num(r.points)], ['CARS LEFT', String(s.carsLeft ? s.carsLeft() : 0)]];
+    const one = rows.length === 1, fL = '700 ' + (one ? 14 : 12) + 'px ' + F_UI, nz = one ? 20 : 15;
+    rows.forEach(([k, v], i) => {
+      const y = one ? TOPY - 4 : 14 + i * 16; ctx.font = fL; const kw = ctx.measureText(k).width;
+      ctx.font = '700 ' + nz + 'px ' + F_MONO; let z = nz; while (z > 10 && ctx.measureText(v).width > W - kw - 10) { z--; ctx.font = '700 ' + z + 'px ' + F_MONO; }
+      const vw = ctx.measureText(v).width; txt(v, R, y + 1, '700 ' + z + 'px ' + F_MONO, FT.text, 'right'); txt(k, R - vw - 8, y, fL, FT.dim, 'right');
+    });
+    if (app.hud) app.hud.score = { x: X, y: 0, w: W, h: FY - 6, rows: rows.map((q) => q[0]).join(' '), points: Math.round(r.points) };
   }
   function drawTopBar(s) {
     const r = s.run, left = s.carsLeft ? s.carsLeft() : Math.max(0, s.schedule.length - (r.admitted - (s.allCars ? s.allCars() : s.cars).filter((c) => !c.deck).length)); // P6.1: shift cars still to appear // deck traffic is off the shift's clock; P5.3: every car still in the district
@@ -13484,7 +13476,7 @@ window.DUMMIES_STORY = {
   }
   // Left: the body's numbers. Health first and largest; dash beneath.
   function drawHUD(s) {
-    const b = s.body, P = s.P, hp = b.alive ? b.health : 0, frac = clamp(hp / P['damage.bodyHealth'], 0, 1);
+    const b = s.body, P = s.P, hp = b.alive ? b.health : 0, frac = clamp(hp / maxHP(s), 0, 1); // Edit 91: on foot, a lighter chassis
     const X = 16, W = FX - 32, TX = 30, BW = W - 28; // left column: as wide as the space beside the field
     const BY = STORY ? FY - 6 : 62, BH = STORY ? 86 : 150, DY = BY + BH + 10; // Edit 87: on the field's top edge // Edit 86 (P7.5): BODY as tall as DASH: the number on the label's row, the bar beneath
     panel(X, BY, W, BH); app.hud = { body: { x: X, y: BY, w: W, h: BH } }; // Edit 87: the boxes as drawn, for the tests
@@ -13498,14 +13490,15 @@ window.DUMMIES_STORY = {
     }
     panel(X, DY, W, 86);
     txt('DASH', TX, DY + 30, fLab, FT.dim);
-    const cap = s.capacity(), pw = (BW - (cap - 1) * 10) / cap; // Big battery: 3 (D26)
+    if (s.dashFitted && !s.dashFitted()) { txt('NOT FITTED', X + W - 14, DY + 30, '700 15px ' + F_UI, FT.dim, 'right'); rr(TX, DY + 44, BW, 28, 6); ctx.fillStyle = FT.track; ctx.globalAlpha = 0.5; ctx.fill(); ctx.globalAlpha = 1; } // Edit 91: Battery 1 is the dash
+    const cap = s.dashFitted && !s.dashFitted() ? 0 : s.capacity(), pw = (BW - (cap - 1) * 10) / cap; // Big battery: 3 (D26)
     for (let i = 0; i < cap; i++) {
       const x = TX + i * (pw + 10), f = clamp(b.charge - i, 0, 1);
       rr(x, DY + 44, pw, 28, 6); ctx.fillStyle = FT.track; ctx.fill();
       if (f > 0) { rr(x, DY + 44, Math.max(6, pw * f), 28, 6); ctx.fillStyle = f >= 1 ? FT.text : FT.dim; ctx.fill(); }
     }
     drawDistrict(s);
-    if (STORY) drawStatsBox(s);
+    if (STORY) drawScore(s);
     const cb = drawBodyPanel(s);
     drawKeysPanel(s, cb);
     app.layoutY = { left: s.district ? (() => { const G = mapGeom(s.district); return G.Y + 66 + G.mh + (s.storyMode ? STORY_FOOT : 0); })() : MAPY, right: cb }; // Edit 75: the touch zones start below these
@@ -13603,7 +13596,7 @@ window.DUMMIES_STORY = {
   const PART_NAME = { head: 'HEAD', torso: 'TORSO', armL: 'L ARM', armR: 'R ARM', legL: 'L LEG', legR: 'R LEG' };
   const dollArt = new Map();
   function partLevels(s) {
-    const P = s.P, H = P['damage.bodyHealth'], out = {};
+    const P = s.P, H = maxHP(s), out = {};
     for (const [k, v] of Object.entries(s.body.parts || {})) { const sh = v / H; out[k] = v <= 0 ? 0 : sh >= P['proto.parts.brokenShare'] ? 3 : sh >= P['proto.parts.crackedShare'] ? 2 : 1; }
     return out;
   }
@@ -13615,7 +13608,7 @@ window.DUMMIES_STORY = {
     if (app.previewMods) return PIX.MODULES;
     if (ABIL) {
       const out = []; for (const t of Object.keys(TRACKS)) out.push(...DOLL_MODS[t].slice(0, s.tier(t)));
-      const nn = s.phase === 'shop' && app.shopRow < SHOP_ROWS ? nextLevel(s, SHOP_GRID[app.shopCol][0]) : null, sel = nn && !(STORY && STORY.VERBS.includes(nn) && !s.run.owned[nn]) ? NODES7[nn] : null; // Edit 89: a part not yet issued is not tried on
+      const nn = s.phase === 'shop' && app.shopRow < SHOP_ROWS ? nextLevel(s, SHOP_GRID[app.shopCol][0]) : null, sel = nn && !s.storyMode ? NODES7[nn] : null; // Edit 89: a part not yet issued is not tried on
       if (sel && s.tier(sel.track) < sel.level && Math.floor(app.realT * 3) % 2 === 0) out.push(...DOLL_MODS[sel.track].slice(s.tier(sel.track), sel.level));
       return out;
     }
@@ -13624,11 +13617,11 @@ window.DUMMIES_STORY = {
     const own = (m) => s.has(m) || (m === 'springStart' && s.has('ricochet')), tried = (m) => tryOn && (m === sel || (m === 'springStart' && sel === 'ricochet')); // Edit 75: Ricochet wears the spring legs
     return PIX.MODULES.filter((m) => own(m) || tried(m));
   }
-  function dollCanvas(levels, flash, mods) {
-    const key = JSON.stringify(levels) + flash + mods.join();
+  function dollCanvas(levels, flash, mods, reds) {
+    const key = JSON.stringify(levels) + flash + mods.join() + (reds ? JSON.stringify(reds) : '');
     if (dollArt.has(key)) return dollArt.get(key);
     if (dollArt.size > 64) dollArt.clear();
-    const S = PIX.doll(levels, flash, mods), cv2 = document.createElement('canvas'); cv2.width = S.w; cv2.height = S.h;
+    const S = PIX.doll(levels, flash, mods, reds), cv2 = document.createElement('canvas'); cv2.width = S.w; cv2.height = S.h;
     const c2 = cv2.getContext('2d'), id = c2.createImageData(S.w, S.h); new Uint32Array(id.data.buffer).set(S.d); c2.putImageData(id, 0, 0);
     dollArt.set(key, cv2);
     return cv2;
@@ -13647,17 +13640,34 @@ window.DUMMIES_STORY = {
     return out;
   }
   // The chassis doll is drawn at ui.artScale like the field: one doll pixel = one art pixel, on the art grid.
+  // Edit 91 (P7.10): Story's chassis: each part reddens with its damage (its share of the chassis, to proto.parts.brokenShare);
+  // its damage beside it. Head and torso on the part; arms and legs in the margins. No rows of effects beneath
+  const PART_TAG = { head: [32, 7, 'on'], torso: [32, 47, 'on'], armR: [9, 60, 'L'], armL: [55, 60, 'R'], legR: [20, 88, 'L'], legL: [44, 88, 'R'] };
+  function partReds(s) { const out = {}, br = s.P['proto.parts.brokenShare'], H = maxHP(s); for (const [k, v] of Object.entries(s.body.parts || {})) if (v > 0) out[k] = Math.round(Math.min(1, v / H / br) * 20) / 20; return out; }
+  function redText(f) { const a = [244, 248, 250], b = [255, 61, 61], m = (i) => Math.round(a[i] + (b[i] - a[i]) * f); return 'rgb(' + m(0) + ',' + m(1) + ',' + m(2) + ')'; }
   function drawBodyPanel(s) {
-    const X = FX + FW + 16, W = VW - X - 16, Y = STORY ? FY - 6 + 96 : 62, b = s.body, U = RA, eff = b.alive ? partEffects(s) : []; // U here: reference units per art px; Edit 87: under the stats box
+    const X = FX + FW + 16, W = VW - X - 16, Y = STORY ? FY - 6 : 62, b = s.body, U = RA, eff = b.alive && !STORY ? partEffects(s) : []; // U here: reference units per art px; Edit 91: on the top edge; no effect rows in P7
     const DW = PIX.DOLL_W * U, DH = PIX.DOLL_H * U, top = Y + 44, yHit = top + DH + (STORY ? 26 : 36), dV = STORY ? 0 : 38; // Edit 86–87: LAST HIT on one row
     const ph = yHit - Y + (STORY ? 20 : 66) + (eff.length ? 16 + eff.length * 32 : 0);
     panel(X, Y, W, ph); if (app.hud) app.hud.chassis = { x: X, y: Y, w: W, h: ph };
     txt('CHASSIS ' + String(b.chassis).padStart(2, '0'), X + 14, Y + 30, fLab, FT.dim);
     const lp = fx.lastPart, flash = lp && app.realT - lp.t < 0.3 && Math.floor(app.realT * 16) % 2 === 0 ? lp.part : '';
-    const dx = Math.round((X + W / 2 - DW / 2) / U) * U, dy = Math.round(top / U) * U;
+    const dx = Math.round((X + W / 2 - DW / 2) / U) * U, dy = Math.round(top / U) * U, reds = STORY && b.alive ? partReds(s) : null;
     ctx.imageSmoothingEnabled = false; ctx.globalAlpha = b.alive ? 1 : 0.35;
-    ctx.drawImage(dollCanvas(partLevels(s), flash, dollMods(s)), dx, dy, DW, DH);
+    ctx.drawImage(dollCanvas(partLevels(s), flash, dollMods(s), reds), dx, dy, DW, DH);
     ctx.globalAlpha = 1;
+    if (reds) { // the numbers beside the parts
+      const tags = []; ctx.font = '700 14px ' + F_MONO;
+      for (const [k, [px, py, side]] of Object.entries(PART_TAG)) {
+        const v = Math.round(b.parts[k] || 0); if (v <= 0) continue;
+        const t = num(v), tw = ctx.measureText(t).width, ty = dy + (py + 3) * U, col = redText(reds[k] || 0);
+        if (side === 'on') { const bw = tw + 10; rr(dx + px * U - bw / 2, ty - 10, bw, 20, 6); ctx.fillStyle = 'rgba(10,14,22,0.78)'; ctx.fill(); txt(t, dx + px * U, ty + 5, '700 14px ' + F_MONO, col, 'center'); }
+        else if (side === 'L') txt(t, Math.min(dx - 2, dx + px * U - 12), ty + 5, '700 14px ' + F_MONO, col, 'right');
+        else txt(t, Math.max(dx + DW + 2, dx + px * U + 12), ty + 5, '700 14px ' + F_MONO, col);
+        tags.push(k + ' ' + v);
+      }
+      if (app.hud) app.hud.chassis.tags = tags.join(', ');
+    }
     txt('LAST HIT', X + 14, yHit, STORY ? '700 15px ' + F_UI : fTxt, FT.dim);
     if (STORY) fitTextR(lp ? PART_NAME[lp.part] + '  −' + num(lp.lost) : '—', X + W - 14, yHit, W - 110, 20, 13, lp ? FT.text : FT.dim);
     else txt(lp ? PART_NAME[lp.part] + '  −' + num(lp.lost) : '—', X + 14, yHit + dV, fLab, lp ? FT.text : FT.dim);
@@ -13753,7 +13763,7 @@ window.DUMMIES_STORY = {
   function slotLines(v) {
     const pr = v.progress, cl = STORY.clearedCount(pr), t = pr.complete ? null : STORY.activeTile(pr, pr.district);
     return [pr.complete ? 'CERTIFIED · ALL ' + STORY.TOTAL + ' TILES' : INFO(pr.district).name.toUpperCase() + ' · ' + t + ' · TILE ' + STORY.tileNumber(pr.district, t) + ' OF ' + STORY.TOTAL + (pr.tileWO ? ' · ' + pr.tileWO + ' OF ' + STORY.needOf(pr.district, t) + ' WRITE-OFFS' : ''),
-      cl + ' / ' + STORY.TOTAL + ' TILES · ' + num(pr.points || 0) + ' POINTS · LEVEL ' + STORY.levelOf(pr.points || 0).level + ' · CHASSIS ' + String(pr.chassis || 0).padStart(2, '0')]; // Edit 89: the dummy's level, not credits
+      cl + ' / ' + STORY.TOTAL + ' TILES · ' + num(pr.points || 0) + ' POINTS · ' + STORY.partsOwned(pr.owned) + ' / ' + STORY.VERBS.length + ' PARTS · CHASSIS ' + String(pr.chassis || 0).padStart(2, '0')]; // Edit 91: parts, not levels
   }
   function drawSaves() {
     drawField(preview(Math.max(0, LEVEL_LIST.indexOf('monument'))), true);
@@ -13834,7 +13844,7 @@ window.DUMMIES_STORY = {
     veil();
     const x = FX + 16, y = FY + 14, w = FW - 32, h = FH - 28, needT = (id, t) => pv('story.writeOffs.' + id + '.' + t); // Edit 82: a count per tile
     panel(x, y, w, h);
-    const sv = app.slot && allSlots()[app.slot - 1], stat = STORY.clearedCount(pr) + ' / ' + STORY.TOTAL + ' TILES · ' + num(pr.points) + ' POINTS · LEVEL ' + STORY.levelOf(pr.points || 0).level; // Edit 89
+    const sv = app.slot && allSlots()[app.slot - 1], stat = STORY.clearedCount(pr) + ' / ' + STORY.TOTAL + ' TILES · ' + num(pr.points) + ' POINTS · ' + STORY.partsOwned(pr.owned) + ' / ' + STORY.VERBS.length + ' PARTS'; // Edit 91
     ctx.font = '700 18px ' + F_UI; const sw = ctx.measureText(stat).width;
     txt(stat, x + w - 24, y + 40, '700 18px ' + F_UI, FT.text, 'right');
     fitText(sv ? 'SLOT ' + app.slot + ' · ' + sv.name : 'THE TEST CITY', x + 24, y + 40, w - 48 - sw - 24, TY.sec, 14, FT.accent); // Edit 88: the slot in play
@@ -13976,7 +13986,7 @@ window.DUMMIES_STORY = {
     }
     ctx.restore();
     const tx = dx + DW + 44, tw = x + w - 30 - tx, pd = TOUCH.on || app.device === 'pad', rs = s.rescue;
-    txt(land < 0 ? 'FARSIGHT DRONE · INCOMING' : 'NEW VERB INSTALLED', tx, y + 62, fLab, land < 0 && Math.floor(t * 4) % 2 ? FT.dim : FT.accent);
+    txt(land < 0 ? 'FARSIGHT DRONE · INCOMING' : 'NEW PART FITTED', tx, y + 62, fLab, land < 0 && Math.floor(t * 4) % 2 ? FT.dim : FT.accent);
     if (land >= 0) {
       const a1 = clamp01(land / 0.15), pop = RM ? 1 : 1 + 0.4 * Math.pow(clamp01(1 - land / 0.28), 2);
       ctx.save(); ctx.globalAlpha = a1; ctx.translate(tx, y + 140); ctx.scale(pop, pop); txt(nd.name.toUpperCase(), 0, 0, '900 64px ' + F_BRAND, C.dummy); ctx.restore();
@@ -13985,11 +13995,11 @@ window.DUMMIES_STORY = {
       ctx.beginPath(); ctx.arc(bx, by, br, 0, TAU); ctx.fillStyle = FT.keyTop; ctx.fill(); ctx.strokeStyle = BADGE[tr.button]; ctx.lineWidth = 3; ctx.stroke();
       txt(tr.button, bx, by + 9, '700 26px ' + F_MONO, FT.text, 'center'); txt(tr.verb, bx + br + 16, by + 12, '900 34px ' + F_BRAND, FT.text);
       let yy = y + 262; yy += 30 * wrapText(nd.desc, tx, yy, tw, 30, '400 22px ' + F_UI, FT.text, 4) + 18;
-      const nx = NODES7[nd.track + (nd.level + 1)];
+      const ng = s.story ? STORY.nextGift(s.story) : null; // Edit 91: the next part on the schedule, and where it arrives
       ctx.globalAlpha = clamp01((land - 0.45) / 0.3);
       ctx.strokeStyle = FT.itemEdge; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(tx, yy - 6); ctx.lineTo(tx + tw, yy - 6); ctx.stroke();
-      if (nx) { const pr = P[nx.price]; txt('NOW IN THE WORKSHOP', tx, yy + 26, fLab, FT.accent); wrapText(nx.name + ' · ' + (s.storyMode ? '1 upgrade' : pr + ' credit' + (pr === 1 ? '' : 's')) + '. ' + nx.desc, tx, yy + 58, tw, 26, '400 19px ' + F_UI, FT.dim, 3); } // Edit 89
-      else txt('THE ONLY LEVEL OF ' + tr.name.toUpperCase(), tx, yy + 26, fLab, FT.accent);
+      if (ng) { txt('NEXT FROM FARSIGHT', tx, yy + 26, fLab, FT.accent); wrapText(NODE(ng.node).name + ' · ' + INFO(ng.district).name + ' ' + ng.tile + ' (tile ' + ng.n + ' of ' + STORY.TOTAL + ').', tx, yy + 58, tw, 26, '400 19px ' + F_UI, FT.dim, 2); }
+      else txt(s.story ? 'EVERY PART FITTED' : 'THE ONLY LEVEL OF ' + tr.name.toUpperCase(), tx, yy + 26, fLab, FT.accent);
       ctx.restore();
     }
     hitbox(x, y, w, h, 'gift', () => menuQ.push('ok')); // Edit 89: a tap continues, once the hold is over
@@ -14052,12 +14062,9 @@ window.DUMMIES_STORY = {
       [shortId(hh.model), hh.angle != null ? Math.round(hh.angle) + '°' : '—', num(hh.assessed), num(hh.lost)].forEach((v, i) => txt(String(v), x + 30 + cols[i][1], yy, fNum, FT.text));
     });
     rr(x + 28, y + h - 116, w - 56, 52, 12); ctx.fillStyle = FT.credit; ctx.fill(); ctx.strokeStyle = C.dummy; ctx.lineWidth = 1.5; ctx.stroke();
-    if (sr && sr.level) { // Edit 89: the level, the bar to the next, and what the upgrades wait for
-      const lv = sr.level, up = sr.levelBefore && lv.level > sr.levelBefore;
-      let line = (up ? 'LEVEL UP: ' + sr.levelBefore + ' → ' + lv.level : 'LEVEL ' + lv.level) + (lv.next ? ' · ' + num(lv.next - s.run.points) + ' POINTS TO LEVEL ' + (lv.level + 1) : ' · TOP LEVEL');
-      if (sr.upgrades > 0) line += sr.fit && sr.fit.length ? ' · ' + sr.upgrades + ' UPGRADE' + (sr.upgrades === 1 ? '' : 'S') + ': THE WORKSHOP IS NEXT' : ' · UPGRADES WAIT FOR A DRONE';
-      fitText(line, x + 46, y + h - 84, w - 92, TY.sec, 13, up ? C.dummy : FT.text);
-      rr(x + 46, y + h - 76, w - 92, 6, 3); ctx.fillStyle = FT.track; ctx.fill(); if (lv.frac > 0) { rr(x + 46, y + h - 76, Math.max(6, (w - 92) * lv.frac), 6, 3); ctx.fillStyle = C.dummy; ctx.fill(); }
+    if (sr && sr.parts != null) { // Edit 91: the parts fitted, and the next one's tile. No shop in Story
+      const ng = sr.nextGift, line = sr.parts + ' / ' + STORY.VERBS.length + ' PARTS FITTED' + (ng ? ' · NEXT: ' + NODE(ng.node).name.toUpperCase() + ' AT ' + INFO(ng.district).name.toUpperCase() + ' ' + ng.tile : ' · EVERY PART FITTED');
+      fitText(line, x + 46, y + h - 82, w - 92, TY.sec, 13, FT.text);
     } else if (sr) { const c = sr.cheapest;
       txt('+' + plural(sr.gained, 'credit').toLowerCase() + ' for the body. Balance: ' + s.run.credits + '.' + (c ? (s.run.credits >= c.price ? ' ' + NODE(c.node).name + ' is yours for ' + c.price + '.' : ' ' + NODE(c.node).name + ' at ' + c.price + '.') : ' Every track is full.'), x + 46, y + h - 82, fLab, FT.text); }
     else txt(copy('report.credit', 'One body credit granted. Balance: {credits}.', { credits: s.run.credits }), x + 46, y + h - 82, fLab, FT.text);
@@ -14110,6 +14117,7 @@ window.DUMMIES_STORY = {
   function abilityStats(s, t, L) {
     const P = s.P, cut = Math.round(P['abilities.wearCut'] * L * 100), wear = L ? 'WEAR −' + cut + '%' : 'FULL WEAR';
     if (ABIL4) { // Edit 80
+      if (t === 'battery' && BM1) { const n = L >= 2 ? P['battery.capacity'] : P['abilities.battery.dashCharges'], sec = (L >= 3 ? P['abilities.battery.level3Seconds'] : P['battery.secondsPerCharge']).toFixed(1); return [L ? 'DASH · ' + n + ' CHARGE' + (n === 1 ? '' : 'S') + ' · ' + sec + ' s' : 'NO DASH', L ? wear : '']; } // Edit 91
       if (t === 'battery') return ['CHARGE ' + (L ? P['abilities.battery.level' + L + 'Seconds'] : P['battery.secondsPerCharge']).toFixed(1) + ' s', wear];
       if (t === 'hands') return [L ? P['abilities.hands.conesPerLevel'] * L + ' CONE' + (P['abilities.hands.conesPerLevel'] * L === 1 ? '' : 'S') : 'NO GRAB', L ? wear : ''];
       if (t === 'arms') return [L ? 'PUSH +' + (P['abilities.arms.pushSpeed'] + P['abilities.arms.pushStep'] * (L - 1)) + ' ×' + P['abilities.arms.pushesPerLevel'] * L : 'BOUNCE ONLY', L ? wear : ''];
@@ -14188,7 +14196,7 @@ window.DUMMIES_STORY = {
     let n = 0, sx = 0, sy = 0; for (let i = 0; i < A.d.length; i++) if (A.d[i] !== B.d[i] && B.d[i]) { n++; sx += i % A.w; sy += Math.floor(i / A.w); }
     return (seatArt[t] = n ? { x: sx / n + 0.5, y: sy / n + 0.5 } : { x: A.w / 2, y: A.h / 2 });
   }
-  const wsLocked = (s, t) => !!(STORY && STORY.VERBS.includes(t + '1') && !s.run.owned[t + '1']);
+  const wsLocked = () => false; // Edit 91: Arcade sells every part; Story has no workshop (its parts come by drone)
   const wsCost = (s, n) => (s.storyMode ? '1 UPGRADE' : plural(s.P[NODES7[n].price], 'CREDIT'));
   function wsMove(m) { // the four cards around the chassis, DONE beneath
     const t = SHOP_GRID[app.shopCol][0], [c, r] = WS_POS[t] || [0, 0], at = (c2, r2) => SHOP_GRID.findIndex((g) => WS_POS[g[0]] && WS_POS[g[0]][0] === c2 && WS_POS[g[0]][1] === r2);
@@ -14199,12 +14207,11 @@ window.DUMMIES_STORY = {
   }
   function drawWorkshop(s) {
     veil(); veil();
-    const x = FX + 22, y = FY + 18, w = FW - 44, h = FH - 36, story = s.storyMode, r0 = s.run;
+    const x = FX + 22, y = FY + 18, w = FW - 44, h = FH - 36, story = false, r0 = s.run; // Edit 91: Arcade only
     panel(x, y, w, h);
     const nextCh = String((s.report ? s.report.chassis : r0.chassis) + 1).padStart(2, '0');
     txt('WORKSHOP · CHASSIS ' + nextCh, x + 28, y + 44, fLab, FT.accent);
-    const left = story ? s.upgradesLeft() : r0.credits, lvN = story ? STORY.levelOf(r0.points, s.P) : null;
-    const pill = story ? 'LEVEL ' + lvN.level + ' · ' + left + ' UPGRADE' + (left === 1 ? '' : 'S') : plural(left, 'CREDIT');
+    const left = r0.credits, lvN = null, pill = plural(left, 'CREDIT');
     ctx.font = fLab; const pw = ctx.measureText(pill).width + 32;
     rr(x + w - 28 - pw, y + 16, pw, 40, 12); ctx.fillStyle = left > 0 ? C.dummy : FT.item; ctx.fill(); ctx.strokeStyle = left > 0 ? C.joints : FT.itemEdge; ctx.lineWidth = 1.5; ctx.stroke();
     txt(pill, x + w - 28 - pw / 2, y + 44, fLab, left > 0 ? C.primary : FT.dim, 'center');
@@ -14251,10 +14258,6 @@ window.DUMMIES_STORY = {
     else if (wsLocked(s, selT)) msg = 'A Farsight drone brings this part. Keep testing.';
     else { const n = nextLevel(s, selT); if (!n) msg = TRACKS[selT].name + ' is at its top level.'; else { const nd = NODES7[n], chk = s.canBuy(n); msg = nd.name + ': ' + nd.desc; if (story && !chk.ok && chk.why === 'level up first' && lvN.next) msg += ' Level ' + (lvN.level + 1) + ' at ' + num(lvN.next) + ' points.'; } }
     wrapText(msg, x + 28, y + 424, w - 56, 24, '400 18px ' + F_UI, FT.text, 2);
-    if (story) { // the loop: points raise the level; each level brings an upgrade
-      const ly = y + 486; txt('LEVEL ' + lvN.level, x + 28, ly, fLab, FT.text); txt(lvN.next ? num(lvN.next - r0.points) + ' POINTS TO LEVEL ' + (lvN.level + 1) + ' · +1 UPGRADE' : 'TOP LEVEL', x + w - 28, ly, '700 15px ' + F_UI, FT.dim, 'right');
-      rr(x + 28, ly + 10, w - 56, 8, 4); ctx.fillStyle = FT.track; ctx.fill(); if (lvN.frac > 0) { rr(x + 28, ly + 10, Math.max(8, (w - 56) * lvN.frac), 8, 4); ctx.fillStyle = C.dummy; ctx.fill(); }
-    }
     // FIT and DONE
     const by2 = y + h - 80, bh = 50, bw = (w - 56 - 16) / 2, n0 = selT ? nextLevel(s, selT) : null, c0 = n0 && !wsLocked(s, selT) ? s.canBuy(n0) : null, can = !!(c0 && c0.ok), onD = app.shopRow === SHOP_ROWS;
     rr(x + 28, by2, bw, bh, 12); ctx.fillStyle = can && !onD ? FT.sel : FT.item; ctx.fill(); ctx.strokeStyle = can ? C.dummy : FT.itemEdge; ctx.lineWidth = 1.5; ctx.stroke();
@@ -14327,7 +14330,7 @@ window.DUMMIES_STORY = {
     const nm = (n, w) => (STORY && !s.has(n) ? '???' : w); // Edit 90: a verb not yet fitted is not named
     const rows = [
       ['MOVE', ['WASD / arrows', 'Stick / d-pad', 'Stick, left'][K3], ''],
-      ['DASH', ['Space / K', 'A', 'A'][K3], '', STORY ? 'Out of a dash, the jump is free' : ''],
+      [STORY && s.dashFitted && !s.dashFitted() ? '???' : 'DASH', ['Space / K', 'A', 'A'][K3], STORY && s.dashFitted && !s.dashFitted() ? 'A Farsight drone brings it' : '', STORY ? 'Out of a dash, the jump is free' : ''], // Edit 91: Battery 1 is the dash
       [nm('jump', 'JUMP'), ['L / Shift', 'B', 'B'][K3], lock('jump', 'Legs 1')],
       [nm('carry', 'GRAB'), ['J / E', 'X', 'X'][K3], lock('carry', 'Hands 1'), s.P['abilities.hands.tapDrop'] ? 'Tap: pick up a cone. Tap with none in reach: put one down' : 'Hold to put a cone down'],
       [nm('push', 'PUSH OFF A CAR'), ['I / Q', 'Y', 'Y'][K3], lock('push', 'Arms 1')],
@@ -14408,7 +14411,6 @@ window.DUMMIES_STORY = {
     drawField(s);
     drawHUD(s);
     drawComboMeter(s);
-    if (!app.paused && s.phase !== 'report' && s.phase !== 'shop') drawLevelUp(s); // Edit 89
     if (app.paused) { if (!app.touchEdit) drawPause(s); } // Edit 87: placing the touch controls shows the game, dimmed, not the menu
     else if (s.phase === 'brief') drawBrief(s); // Edit 81: the tile card
     else if (s.phase === 'gift') drawGiftPopup(s); // Edit 84
@@ -14486,7 +14488,7 @@ window.DUMMIES_STORY = {
     for (let i = TUNE.length - 1; i >= 0; i--) if (gone.has(TUNE[i][0])) TUNE.splice(i, 1);
   }
   if (STORY) { // Edit 81–82: the story (from the next deploy): a credit a body, its prices, the gift, the brief's combos, each tile's write-offs
-    TUNE.push(['proto.bounce.maxThrow', 0, 200, 4], ['story.ferryDepth', 40, 400, 10], ['economy.creditsPerWriteOff', 0, 3, 1], ['story.level.firstPoints', 1000, 30000, 500], ['story.level.stepPoints', 0, 10000, 250], ['story.level.max', 2, 12, 1], ['story.level.upgrades', 1, 3, 1], ['arcade.giftEvery', 1, 5, 1], ['ui.gift.fallSeconds', 0.1, 3, 0.05], ['ui.gift.holdSeconds', 0, 5, 0.1], ['story.task.comboEasy', 2, 5, 1], ['story.task.comboHard', 2, 6, 1]);
+    TUNE.push(['proto.bounce.maxThrow', 0, 200, 4], ['story.ferryDepth', 40, 400, 10], ['economy.creditsPerWriteOff', 0, 3, 1], ['story.missFloor', 0, 50, 1], ['damage.bodyHealthOnFoot', 100, 2000, 50], ['abilities.battery.dashCharges', 1, 3, 1], ['ui.gift.fallSeconds', 0.1, 3, 0.05], ['ui.gift.holdSeconds', 0, 5, 0.1], ['story.task.comboEasy', 2, 5, 1], ['story.task.comboHard', 2, 6, 1]);
     for (const d of STORY.DIST) for (const t of d.order) TUNE.push(['story.writeOffs.' + d.id + '.' + t, 1, 6, 1]);
     for (const d of STORY.DIST) for (const t of d.order) TUNE.push(['story.traffic.' + d.id + '.' + t, 0.5, 3, 0.25]); // Edit 85: each tile's traffic
   }
