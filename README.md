@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.3
+# DUMMIES — Prototype 7.4
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 84.
+**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 85.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.3:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-3/
 - **Prototype 7.2:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-2/
 - **Prototype 7.1:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-1/
 - **Prototype 7 (before 7.1's economy):** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7/
@@ -14,7 +15,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.3. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.4. Arcade and Story. One file; no server.
+- `p7-3/index.html`: Prototype 7.3, frozen.
 - `p7-2/index.html`: Prototype 7.2, frozen.
 - `p7-1/index.html`: Prototype 7.1, frozen.
 - `p7/index.html`: Prototype 7, frozen.
@@ -39,6 +41,13 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - The shop opens after each write-off. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.4 changes
+
+- Story: traffic is tuned tile by tile. The opening tiles and Parkland's quiet ones get more cars. Arcade keeps one level per map.
+- Every highway has a staircase, and a lit gap in the railing over each road below: walk off it to drop onto the cars.
+- Waterfront's bridges gain a staircase from the beach.
+- Cones sit beside the road where you can see them: never on the road, under a highway or behind a building.
 
 ## What 7.3 changes
 
