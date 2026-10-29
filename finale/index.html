@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUMMIES · Finale test save</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #05070D; color: #F4F8FA; font: 16px/1.5 system-ui, sans-serif; }
+main { max-width: 34rem; padding: 16px; }
+h1 { font-size: 20px; margin: 0 0 8px; color: #4FC3E8; }
+a { color: #4FC3E8; }
+</style>
+</head>
+<body>
+<main>
+<h1>FINALE TEST</h1>
+<p id="msg">Preparing a save at the circus, Waterfront B2, one write-off from the end.</p>
+</main>
+<script>
+// Assignment 5: a save for reaching Prototype 7.13's finale quickly. Every tile but Waterfront B2 cleared; B2 needs one more write-off.
+// Written to the first empty save slot (or slot 3), with the newest time stamp, so STORY › CONTINUE opens it.
+(function () {
+  var D = ['A1', 'B1', 'C1', 'C2', 'B2', 'A2', 'A3', 'B3', 'C3'], P = ['C1', 'C2', 'C3', 'B3', 'A3', 'A2', 'A1', 'B1', 'B2'];
+  var progress = { v: 1, district: 'waterfront', done: { monument: D, parkland: P, waterfront: ['A1', 'B1', 'C1', 'C2', 'C3', 'B3', 'A3', 'A2'] },
+    tileWO: 1, owned: { battery1: true, hands1: true, legs1: true, arms1: true, legs2: true, hands2: true, arms2: true, battery2: true, legs3: true, arms3: true }, credits: 0, points: 400000, chassis: 33, writeOffs: 33, t: 5400, gifts: {}, tilePoints: {}, complete: false, bestCombo: 2 };
+  var msg = document.getElementById('msg');
+  try {
+    var slot = 3;
+    for (var n = 1; n <= 3; n++) if (!localStorage.getItem('dummies.p7.save' + n)) { slot = n; break; }
+    localStorage.setItem('dummies.p7.saveMoved', '1');
+    localStorage.setItem('dummies.p7.save' + slot, JSON.stringify({ v: 1, name: 'FINALE TEST', saved: Date.now(), progress: progress }));
+    msg.textContent = 'Saved in slot ' + slot + ' as FINALE TEST. Opening the game: STORY, then CONTINUE, then DEPLOY.';
+    setTimeout(function () { location.href = '../'; }, 1800);
+  } catch (e) {
+    msg.innerHTML = 'This browser blocks storage for this site, so no save was made. <a href="../">Open the game</a>.';
+  }
+})();
+</script>
+</body>
+</html>
