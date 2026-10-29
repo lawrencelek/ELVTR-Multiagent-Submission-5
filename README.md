@@ -1,10 +1,11 @@
-# DUMMIES — Prototype 7.11
+# DUMMIES — Prototype 7.12
 
-**28 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 92.
+**29 October 2026 · Lawrence Lek** · ELVTR Multi-Agent, Submission 5. Spec: GDD Edit 93.
 
 - **Play:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/
 - **Jump test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/jump/
 - **Control test:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/controls/
+- **Prototype 7.11:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-11/
 - **Prototype 7.10:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-10/
 - **Prototype 7.9:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-9/
 - **Prototype 7.8:** https://lawrencelek.github.io/ELVTR-Multiagent-Submission-5/p7-8/
@@ -22,7 +23,8 @@
 
 ## Files
 
-- `index.html`: the game, Prototype 7.11. Arcade and Story. One file; no server.
+- `index.html`: the game, Prototype 7.12. Arcade and Story. One file; no server.
+- `p7-11/index.html`: Prototype 7.11, frozen.
 - `p7-10/index.html`: Prototype 7.10, frozen.
 - `p7-9/index.html`: Prototype 7.9, frozen.
 - `p7-8/index.html`: Prototype 7.8, frozen.
@@ -58,6 +60,14 @@
 - Press any button on a gamepad first: browsers list a pad only after a press.
 - Pad without a standard mapping: press G, then DASH, JUMP, GRAB, PUSH in turn.
 - Arcade: the workshop opens after each write-off; credits buy parts. Story: parts come by drone. Tuning (T, desktop) installs ability levels for a test run.
+
+## What 7.12 changes
+
+- Story only. Each part arrives on the tile that first asks for it, and that tile tests it.
+- B1 brings the dash and asks for one: DASH INTO A CAR. C1 asks you to drop onto a car from the high road.
+- Monument teaches three moves: dash (B1), cones (A2), jump (B3). The push arrives at the start of Parkland.
+- Parkland: Arms 1 C1, Legs 2 A3, Hands 2 A2, Arms 2 A1, Battery 2 B2. Waterfront: Legs 3 B1, Arms 3 B3, Battery 3 on the last tile, the circus.
+- Monument C3 asks you to be thrown into a car; one write-off. Parkland B1 asks for a raised road, not a cone. 34 bodies in all.
 
 ## What 7.11 changes
 
